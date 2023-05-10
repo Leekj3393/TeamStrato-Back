@@ -1,1 +1,4 @@
 # TeamStrato-Back
+
+ignore -
+yml
