@@ -22,4 +22,4 @@ public class ResponseDto {
 		this.data = data;
 	}
 
-}
+} 
