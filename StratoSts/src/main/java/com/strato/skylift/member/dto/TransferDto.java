@@ -2,7 +2,8 @@ package com.strato.skylift.member.dto;
 
 import java.util.Date;
 
-import com.strato.skylift.member.entity.Member;
+import com.strato.skylift.department.dto.DepartmentDto;
+import com.strato.skylift.job.dto.JobDto;
 
 import lombok.Data;
 
@@ -13,10 +14,10 @@ public class TransferDto {
 	
 	private Date transferDate; 
 	
-	private Member member;
+	private MemberDto member;
 	
-	private Member job;
+	private JobDto job;
 	
-	private Member department;
+	private DepartmentDto department;
 	
 }

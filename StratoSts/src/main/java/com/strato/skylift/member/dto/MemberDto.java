@@ -2,8 +2,8 @@ package com.strato.skylift.member.dto;
 
 import java.util.Date;
 
-import com.strato.skylift.department.entity.Department;
-import com.strato.skylift.job.entity.Job;
+import com.strato.skylift.department.dto.DepartmentDto;
+import com.strato.skylift.job.dto.JobDto;
 
 import lombok.Data;
 
@@ -38,7 +38,7 @@ public class MemberDto {
 
 	private Long memberAnnual;
 
-	private Job job;
+	private JobDto job;
 
-	private Department department;
+	private DepartmentDto department;
 }
