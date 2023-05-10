@@ -81,4 +81,20 @@ public class Member {
 	@JoinColumn(name="DEPT_CODE")
 	private Department department;
 	
+	
+	public void update(String memberName, String residentNo, String gender,
+			String phone, String address, String bankName, String bankNo,
+			Long memberSalary, Long memberAnnual) {
+		
+		this.memberName = memberName;
+		this.residentNo = residentNo;
+		this.gender = gender;
+		this.phone = phone;
+		this.address = address;
+		this.bankName = bankName;
+		this.bankNo = bankNo;
+		this.memberSalary = memberSalary;
+		this.memberAnnual = memberAnnual;
+	}
+	
 }

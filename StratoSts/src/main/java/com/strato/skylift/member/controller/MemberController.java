@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.strato.skylift.common.ResponseDto;
@@ -59,4 +60,14 @@ public class MemberController {
 	}
 	
 	/* 직원 수정 */
+	@PutMapping("/members")
+	public ResponseEntity<ResponseDto> updateMember(@ModelAttribute MemberDto memberDto) {
+		
+		memberService.updateMember(memberDto);
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDto(HttpStatus.OK,"직원 수정 성공"));
+	}
+	
 }

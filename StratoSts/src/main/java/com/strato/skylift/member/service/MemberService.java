@@ -53,11 +53,27 @@ public class MemberService {
 		memberRepository.save(modelMapper.map(memberDto, Member.class));
 		
 	}
-	
-	
-	
-	
+
 	/* 직원 수정 */
+	@Transactional
+	public void updateMember(MemberDto memberDto) {
+		
+		Member originMember = memberRepository.findById(memberDto.getMemberCode())
+				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 직원이 없습니다. memberCode : " + memberDto.getMemberCode() ));
+		
+		originMember.update(
+			memberDto.getMemberName(),
+			memberDto.getResidentNo(),
+			memberDto.getGender(),
+			memberDto.getPhone(),
+			memberDto.getAddress(),
+			memberDto.getBankName(),
+			memberDto.getBankNo(),
+			memberDto.getMemberSalary(),
+			memberDto.getMemberAnnual()
+		);
+		
+	}
 	
 	
 }
