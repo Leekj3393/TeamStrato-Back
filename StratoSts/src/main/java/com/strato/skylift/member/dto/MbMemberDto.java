@@ -2,8 +2,7 @@ package com.strato.skylift.member.dto;
 
 import java.util.Date;
 
-import com.strato.skylift.member.dto.MbDepartmentDto;
-import com.strato.skylift.member.dto.MbJobDto;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 
@@ -27,7 +26,7 @@ public class MbMemberDto {
 	private String address;
 
 	private String memberStatus;
-
+	
 	private Date memberHireDate;
 
 	private String bankName;
