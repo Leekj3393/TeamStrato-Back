@@ -9,10 +9,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.entity.Member;
+import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.repository.MemberRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class MemberService {
 
@@ -30,8 +33,8 @@ public class MemberService {
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("memberCode").ascending());
 		
 		Page<Member> memberList = memberRepository.findAll(pageable);
-		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(memberList, MbMemberDto.class));
-			
+		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
+		
 		return memberDtoList;
 	}
 	

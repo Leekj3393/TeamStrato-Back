@@ -1,6 +1,5 @@
 package com.strato.skylift.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -15,6 +14,7 @@ import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Setter
 @Getter
