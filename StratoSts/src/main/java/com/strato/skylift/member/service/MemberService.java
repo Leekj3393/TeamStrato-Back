@@ -9,8 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.strato.skylift.member.dto.MemberDto;
-import com.strato.skylift.member.entity.Member;
+import com.strato.skylift.member.dto.MbMemberDto;
+import com.strato.skylift.entity.Member;
 import com.strato.skylift.member.repository.MemberRepository;
 
 @Service
@@ -25,30 +25,30 @@ public class MemberService {
 	}
 	
 	/* 직원 전체목록 조회(공통) */
-	public Page<MemberDto> selectMemberList(int page) {
+	public Page<MbMemberDto> selectMemberList(int page) {
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("memberCode").ascending());
 		
 		Page<Member> memberList = memberRepository.findAll(pageable);
-		Page<MemberDto> memberDtoList = memberList.map(member -> modelMapper.map(memberList, MemberDto.class));
+		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(memberList, MbMemberDto.class));
 			
 		return memberDtoList;
 	}
 	
 	/* 직원 상세조회 */
-	public MemberDto selectMemberDetail(Long memberCode) {
+	public MbMemberDto selectMemberDetail(Long memberCode) {
 		
 		Member member = memberRepository.findById(memberCode)
 				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 직원이 없습니다. memberCode : " + memberCode));
 		
-		MemberDto memberDto = modelMapper.map(member, MemberDto.class);
+		MbMemberDto memberDto = modelMapper.map(member, MbMemberDto.class);
 		
 		return memberDto;
 	}
 
 	/* 직원 등록 */
 	@Transactional
-	public void insertMember(MemberDto memberDto) {
+	public void insertMember(MbMemberDto memberDto) {
 		
 		memberRepository.save(modelMapper.map(memberDto, Member.class));
 		
@@ -56,7 +56,7 @@ public class MemberService {
 
 	/* 직원 수정 */
 	@Transactional
-	public void updateMember(MemberDto memberDto) {
+	public void updateMember(MbMemberDto memberDto) {
 		
 		Member originMember = memberRepository.findById(memberDto.getMemberCode())
 				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 직원이 없습니다. memberCode : " + memberDto.getMemberCode() ));
