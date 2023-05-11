@@ -1,4 +1,4 @@
-package com.strato.skylift.member.entity;
+package com.strato.skylift.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,12 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import com.strato.skylift.department.entity.Department;
-import com.strato.skylift.job.entity.Job;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +21,7 @@ import lombok.Setter;
 @Entity
 @Table(name="TBL_MEMBER")
 @SequenceGenerator(name="MEMBER_SEQ_GENERATOR",
-			sequenceName="SEQ_MEMBER_CODE",
+			sequenceName="SEQ_MEMBER",
 			initialValue=1, allocationSize=1)
 public class Member {
 	

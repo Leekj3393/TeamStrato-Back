@@ -1,9 +1,9 @@
-package com.strato.skylift.department.dto;
+package com.strato.skylift.member.dto;
 
 import lombok.Data;
 
 @Data
-public class DepartmentDto {
+public class MbDepartmentDto {
 
 	private String deptCode;
 

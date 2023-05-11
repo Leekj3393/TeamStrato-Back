@@ -1,4 +1,4 @@
-package com.strato.skylift.job.entity;
+package com.strato.skylift.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -14,7 +14,7 @@ import com.strato.skylift.common.ResponseDto;
 import com.strato.skylift.common.paging.Pagenation;
 import com.strato.skylift.common.paging.PagingButtonInfo;
 import com.strato.skylift.common.paging.ResponseDtoWithPaging;
-import com.strato.skylift.member.dto.MemberDto;
+import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.service.MemberService;
 
 public class MemberController {
@@ -29,7 +29,7 @@ public class MemberController {
 	@GetMapping("/members")
 	public ResponseEntity<ResponseDto> selectMemberList(@RequestParam(name="page", defaultValue="1") int page) {
 		
-		Page<MemberDto> memberDtoList = memberService.selectMemberList(page);
+		Page<MbMemberDto> memberDtoList = memberService.selectMemberList(page);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberDtoList);
 		
@@ -50,7 +50,7 @@ public class MemberController {
 	
 	/* 직원 등록 */
 	@PostMapping("/members")
-	public ResponseEntity<ResponseDto> insertMember(@ModelAttribute MemberDto memberDto) {
+	public ResponseEntity<ResponseDto> insertMember(@ModelAttribute MbMemberDto memberDto) {
 		
 		memberService.insertMember(memberDto);
 		
@@ -61,7 +61,7 @@ public class MemberController {
 	
 	/* 직원 수정 */
 	@PutMapping("/members")
-	public ResponseEntity<ResponseDto> updateMember(@ModelAttribute MemberDto memberDto) {
+	public ResponseEntity<ResponseDto> updateMember(@ModelAttribute MbMemberDto memberDto) {
 		
 		memberService.updateMember(memberDto);
 		

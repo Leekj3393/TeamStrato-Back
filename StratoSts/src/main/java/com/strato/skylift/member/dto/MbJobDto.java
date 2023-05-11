@@ -1,9 +1,9 @@
-package com.strato.skylift.job.dto;
+package com.strato.skylift.member.dto;
 
 import lombok.Data;
 
 @Data
-public class JobDto {
+public class MbJobDto {
 
 	private String jobCode;
 
