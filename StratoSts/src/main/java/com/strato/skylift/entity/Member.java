@@ -76,6 +76,10 @@ public class Member {
 	@ManyToOne
 	@JoinColumn(name="DEPT_CODE")
 	private Department department;
+
+	@ManyToOne
+	@JoinColumn(name = "ROLE_CODE")
+	private MemberRole memberRole;
 	
 	
 	public void update(String memberName, String residentNo, String gender,
