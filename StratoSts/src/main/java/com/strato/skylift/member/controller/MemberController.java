@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.strato.skylift.common.ResponseDto;
 import com.strato.skylift.common.paging.Pagenation;
@@ -17,6 +19,11 @@ import com.strato.skylift.common.paging.ResponseDtoWithPaging;
 import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.service.MemberService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RestController
+@RequestMapping("/skylift/member")
 public class MemberController {
 
 	private final MemberService memberService;
@@ -26,11 +33,11 @@ public class MemberController {
 	}
 	
 	/* 직원 전체 조회 */
-	@GetMapping("/members")
+	@GetMapping("/memberList")
 	public ResponseEntity<ResponseDto> selectMemberList(@RequestParam(name="page", defaultValue="1") int page) {
 		
 		Page<MbMemberDto> memberDtoList = memberService.selectMemberList(page);
-		
+			
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberDtoList);
 		
 		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
@@ -42,7 +49,7 @@ public class MemberController {
 	}
 	
 	/* 직원 상세 조회 */
-	@GetMapping("/members/{memberCode}")
+	@GetMapping("/memberList/{memberCode}")
 	public ResponseEntity<ResponseDto> selectMemberDetail(@PathVariable Long memberCode) {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 상세조회에 성공했습니다.", memberService.selectMemberDetail(memberCode)));
