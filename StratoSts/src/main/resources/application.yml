@@ -2,10 +2,3 @@
 server:
   port: 8001
 
-# datasource config
-spring:
-  datasource:
-    driver-class-name: oracle.jdbc.OracleDriver
-    url: jdbc:oracle:thin:@localhost:1521:xe
-    username: C##SKYLIFT
-    password: SKYLIFT

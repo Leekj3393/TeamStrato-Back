@@ -36,17 +36,6 @@ public class File {
 	@Column(name="FILE_TYPE")
 	private String fileType;
 	
-	@ManyToOne
-	@JoinColumn(name="MEMBER_CODE")
-	private Member member;
-	
-	@ManyToOne
-	@JoinColumn(name="ED_CODE")
-	private Education education;
-	
-	@ManyToOne
-	@JoinColumn(name="CLASS_CODE")
-	private Class edClass;
-	
-	
+
+
 }
