@@ -1,4 +1,4 @@
-package com.strato.skylift.member.entity;
+package com.strato.skylift.entity;
 
 import java.util.Date;
 

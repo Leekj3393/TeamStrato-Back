@@ -2,13 +2,13 @@ package com.strato.skylift.member.dto;
 
 import java.util.Date;
 
-import com.strato.skylift.department.dto.DepartmentDto;
-import com.strato.skylift.job.dto.JobDto;
+import com.strato.skylift.member.dto.MbDepartmentDto;
+import com.strato.skylift.member.dto.MbJobDto;
 
 import lombok.Data;
 
 @Data
-public class MemberDto {
+public class MbMemberDto {
 
 	private Long memberCode;
 
@@ -38,7 +38,7 @@ public class MemberDto {
 
 	private Long memberAnnual;
 
-	private JobDto job;
+	private MbJobDto job;
 
-	private DepartmentDto department;
+	private MbDepartmentDto department;
 }
