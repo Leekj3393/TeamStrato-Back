@@ -83,13 +83,15 @@ public class MyPageController {
                 if (attendanceOptional.isPresent()) {
                     Attendance attendance = attendanceOptional.get();
 
+                    // 이미 출근한 경우
+                    if (attendance.getStartTime() != null) {
+                        throw new RuntimeException("이미 출근하셨습니다.");
+                    }
+
                     // 출근 버튼이 오늘이면 업데이트 되게하기
                     if (isToday(attendance.getAttendanceDate())) {
                         Date startTime = new Date(); // 출근 시간 업데이트
                         attendance.setStartTime(startTime);
-                        attendance.setEndTime(null);
-                        attendance.setOutTime(null);
-                        attendance.setReturnTime(null);
                         attendanceRepository.save(attendance); // 출근 정보 업데이트
 
                         log.info("출근 요청 - 멤버 코드: {}, 요청 시간: {}", memberCode, currentTime);
@@ -98,16 +100,7 @@ public class MyPageController {
                         log.info("외출 시간: {}", attendance.getOutTime());
                         log.info("복귀 시간: {}", attendance.getReturnTime());
                     } else {
-                        // 출근한 상태인지 체크
-                        if (!attendance.getStatus().equals("출근")) {
-                            throw new RuntimeException("출근을 먼저 해주세요.");
-                        } else {
-                            log.info("출근 요청 - 멤버 코드: {}, 요청 시간: {}", memberCode, currentTime);
-                            log.info("출근 시간: {}", dateFormat.format(attendance.getStartTime()));
-                            log.info("퇴근 시간: {}", attendance.getEndTime());
-                            log.info("외출 시간: {}", attendance.getOutTime());
-                            log.info("복귀 시간: {}", attendance.getReturnTime());
-                        }
+                        throw new RuntimeException("출근은 하루에 한 번만 가능합니다.");
                     }
                 } else {
                     // 오늘 처음 출근하는 경우, 새로운 Attendance 생성
@@ -117,9 +110,6 @@ public class MyPageController {
                     newAttendance.setAttendanceDate(new Date());
                     Date startTime = new Date(); // 출근 시간 설정
                     newAttendance.setStartTime(startTime);
-                    newAttendance.setEndTime(null);
-                    newAttendance.setOutTime(null);
-                    newAttendance.setReturnTime(null);
                     attendanceRepository.save(newAttendance);
 
                     log.info("처음 출근 요청 - 멤버 코드: {}, 요청 시간: {}", memberCode, currentTime);
@@ -129,44 +119,48 @@ public class MyPageController {
             return ResponseEntity.ok().build();
         }
 
-        //출근 시간은 그대로 두고 퇴근시간 누르기, 만약 출근 시간이 안눌러져 있으면 '먼저 출근을 하세요!' 뜨게 하기
-        @PatchMapping("/attendance/endTime/{memberCode}")
-        public ResponseEntity<?> handleAttendanceUpdate(@PathVariable Long memberCode) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String currentTime = dateFormat.format(new Date());
 
-            Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
-            if (memberOptional.isPresent()) {
-                Member member = memberOptional.get();
+    //출근 시간은 그대로 두고 퇴근시간 누르기, 만약 출근 시간이 안눌러져 있으면 '먼저 출근을 하세요!' 뜨게 하기
+    @PatchMapping("/attendance/endTime/{memberCode}")
+    public ResponseEntity<?> handleAttendanceUpdate(@PathVariable Long memberCode) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentTime = dateFormat.format(new Date());
 
-                Optional<Attendance> attendanceOptional = attendanceRepository.findAllByMemberMemberCode(memberCode);
-                if (attendanceOptional.isPresent()) {
-                    Attendance attendance = attendanceOptional.get();
-                    // 이미 퇴근한 경우
-                    if (attendance.getEndTime() != null) {
-                        throw new RuntimeException("이미 퇴근하셨으므로 다시 퇴근할 수 없습니다.");
-                    }
+        Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
 
-                    // 퇴근 시간 업데이트
-                    Date endTime = new Date();
-                    attendance.setEndTime(endTime);
-                    attendance.setStatus("퇴근");
-                    attendanceRepository.save(attendance); // 출근 정보 업데이트
+            Optional<Attendance> attendanceOptional = attendanceRepository.findAllByMemberMemberCode(memberCode);
+            if (attendanceOptional.isPresent()) {
+                Attendance attendance = attendanceOptional.get();
 
-                    log.info("퇴근 요청 - 멤버 코드: {}, 요청 시간: {}", memberCode, currentTime);
-                    log.info("출근 시간: {}", dateFormat.format(attendance.getStartTime()));
-                    log.info("퇴근 시간: {}", dateFormat.format(endTime));
-
-                    return ResponseEntity.ok().build();
-                } else {
-                    // 출근 정보가 없는 경우 처리
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("출근을 먼저 해주세요.");
+                // 이미 퇴근한 경우
+                if (attendance.getEndTime() != null) {
+                    throw new RuntimeException("이미 퇴근하셨으므로 다시 퇴근할 수 없습니다.");
                 }
+
+                // 퇴근 시간 업데이트
+                Date endTime = new Date();
+                attendance.setEndTime(endTime);
+                attendance.setStatus("퇴근");
+                attendanceRepository.save(attendance); // 출근 정보 업데이트
+
+                log.info("퇴근 요청 - 멤버 코드: {}, 요청 시간: {}", memberCode, currentTime);
+                log.info("출근 시간: {}", dateFormat.format(attendance.getStartTime()));
+                log.info("퇴근 시간: {}", dateFormat.format(endTime));
+
+                return ResponseEntity.ok().build();
             } else {
-                // 멤버가 존재하지 않는 경우 처리
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("로그인을 다시 확인하세요.");
+                // 출근 정보가 없는 경우 처리
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("출근을 먼저 해주세요.");
             }
+        } else {
+            // 멤버가 존재하지 않는 경우 처리
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("로그인을 다시 확인하세요.");
         }
+    }
+
+
 
 
     //외출시간 출근시간은 그대로 두고, 만약 퇴근이 되어있으면 "퇴근하셔서 외출이 안됩니다"라고 뜨게하기
@@ -214,6 +208,50 @@ public class MyPageController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("로그인을 다시 확인하세요.");
         }
     }
+
+
+    //출근이랑 외출이 둘다 날짜가 찏혔을때만 복귀가 가능하게 하고싶어
+    @PatchMapping("/attendance/returnTime/{memberCode}")
+    public ResponseEntity<?> handleAttendanceReturnUpdate(@PathVariable Long memberCode) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentTime = dateFormat.format(new Date());
+
+        Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+
+            Optional<Attendance> attendanceOptional = attendanceRepository.findAllByMemberMemberCode(memberCode);
+            if (attendanceOptional.isPresent()) {
+                Attendance attendance = attendanceOptional.get();
+
+                // 출근과 외출 상태를 함께 검사
+                if (attendance.getStatus().equals("외출")) {
+                    // 이미 퇴근한 경우
+                    if (attendance.getEndTime() != null) {
+                        throw new RuntimeException("이미 퇴근하셨으므로 복귀가 불가능합니다.");
+                    } else {
+                        Date returnTime = new Date(); // 복귀 시간 업데이트
+                        attendance.setReturnTime(returnTime);
+                        attendance.setStatus("복귀"); // 출석 상태를 "복귀"로 변경
+                        attendanceRepository.save(attendance); // 출석 정보 업데이트
+
+                        log.info("복귀 요청 - 멤버 코드: {}, 요청 시간: {}", memberCode, currentTime);
+                        log.info("출근 시간: {}", dateFormat.format(attendance.getStartTime()));
+                        log.info("복귀 시간: {}", dateFormat.format(returnTime));
+
+                        return ResponseEntity.ok().build();
+                    }
+                } else {
+                    return ResponseEntity.badRequest().body("외출한 후에만 복귀할 수 있습니다.");
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("로그인을 다시 확인하세요.");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("로그인을 다시 확인하세요.");
+        }
+    }
+
 
 
 

@@ -140,10 +140,18 @@ public class MyPageService {
                 if (attendance.getStatus().equals("출근")) {
                     // 외출 버튼을 누를 때 외출 시간만 업데이트하고 복귀 시간은 null로 유지
                     if (isToday(attendance.getAttendanceDate())) {
+                        // 이미 외출한 경우 예외 처리
+                        if (attendance.getOutTime() != null) {
+                            throw new RuntimeException("이미 외출하셨으므로 다시 외출은 불가능합니다.");
+                        }
+
                         attendance.setOutTime(new Date()); // 외출 시간 업데이트
                         attendance.setReturnTime(null); // 복귀 시간 null로 설정
                         attendance.setStatus("외출"); // 출석 상태를 "외출"로 변경
                         attendanceRepository.save(attendance); // 출근 정보 업데이트
+                        return; // 메소드 종료
+                    } else {
+                        throw new RuntimeException("출근일자와 오늘 날짜가 일치하지 않습니다.");
                     }
                 } else {
                     // 출근을 먼저 해주세요.
@@ -153,13 +161,57 @@ public class MyPageService {
                 // 출근을 안눌렀을 경우
                 Attendance newAttendance = new Attendance();
                 newAttendance.setMember(member);
-                newAttendance.setStatus("출근"); // 출석 상태를 "외출"로 설정
+                newAttendance.setStatus("출근"); // 출석 상태를 "출근"으로 설정
+                newAttendance.setAttendanceDate(new Date());
+                newAttendance.setStartTime(new Date());
+                attendanceRepository.save(newAttendance); // 출근 정보 저장
+                return; // 메소드 종료
+            }
+        }
+        // 로그인을 다시 확인하세요.
+        throw new RuntimeException("로그인을 다시 확인하세요.");
+    }
+
+
+    /* 회원 근태 복귀 기록하기 */
+    @Transactional
+    public void manageAttendanceRetrunChange(Long memberCode) {
+        Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            Optional<Attendance> attendanceOptional = attendanceRepository.findAllByMemberMemberCode(memberCode);
+            if (attendanceOptional.isPresent()) {
+                Attendance attendance = attendanceOptional.get();
+
+                // 출근한 상태인지 체크
+                if (attendance.getStatus().equals("출근")) {
+                    if (attendance.getOutTime() != null && attendance.getReturnTime() == null) {
+                        // 출근 및 외출이 동시에 기록된 경우에만 복귀 가능
+                        attendance.setReturnTime(new Date()); // 복귀 시간 업데이트
+                        attendance.setStatus("복귀"); // 출석 상태를 "복귀"로 변경
+                        attendanceRepository.save(attendance); // 출근 정보 업데이트
+                    } else {
+                        throw new RuntimeException("출근 후 외출을 먼저 해주세요.");
+                    }
+                } else {
+                    // 출근을 먼저 해주세요.
+                    throw new RuntimeException("출근을 먼저 해주세요.");
+                }
+            } else {
+                // 출근을 안눌렀을 경우
+                Attendance newAttendance = new Attendance();
+                newAttendance.setMember(member);
+                newAttendance.setStatus("출근"); // 출석 상태를 "출근"으로 설정
                 newAttendance.setAttendanceDate(new Date());
                 newAttendance.setStartTime(new Date());
                 attendanceRepository.save(newAttendance); // 출근 정보 저장
             }
+        } else {
+            throw new RuntimeException("로그인을 다시 확인하세요.");
         }
     }
+
+
 
 
     //isToday 정의하기
