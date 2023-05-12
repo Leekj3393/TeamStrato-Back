@@ -232,5 +232,8 @@ public class MyPageService {
     }
 
 
+    public long getTotalMemberCount() {
+        return myPageRepository.count(); // MyPageRepository는 JPA Repository 인터페이스
+    }
 
 }

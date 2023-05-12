@@ -19,9 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 
@@ -34,8 +32,27 @@ public class MyPageController {
         private final AttendanceRepository attendanceRepository;
         private final MyPageRepository myPageRepository;
 
+        //전체 사원수
+    @GetMapping("/membersAll")
+    public ResponseEntity<ResponseDto> getTotalMemberCount() {
+        log.info("[MyPageController1] : getTotalMemberCount start=========");
 
-        //전체 멤버 조회하기
+        // 전체 사원 수를 조회하는 쿼리 실행
+        long totalMemberCount = myPageService.getTotalMemberCount();
+        log.info("전체 사원 수: {}", totalMemberCount);
+
+        // 숫자로만 표시하는 응답 데이터 생성
+        Map<String, Long> data = new HashMap<>();
+        data.put("totalMemberCount", totalMemberCount);
+
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공", data));
+    }
+
+
+
+
+
+    //전체 멤버 조회하기
         @GetMapping("/members")
         public ResponseEntity<ResponseDto> selectMemberList(@RequestParam(name="page", defaultValue="1") int page){
             log.info("[MyPageController1] : selectMemberList start=========");
