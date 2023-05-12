@@ -15,24 +15,28 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.strato.skylift.jwt.JwtAccessDeniedHandler;
+import com.strato.skylift.jwt.JwtAuthenticationEntryPoint;
+import com.strato.skylift.jwt.JwtFilter;
+
 
 @EnableWebSecurity
 public class SecurityConfig {
 	
-//	// 인증 실패 핸들러
-//	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-//	// 인가 실패 핸들러
-//	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-//	// 커스텀 인증 필터
-//	private final JwtFilter jwtFilter;
-//	
-//	public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-//			JwtAccessDeniedHandler jwtAccessDeniedHandler, JwtFilter jwtFilter) {
-//		this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-//		this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
-//		this.jwtFilter = jwtFilter;
-//	}
-//	
+	// 인증 실패 핸들러
+	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	// 인가 실패 핸들러
+	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+	// 커스텀 인증 필터
+	private final JwtFilter jwtFilter;
+	
+	public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+			JwtAccessDeniedHandler jwtAccessDeniedHandler, JwtFilter jwtFilter) {
+		this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+		this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
+		this.jwtFilter = jwtFilter;
+	}
+	
 
 	// 외부에서 이미지 파일에 접근 가능 하도록 설정
 	@Bean
@@ -55,8 +59,8 @@ public class SecurityConfig {
 		         	.disable()
 		         // exception handling 설정 추가
 		         .exceptionHandling()
-//		         	.authenticationEntryPoint(jwtAuthenticationEntryPoint)
-//		         	.accessDeniedHandler(jwtAccessDeniedHandler)
+		         	.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+		         	.accessDeniedHandler(jwtAccessDeniedHandler)
 		         .and()
 		         	
 		         // 시큐리티는 기본적으로 세션을 사용하지만 API 서버에선 세션을 사용하지 않기 때문에 세션 설정을 Stateless 로 설정
