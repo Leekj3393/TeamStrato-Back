@@ -8,7 +8,7 @@ import java.util.Date;
 public class MbAttendanceDto {
 
     private Long attendanceCode;
-    private Long memberCode;
+    private Long member;
     private String Status;
     private Date attendanceDate;
     private Date startTime;
