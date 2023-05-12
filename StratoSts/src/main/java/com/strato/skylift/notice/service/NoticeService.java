@@ -65,6 +65,22 @@ public class NoticeService {
 		
 		return null;
 	}
+
+//3. 공지사항 상태별 목록 조회 - 미완성......
+	public Page<NoticeDto> selectNoticeListByNoticeStatus(int page, String noticeStatus) {
+		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("noticeCode").descending());
+		
+		
+		Page<Notice> noticeList = noticeRepository.findByNoticeStatus(pageable, noticeStatus);
+		Page<NoticeDto> noticeDtoList = noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
+	
+		
+		log.info("[NoticeService] noticeDtoList.getContent() : {}", noticeDtoList.getContent());
+		
+		log.info("[NoticeService] selectNoticeListByNoticeStatus end ============================== ");
+		
+		return noticeDtoList;
+	}
 	
 
 }

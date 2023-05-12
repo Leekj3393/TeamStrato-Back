@@ -74,6 +74,30 @@ public class NoticeController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	} 
 	
+	/* 3. 공지사항 상태별 목록 조회 - 포스트맨 테스트는 완료!! 
+	 * ??*/
+	@GetMapping("/status/{noticeStatus}")
+	public ResponseEntity<ResponseDto> selectNoticeListByNoticeStatus(
+			@RequestParam(name="page", defaultValue="1") int page, @PathVariable String noticeStatus){
+		
+		log.info("[NoticeController] : selectNoticeListByDepartment start ==================================== ");
+		log.info("[NoticeController] : page : {}", page);
+		
+		Page<NoticeDto> noticeDtoList = noticeService.selectNoticeListByNoticeStatus(page, noticeStatus);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(noticeDtoList);
+		
+		log.info("[ProductController] : pageInfo : {}", pageInfo);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(noticeDtoList.getContent());
+		
+		log.info("[NoticeController] : selectNoticeListByDepartment end ==================================== ");
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+	} 
+	
 	
 	
 }
