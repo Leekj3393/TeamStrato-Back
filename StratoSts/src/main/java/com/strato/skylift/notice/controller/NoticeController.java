@@ -30,7 +30,7 @@ public class NoticeController {
 	}
 	
 /* 1. 공지사항 전체 목록 조회 - 완성 */
-	@GetMapping("/main")
+	@GetMapping
 	public ResponseEntity<ResponseDto> selectNoticeList(@RequestParam(name="page", defaultValue="1") int page){
 		
 		log.info("[NoticeController] : selectNoticeList start ==================================== ");
