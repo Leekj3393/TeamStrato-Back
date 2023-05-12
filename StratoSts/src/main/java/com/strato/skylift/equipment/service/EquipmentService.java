@@ -1,8 +1,9 @@
 package com.strato.skylift.equipment.service;
 
+import com.strato.skylift.common.paging.Pagenation;
 import com.strato.skylift.entity.Equipment;
+import com.strato.skylift.equipment.dto.CSequipmentCatgoryDTO;
 import com.strato.skylift.equipment.dto.EquipmentDTO;
-
 import com.strato.skylift.equipment.repository.EQcategoryRepositroy;
 import com.strato.skylift.equipment.repository.EquipmentRepositroy;
 import lombok.extern.slf4j.Slf4j;
@@ -17,24 +18,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class EquipmentService
 {
-    private final EQcategoryRepositroy equiCategoryRepositroy;
+    private final EQcategoryRepositroy eqCategoryRepositroy;
     private final EquipmentRepositroy equipmentRepositroy;
     private final ModelMapper modelMapper;
 
-    public EquipmentService(EQcategoryRepositroy equiCategoryRepositroy ,
-                            EquipmentRepositroy equipmentRepositroy, ModelMapper modelMapper)
+    public EquipmentService(EQcategoryRepositroy eqCategoryRepositroy ,
+                            EquipmentRepositroy equipmentRepositroy,ModelMapper modelMapper)
     {
         this.equipmentRepositroy = equipmentRepositroy;
-        this.equiCategoryRepositroy = equiCategoryRepositroy;
+        this.eqCategoryRepositroy = eqCategoryRepositroy;
         this.modelMapper = modelMapper;
     }
 
-    public Page<EquipmentDTO> selectEqiAll(int page)
+
+    public Page<CSequipmentCatgoryDTO> selectCategoryAll(int page)
     {
-        Pageable pageable = PageRequest.of(page -1 , 8, Sort.by("EquipmentCode").descending());
+        Pageable pageable = PageRequest.of(page - 1, 8 , Sort.by("equipmentCode").ascending());
         Page<Equipment> equipment = equipmentRepositroy.findAll(pageable);
-        log.info("[EquipmentService] equipment : " + equipment.getContent());
-        Page<EquipmentDTO> equipmentDTO = equipment.map(equ -> modelMapper.map(equ , EquipmentDTO.class));
-        return equipmentDTO;
+
+        Page<CSequipmentCatgoryDTO> cSequipmentCatgoryDTO = equipment.map(equ -> modelMapper.map(equ , CSequipmentCatgoryDTO.class));
+        cSequipmentCatgoryDTO.forEach(cs -> cs.setCategoryCount(equipmentRepositroy.countByEquCategoryCategoryCode(cs.getCategoryCode())));
+        return cSequipmentCatgoryDTO;
     }
 }
