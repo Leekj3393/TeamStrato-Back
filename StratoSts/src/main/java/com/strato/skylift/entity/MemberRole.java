@@ -20,4 +20,6 @@ public class MemberRole
 
     @Column(name = "ROLE_NAME")
     private String roleName;
+    
+    
 }
