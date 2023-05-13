@@ -25,9 +25,4 @@ public class EquCategory
     @OneToMany(mappedBy = "equCategory")
     private List<EquCategory> child = new ArrayList<>();
 
-
-
-
-
-
 }
