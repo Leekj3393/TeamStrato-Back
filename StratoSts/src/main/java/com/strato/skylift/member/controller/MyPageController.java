@@ -11,6 +11,8 @@ import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.repository.AttendanceRepository;
 import com.strato.skylift.member.repository.MyPageRepository;
 import com.strato.skylift.member.service.MyPageService;
+import com.strato.skylift.notice.dto.NoticeDto;
+import com.strato.skylift.notice.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,6 +33,7 @@ public class MyPageController {
         private final MyPageService myPageService;
         private final AttendanceRepository attendanceRepository;
         private final MyPageRepository myPageRepository;
+        private final NoticeService noticeService;
 
         //전체 사원수
     @GetMapping("/membersAll")
@@ -74,7 +77,7 @@ public class MyPageController {
                     .body(new ResponseDto(HttpStatus.OK,"조회성공",myPageService.findByMemberCode(memberCode)));
 
         }
-
+        //멤버 기본정보 수정하기
         @PutMapping("/members/{memberCode}")
     public ResponseEntity<ResponseDto> updateMember(@ModelAttribute MbMemberDto mbMemberDto) {
             myPageService.updateMember(mbMemberDto);
@@ -269,6 +272,7 @@ public class MyPageController {
         }
     }
 
+    //  공지사항 전체 조회
 
 
 
