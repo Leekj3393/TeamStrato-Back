@@ -98,5 +98,13 @@ public class Member {
 		this.memberSalary = memberSalary;
 		this.memberAnnual = memberAnnual;
 	}
-	
+
+	public void update(String bankName, String address, String phone, String bankNo, String memberStatus) {
+		this.bankName = bankName;
+		this.address = address;
+		this.phone = phone;
+		this.bankNo = bankNo;
+		this.memberStatus = memberStatus;
+	}
+
 }
