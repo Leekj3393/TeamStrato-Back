@@ -55,7 +55,7 @@ public class MemberController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 상세조회에 성공했습니다.", memberService.selectMemberDetail(memberCode)));
 	}
 	
-	/* 직원 등록 */
+	/* 직원 등록 - 미완성 */
 	@PostMapping("/members")
 	public ResponseEntity<ResponseDto> insertMember(@ModelAttribute MbMemberDto memberDto) {
 		
