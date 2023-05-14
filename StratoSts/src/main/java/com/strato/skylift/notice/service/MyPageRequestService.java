@@ -26,6 +26,7 @@ public class MyPageRequestService {
 
     private final MyPageRepository myPageRepository;
 
+    //모든 리퀘스트 찾기
     public List<Request> getAllRequests() {
         List<Request> requests = requestRepository.findAll();
         log.info("findAll : {}", requests);
@@ -44,22 +45,23 @@ public class MyPageRequestService {
 
 @Transactional
     public void updateRequest(Member member, RequestDto requestDto) {
-        Request request = requestRepository.findById(requestDto.getMember())
-                .orElseThrow(() -> new IllegalArgumentException("No request found with id " + requestDto.getMember()));
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    Date requestStart = null;
+    Date requestEnd = null;
+    try {
+        requestStart = formatter.parse(requestDto.getRequestStart());
+        requestEnd = formatter.parse(requestDto.getRequestEnd());
+    } catch (ParseException e) {
+        e.printStackTrace();
+    }
 
-        // 멤버와 관련된 검증 로직 및 리퀘스트 수정 로직 수행
-        if (!request.getMember().equals(member)) {
-            throw new IllegalArgumentException("The request does not belong to the member.");
-        }
+    Request request = new Request();
+    request.setRequestReason(requestDto.getRequestReason());
+    request.setRequsetType(requestDto.getRequsetType());
+    request.setRequestStart(requestStart);
+    request.setRequestEnd(requestEnd);
 
-        // requestDto로부터 필요한 데이터를 추출하여 리퀘스트 수정
-        request.setRequestReason(requestDto.getRequestReason());
- //       request.setRequestEnd(requestDto.getRequestEnd());
-//        request.setRequestStart(requestDto.getRequestStart());
-//        request.setRequsetType(requestDto.getRequsetType());
-
-        // 수정된 리퀘스트 저장
-        requestRepository.save(request);
+    requestRepository.save(request);
     }
 
     //인서트 하기 근데 날짜를 ...ㅠㅠ
@@ -76,7 +78,6 @@ public class MyPageRequestService {
         }
 
         Request request = new Request();
-        request.setMember(member);
         request.setRequestReason(requestDto.getRequestReason());
         request.setRequsetType(requestDto.getRequsetType());
         request.setRequestStart(requestStart);
