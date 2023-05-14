@@ -18,6 +18,12 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
 /* 3. 공지사항 상태별 목록 조회 -  */
 	Page<Notice> findByNoticeStatus(Pageable pageable, String noticeStatus);
 	
+/* B. 관리자 부서별 조회 */
+/* C. 관리자 상태별 조회 */
+/* D. 관리자 공지 등록 */
+/* E. 관리자 공지 수정 */
+/* F. 관리자 공지 삭제 */
+
 	
 	
 	
