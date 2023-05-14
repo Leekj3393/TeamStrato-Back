@@ -42,9 +42,12 @@ public class MyPageRequestService {
 
 
 
-
+//수정 서비스
 @Transactional
-    public void updateRequest(Member member, RequestDto requestDto) {
+public void updateRequest(Member member, Long requestCode, RequestDto requestDto) {
+    Request request = requestRepository.findById(requestCode)
+            .orElseThrow(() -> new IllegalArgumentException("No request found with id " + requestCode));
+
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     Date requestStart = null;
     Date requestEnd = null;
@@ -55,14 +58,16 @@ public class MyPageRequestService {
         e.printStackTrace();
     }
 
-    Request request = new Request();
+    request.setMember(member);
     request.setRequestReason(requestDto.getRequestReason());
     request.setRequsetType(requestDto.getRequsetType());
     request.setRequestStart(requestStart);
     request.setRequestEnd(requestEnd);
 
     requestRepository.save(request);
-    }
+}
+
+
 
     //인서트 하기 근데 날짜를 ...ㅠㅠ
     @Transactional
@@ -78,6 +83,7 @@ public class MyPageRequestService {
         }
 
         Request request = new Request();
+        request.setMember(member);
         request.setRequestReason(requestDto.getRequestReason());
         request.setRequsetType(requestDto.getRequsetType());
         request.setRequestStart(requestStart);

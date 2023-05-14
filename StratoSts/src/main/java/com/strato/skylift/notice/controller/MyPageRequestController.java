@@ -50,16 +50,17 @@ public class MyPageRequestController {
         return requestRepository.findRequestByMember(member);
     }
     //로그인한 멤버의 코드로 리퀘스트 수정하기
-    @PutMapping("/request/modify/{memberCode}")
-    public ResponseEntity<ResponseDto> updateMember(@PathVariable Long memberCode, @ModelAttribute RequestDto requestDto) {
+    @PatchMapping("/request/modify/{memberCode}/{requestCode}")
+    public ResponseEntity<ResponseDto> updateMember(@PathVariable Long memberCode, @PathVariable Long requestCode, @ModelAttribute RequestDto requestDto) {
         Member member = myPageRepository.findById(memberCode)
                 .orElseThrow(() -> new IllegalArgumentException("No member found with id " + memberCode));
-        myPageRequestService.updateRequest(member, requestDto);
+        myPageRequestService.updateRequest(member, requestCode, requestDto);
 
         return ResponseEntity
                 .ok()
                 .body(new ResponseDto(HttpStatus.OK, "리퀘스트 수정 완료"));
     }
+
 
     //리퀘스트요청 인서트
     @PostMapping("/request/insert/{memberCode}")
