@@ -77,7 +77,7 @@ public class SecurityConfig {
 		             .antMatchers("/api/v1/products/**").hasRole("ADMIN")
 		             .antMatchers("/api/v1/products-management/**").hasRole("ADMIN")
 		             .antMatchers(HttpMethod.GET, "/api/v1/reviews/**").permitAll()
-		             .antMatchers("/api/**").hasAnyRole("USER", "ADMIN")  // 나머지 API 는 전부 인증 필요
+		             .antMatchers("/api/**").permitAll()
 		         .and()
 		         	.cors()
 		         // 실제 요청에 대해서 적용할 JwtFilter 설정
