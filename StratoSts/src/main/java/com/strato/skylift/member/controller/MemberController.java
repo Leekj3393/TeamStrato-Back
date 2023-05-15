@@ -117,7 +117,7 @@ public class MemberController {
 		
 		memberService.updateMember(memberDto);
 		
-		return ResponseEntity
+		return ResponseEntity 
 				.ok()
 				.body(new ResponseDto(HttpStatus.OK,"직원 수정 성공"));
 	}
