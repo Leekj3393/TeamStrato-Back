@@ -25,7 +25,7 @@ public class Request
     @Column(name = "REQUEST_REASON")
     private String requestReason;
 
-    @Column(name = "REQUEST_TYPE")
+    @Column(name = "REQUSET_TYPE")
     private String requsetType;
 
     @Column(name = "REQUEST_START")

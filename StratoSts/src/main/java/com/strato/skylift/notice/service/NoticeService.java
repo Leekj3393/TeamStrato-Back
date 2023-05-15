@@ -68,10 +68,14 @@ public class NoticeService {
 
 //3. 공지사항 상태별 목록 조회 - 미완성......
 	public Page<NoticeDto> selectNoticeListByNoticeStatus(int page, String noticeStatus) {
+		
+		log.info("[NoticeService] selectNoticeListByNoticeStatus start ============================== ");
+		
 		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("noticeCode").descending());
 		
 		
 		Page<Notice> noticeList = noticeRepository.findByNoticeStatus(pageable, noticeStatus);
+		
 		Page<NoticeDto> noticeDtoList = noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
 	
 		
@@ -81,6 +85,32 @@ public class NoticeService {
 		
 		return noticeDtoList;
 	}
+
+/* A.관리자 공지사항 전체 조회 */
+	public Page<NoticeDto> selectNoticeListForAdmin(int page) {
+		
+		log.info("[NoticeService] selectNoticeListForAdmin start ============================== ");
+		
+		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("noticeCode").descending());
+		
+		Page<Notice> noticeList = noticeRepository.findAll(pageable);
+		Page<NoticeDto> noticeDtoList = noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
+		
+
+		
+		log.info("[NoticeService] noticeDtoList.getContent() : {}", noticeDtoList.getContent());
+		
+		log.info("[ProductService] selectProductListForAdmin end ============================== ");
+		
+		return noticeDtoList;
+	}
+	
+/* B. 관리자 부서별 조회 */
+/* C. 관리자 상태별 조회 */
+/* D. 관리자 공지 등록 */
+/* E. 관리자 공지 수정 */
+/* F. 관리자 공지 삭제 */
+
 	
 
 }

@@ -44,8 +44,10 @@ public class AuthService {
 		
 		// 2. 비밀번호 매칭 확인 
 		// 가데이터 사용할 때 사용 할 구문
-		if((memberDto.getMemberPwd() == member.getMemberPwd())) {
+		if((!memberDto.getMemberPwd().matches(member.getMemberPwd()))) {
 			throw new LoginFailedException("잘못 된 아이디 또는 비밀번호입니다.");}
+		log.info("loginMemberDto : {}", memberDto.getMemberPwd());
+		log.info("loginMember : {}", member.getMemberPwd());
 		// 솔팅 처리 후 사용 할 구문
 //		if(!passwordEncoder.matches(memberDto.getMemberPwd(), member.getMemberPwd())) {
 //			throw new LoginFailedException("잘못 된 아이디 또는 비밀번호입니다.");
@@ -58,6 +60,17 @@ public class AuthService {
 		log.info("[AuthService] login end ====================================================");
 		
 		return tokenDto;
+	}
+	
+	/* Id 찾기 */
+	public MbMemberDto findMemberIdByMemberNameAndResidentNo(MbMemberDto memberDto) {
+		
+		Member member = memberRepository.findByMemberNameAndResidentNo(memberDto.getMemberName(), memberDto.getResidentNo())
+				.orElseThrow(() -> new IllegalArgumentException("해당 정보의 직원이 없습니다. memberCode : " + memberDto.getMemberName()));
+		
+		MbMemberDto FindMemberId = modelMapper.map(member, MbMemberDto.class);
+		
+		return FindMemberId;
 	}
 
 }

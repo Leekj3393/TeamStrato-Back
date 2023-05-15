@@ -3,11 +3,11 @@ package com.strato.skylift.member.dto;
 import java.util.Collection;
 import java.util.Date;
 
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import com.strato.skylift.entity.MemberRole;
-
 import lombok.Data;
 
 @Data
@@ -48,6 +48,7 @@ public class MbMemberDto implements UserDetails {
 	private MemberRole memberRole;
 	
 	private Collection<? extends GrantedAuthority> authorities;
+	private MbAttendanceDto attendance;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -90,4 +91,12 @@ public class MbMemberDto implements UserDetails {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+
+
+
+	public void setAttendance(MbAttendanceDto attendance) {
+		this.attendance = attendance;
+	}
 }
+

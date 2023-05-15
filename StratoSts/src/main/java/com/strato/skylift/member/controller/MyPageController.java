@@ -11,6 +11,8 @@ import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.repository.AttendanceRepository;
 import com.strato.skylift.member.repository.MyPageRepository;
 import com.strato.skylift.member.service.MyPageService;
+import com.strato.skylift.notice.dto.NoticeDto;
+import com.strato.skylift.notice.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,15 +24,16 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Slf4j
-
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/skylift/myPage")
 public class MyPageController {
 
         private final MyPageService myPageService;
         private final AttendanceRepository attendanceRepository;
         private final MyPageRepository myPageRepository;
+        private final NoticeService noticeService;
 
         //전체 사원수
     @GetMapping("/membersAll")
@@ -48,6 +51,13 @@ public class MyPageController {
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공", data));
     }
 
+    //해당하는 멤버의 근태조회하기
+    @GetMapping("/members/{memberCode}/attendance")
+    public ResponseEntity<ResponseDto> getAttendanceByMemberCode(@PathVariable("memberCode") Long memberCode) {
+        List<MbAttendanceDto> attendanceList = myPageService.getAttendanceByMemberCode(memberCode);
+        ResponseDto responseDto = new ResponseDto(HttpStatus.OK, "조회 성공", attendanceList);
+        return ResponseEntity.ok().body(responseDto);
+    }
 
 
 
@@ -74,8 +84,8 @@ public class MyPageController {
                     .body(new ResponseDto(HttpStatus.OK,"조회성공",myPageService.findByMemberCode(memberCode)));
 
         }
-
-        @PutMapping("/members/{memberCode}")
+        //멤버 기본정보 수정하기
+        @PutMapping("/members/modify/{memberCode}")
     public ResponseEntity<ResponseDto> updateMember(@ModelAttribute MbMemberDto mbMemberDto) {
             myPageService.updateMember(mbMemberDto);
 
@@ -136,9 +146,8 @@ public class MyPageController {
             return ResponseEntity.ok().build();
         }
 
-
     //출근 시간은 그대로 두고 퇴근시간 누르기, 만약 출근 시간이 안눌러져 있으면 '먼저 출근을 하세요!' 뜨게 하기
-    @PatchMapping("/attendance/endTime/{memberCode}")
+    @PostMapping("/attendance/endTime/{memberCode}")
     public ResponseEntity<?> handleAttendanceUpdate(@PathVariable Long memberCode) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTime = dateFormat.format(new Date());
@@ -181,7 +190,7 @@ public class MyPageController {
 
 
     //외출시간 출근시간은 그대로 두고, 만약 퇴근이 되어있으면 "퇴근하셔서 외출이 안됩니다"라고 뜨게하기
-    @PatchMapping("/attendance/outTime/{memberCode}")
+    @PostMapping("/attendance/outTime/{memberCode}")
     public ResponseEntity<?> handleAttendanceOutUpdate(@PathVariable Long memberCode) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTime = dateFormat.format(new Date());
@@ -228,7 +237,7 @@ public class MyPageController {
 
 
     //출근이랑 외출이 둘다 날짜가 찏혔을때만 복귀가 가능하게 하고싶어
-    @PatchMapping("/attendance/returnTime/{memberCode}")
+    @PostMapping("/attendance/returnTime/{memberCode}")
     public ResponseEntity<?> handleAttendanceReturnUpdate(@PathVariable Long memberCode) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTime = dateFormat.format(new Date());
@@ -269,6 +278,7 @@ public class MyPageController {
         }
     }
 
+    //  공지사항 전체 조회
 
 
 
