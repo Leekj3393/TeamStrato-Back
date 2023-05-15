@@ -13,7 +13,9 @@ public interface ApprovalRepository extends JpaRepository<Approval, Long> {
 /* 4. 결재문서 조회 - 결재 반려함 */
 /* 5. 결재문서 조회 - 상신 문서함(본인이 상신한 문서함) */
 /* 6. 기안문 작성  */
-/* 7. 결재선, 열람인 선정  */
+	
+/* 7. 결재선, 열람인 선정 save 메소드로 정의함 */
+	
 /* 8. 결재 승인  */
 /* 9. 결재 반려  */
 	
