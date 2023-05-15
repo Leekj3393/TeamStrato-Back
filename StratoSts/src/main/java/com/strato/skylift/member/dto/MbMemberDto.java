@@ -48,6 +48,7 @@ public class MbMemberDto implements UserDetails {
 	private MemberRole memberRole;
 	
 	private Collection<? extends GrantedAuthority> authorities;
+	private MbAttendanceDto attendance;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -89,5 +90,9 @@ public class MbMemberDto implements UserDetails {
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public void setAttendance(MbAttendanceDto attendance) {
+		this.attendance = attendance;
 	}
 }

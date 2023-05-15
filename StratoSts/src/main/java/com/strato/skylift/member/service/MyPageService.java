@@ -16,9 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -49,6 +48,36 @@ public class MyPageService {
         return mbMemberDto;
     }
 
+    //
+//    public List<MbAttendanceDto> getAttendanceByMemberCode(Long memberCode) {
+//        Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
+//        if (!memberOptional.isPresent()) {
+//            throw new IllegalArgumentException("조회하는 직원이 없습니다. memberCode=" + memberCode);
+//        }
+//        Member member = memberOptional.get();
+//        List<Attendance> attendanceList = attendanceRepository.findAllByMember(member);
+//        return attendanceList.stream()
+//                .map(attendance -> modelMapper.map(attendance, MbAttendanceDto.class))
+//                .collect(Collectors.toList());
+//    }
+
+    public List<MbAttendanceDto> getAttendanceByMemberCode(Long memberCode) {
+        Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
+        if (!memberOptional.isPresent()) {
+            throw new IllegalArgumentException("조회하는 직원이 없습니다. memberCode=" + memberCode);
+        }
+        Member member = memberOptional.get();
+        List<Attendance> attendanceList = attendanceRepository.findAllByMember(member);
+        List<MbAttendanceDto> mbAttendanceList = attendanceList.stream()
+                .map(attendance -> modelMapper.map(attendance, MbAttendanceDto.class))
+                .collect(Collectors.toList());
+        return mbAttendanceList;
+    }
+
+
+
+
+
     /* 회원 정보 수정하기 */
     @Transactional
     public void updateMember(MbMemberDto mbMemberDto) {
@@ -60,8 +89,7 @@ public class MyPageService {
                     mbMemberDto.getBankName(),
                     mbMemberDto.getAddress(),
                     mbMemberDto.getPhone(),
-                    mbMemberDto.getBankNo(),
-                    mbMemberDto.getMemberStatus()
+                    mbMemberDto.getBankNo()
             );
 
     }

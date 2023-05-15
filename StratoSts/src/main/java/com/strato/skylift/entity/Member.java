@@ -24,68 +24,68 @@ import lombok.ToString;
 			sequenceName="SEQ_MEMBER",
 			initialValue=1, allocationSize=1)
 public class Member {
-	
+
 	@Id
-	@Column(name="MEMBER_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="MEMBER_SEQ_GENERATOR")
+	@Column(name = "MEMBER_CODE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
 	private Long memberCode;
-	
-	@Column(name="MEMBER_ID")
+
+	@Column(name = "MEMBER_ID")
 	private String memberId;
-	
-	@Column(name="MEMBER_PWD")
+
+	@Column(name = "MEMBER_PWD")
 	private String memberPwd;
-	
-	@Column(name="MEMBER_NAME")
+
+	@Column(name = "MEMBER_NAME")
 	private String memberName;
-	
-	@Column(name="RESIDENT_NO")
+
+	@Column(name = "RESIDENT_NO")
 	private String residentNo;
-	
-	@Column(name="GENDER")
+
+	@Column(name = "GENDER")
 	private String gender;
-	
-	@Column(name="PHONE")
+
+	@Column(name = "PHONE")
 	private String phone;
-	
-	@Column(name="ADDRESS")
+
+	@Column(name = "ADDRESS")
 	private String address;
-	
-	@Column(name="MEMBER_STATUS")
+
+	@Column(name = "MEMBER_STATUS")
 	private String memberStatus;
-	
-	@Column(name="MEMBER_HIRE_DATE")
+
+	@Column(name = "MEMBER_HIRE_DATE")
 	private Date memberHireDate;
-	
-	@Column(name="BANK_NAME")
+
+	@Column(name = "BANK_NAME")
 	private String bankName;
-	
-	@Column(name="BANK_NO")
+
+	@Column(name = "BANK_NO")
 	private String bankNo;
-	
-	@Column(name="MEMBER_SALARY")
+
+	@Column(name = "MEMBER_SALARY")
 	private Long memberSalary;
-	
-	@Column(name="MEMBER_ANNUAL")
+
+	@Column(name = "MEMBER_ANNUAL")
 	private Long memberAnnual;
-	
+
 	@ManyToOne
-	@JoinColumn(name="JOB_CODE")
+	@JoinColumn(name = "JOB_CODE")
 	private Job job;
-	
+
 	@ManyToOne
-	@JoinColumn(name="DEPT_CODE")
+	@JoinColumn(name = "DEPT_CODE")
 	private Department department;
 
 	@ManyToOne
 	@JoinColumn(name = "ROLE_CODE")
 	private MemberRole memberRole;
-	
-	
+
+
 	public void update(String memberName, String residentNo, String gender,
-			String phone, String address, String bankName, String bankNo,
-			Long memberSalary, Long memberAnnual) {
-		
+					   String phone, String address, String bankName, String bankNo,
+					   Long memberSalary, Long memberAnnual) {
+
 		this.memberName = memberName;
 		this.residentNo = residentNo;
 		this.gender = gender;
@@ -97,12 +97,11 @@ public class Member {
 		this.memberAnnual = memberAnnual;
 	}
 
-	public void update(String bankName, String address, String phone, String bankNo, String memberStatus) {
+	public void update(String bankName, String address, String phone, String bankNo) {
 		this.bankName = bankName;
 		this.address = address;
 		this.phone = phone;
 		this.bankNo = bankNo;
-		this.memberStatus = memberStatus;
 	}
-
 }
+
