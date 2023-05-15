@@ -14,10 +14,13 @@ public interface MemberRepository extends JpaRepository <Member, Long> {
 //	@EntityGraph(attributePaths= {"department", "job"})
 	Page<Member> findAll(Pageable pageable);
 	
+	/* 직원 검색 조회(아이디) */
+	Page<Member> findByMemberId(Pageable pageable, String MemberId);
+	
+	/* 직원 검색 조회(이름) */
+	Page<Member> findByMemberName(Pageable pageable, String MemberName);
+	
 	/* 직원 상세정보 조회(공통) -> findById */
-	
-	
-	/* 직원 Id로 조회 */
 	Optional<Member> findByMemberId(String memberId);
 	
 	

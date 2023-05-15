@@ -1,6 +1,8 @@
 package com.strato.skylift.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -82,6 +85,10 @@ public class Member {
 	@ManyToOne
 	@JoinColumn(name = "ROLE_CODE")
 	private MemberRole memberRole;
+	
+	@OneToMany
+    @JoinColumn(name = "MEMBER_CODE")
+    private List<File> files = new ArrayList<>();
 	
 	
 	public void update(String memberName, String residentNo, String gender,
