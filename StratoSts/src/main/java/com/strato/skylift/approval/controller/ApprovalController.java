@@ -1,9 +1,15 @@
 package com.strato.skylift.approval.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.strato.skylift.approval.dto.ApprovalLineDto;
 import com.strato.skylift.approval.service.ApprovalService;
+import com.strato.skylift.common.ResponseDto;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +36,16 @@ public class ApprovalController {
  * 	- 기안문 작성 -> 전자결재 페이지에서 함
  * 	- 휴가, 휴직, 퇴직 신청 -> 마이페이지에서 한 뒤 넘어옴
  * 	- 장비 구매, 장비 수리, 장비 폐기 신청 -> 장비관리 페이지에서 한 뒤 넘어옴  */
+	@PostMapping("/appline")
+	public ResponseEntity<ResponseDto> insertAppLine (@ModelAttribute ApprovalLineDto applineDto){
+		
+		appServ.insertAppLine(applineDto);
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDto(HttpStatus.OK, "결재선 등록 성공"));
+	}
+	
 /* 8. 결재 승인  */
 /* 9. 결재 반려  */
 /* 추가로 생각할 것.. 결재 완료 후 스케줄에 추가하는 거 어떻게 할지 고민,,  */
