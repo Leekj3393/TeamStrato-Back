@@ -3,11 +3,11 @@ package com.strato.skylift.member.dto;
 import java.util.Collection;
 import java.util.Date;
 
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import com.strato.skylift.entity.MemberRole;
-
 import lombok.Data;
 
 @Data
@@ -30,7 +30,7 @@ public class MbMemberDto implements UserDetails {
 	private String address;
 
 	private String memberStatus;
-
+	
 	private Date memberHireDate;
 
 	private String bankName;
