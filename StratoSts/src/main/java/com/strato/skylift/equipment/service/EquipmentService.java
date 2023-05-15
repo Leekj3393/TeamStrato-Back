@@ -46,12 +46,43 @@ public class EquipmentService
         return cSequipmentCatgoryDTO;
     }
 
-    public Page<EquipmentDTO> selectCategorySerch(Long categoryCode, int page)
+    public Page<EquipmentDTO> selectCategorySerch(String name , String value , int page)
     {
+        Pageable pageable = PageRequest.of(page - 1, 8 , Sort.by("equipmentCode").ascending());
+        if(name.equals("EquipmentName"))
+        {
 
+            log.info("g2");
+            Page<Equipment> equipment = equipmentRepositroy.findByCategoryCodeCategoryName(value,pageable);
+
+            return equipment.map(equ -> modelMapper.map(equ , EquipmentDTO.class));
+        }
+        else if(name.equals("category"))
+        {
+            log.info("ㅎ2");
+            Page<Equipment> equipment = equipmentRepositroy.findByCategoryCode(Long.parseLong(value),pageable);
+
+            return equipment.map(equ -> modelMapper.map(equ , EquipmentDTO.class));
+        }
+
+        return null;
+    };
+
+    public Page<EquipmentDTO> findByCategory(Long category, int page)
+    {
         Pageable pageable = PageRequest.of(page - 1, 8 , Sort.by("equipmentCode").ascending());
 
-        Page<Equipment> equipment = equipmentRepositroy.findByCategoryCode(categoryCode , pageable);
-        return equipment.map(equ -> modelMapper.map(equ,EquipmentDTO.class));
-    };
+        Page<Equipment> equipment = equipmentRepositroy.findByCategoryCode(category,pageable);
+
+        return equipment.map(equ -> modelMapper.map(equ , EquipmentDTO.class));
+    }
+
+    public void regist(EquipmentDTO equipmentDTO)
+    {
+        equipmentRepositroy.save(modelMapper.map(equipmentDTO , Equipment.class));
+    }
+
+
+
+
 }
