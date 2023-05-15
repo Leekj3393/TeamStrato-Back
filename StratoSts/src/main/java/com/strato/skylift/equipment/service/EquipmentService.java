@@ -14,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+
 @Slf4j
 @Service
 public class EquipmentService
@@ -37,7 +40,18 @@ public class EquipmentService
         Page<Equipment> equipment = equipmentRepositroy.findAll(pageable);
 
         Page<CSequipmentCatgoryDTO> cSequipmentCatgoryDTO = equipment.map(equ -> modelMapper.map(equ , CSequipmentCatgoryDTO.class));
-        cSequipmentCatgoryDTO.forEach(cs -> cs.setCategoryCount(equipmentRepositroy.countByEquCategoryCategoryCode(cs.getCategoryCode())));
+        List<Long> count = equipmentRepositroy.countByEquCategoryCategoryCode();
+        for(int i = 0; i < cSequipmentCatgoryDTO.getContent().size(); i++)
+            cSequipmentCatgoryDTO.getContent().get(i).setCategoryCount(count.get(i));
         return cSequipmentCatgoryDTO;
     }
+
+    public Page<EquipmentDTO> selectCategorySerch(Long categoryCode, int page)
+    {
+
+        Pageable pageable = PageRequest.of(page - 1, 8 , Sort.by("equipmentCode").ascending());
+
+        Page<Equipment> equipment = equipmentRepositroy.findByCategoryCode(categoryCode , pageable);
+        return equipment.map(equ -> modelMapper.map(equ,EquipmentDTO.class));
+    };
 }

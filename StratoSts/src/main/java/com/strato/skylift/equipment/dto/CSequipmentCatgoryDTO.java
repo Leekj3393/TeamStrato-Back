@@ -1,13 +1,12 @@
 package com.strato.skylift.equipment.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,6 +17,8 @@ public class CSequipmentCatgoryDTO
     private String categoryName;
     private EquiCategoryDTO equCategory;
     private Long categoryCount;
+    @JsonFormat(pattern = "yyyy-MM-dd-HH-mm")
     private Date equipmentCreateDate;
-    private Date equipmentModifyDate;
+    @JsonFormat(pattern = "yyyy-MM-dd-HH-mm")
+    private Date  equipmentModifyDate;
 }
