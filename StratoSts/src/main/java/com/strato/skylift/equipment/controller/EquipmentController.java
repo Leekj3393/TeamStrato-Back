@@ -12,10 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -30,7 +27,7 @@ public class EquipmentController
     }
 
 
-    @GetMapping("test")
+    @GetMapping("findCategory")
     public ResponseEntity<ResponseDto> find(@RequestParam(name = "page",defaultValue = "1")int page)
     {
         Page<CSequipmentCatgoryDTO> category = equipmentService.selectCategoryAll(page);
@@ -41,7 +38,22 @@ public class EquipmentController
         responseDtoWithPaging.setPageInfo(pagingButtonInfo);
         responseDtoWithPaging.setData(category.getContent());
 
-        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"제발",responseDtoWithPaging));
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"성공",responseDtoWithPaging));
+    }
+
+    @GetMapping("searchEquipment/category/{categoryCode}")
+    public ResponseEntity<ResponseDto> searchEquipment(@RequestParam(name = "page", defaultValue = "1") int page,
+                                                       @PathVariable Long categoryCode)
+    {
+        Page<EquipmentDTO> equipment = equipmentService.selectCategorySerch(categoryCode , page);
+
+        PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(equipment);
+
+        ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+        responseDtoWithPaging.setPageInfo(pagingButtonInfo);
+        responseDtoWithPaging.setData(equipment.getContent());
+
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"test",responseDtoWithPaging));
     }
 
 }
