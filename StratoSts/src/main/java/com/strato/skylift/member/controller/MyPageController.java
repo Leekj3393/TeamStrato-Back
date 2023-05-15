@@ -24,9 +24,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Slf4j
-
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/skylift/myPage")
 public class MyPageController {
 
@@ -51,6 +51,13 @@ public class MyPageController {
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공", data));
     }
 
+    //해당하는 멤버의 근태조회하기
+    @GetMapping("/members/{memberCode}/attendance")
+    public ResponseEntity<ResponseDto> getAttendanceByMemberCode(@PathVariable("memberCode") Long memberCode) {
+        List<MbAttendanceDto> attendanceList = myPageService.getAttendanceByMemberCode(memberCode);
+        ResponseDto responseDto = new ResponseDto(HttpStatus.OK, "조회 성공", attendanceList);
+        return ResponseEntity.ok().body(responseDto);
+    }
 
 
 
@@ -78,7 +85,7 @@ public class MyPageController {
 
         }
         //멤버 기본정보 수정하기
-        @PutMapping("/members/{memberCode}")
+        @PutMapping("/members/modify/{memberCode}")
     public ResponseEntity<ResponseDto> updateMember(@ModelAttribute MbMemberDto mbMemberDto) {
             myPageService.updateMember(mbMemberDto);
 
@@ -139,9 +146,8 @@ public class MyPageController {
             return ResponseEntity.ok().build();
         }
 
-
     //출근 시간은 그대로 두고 퇴근시간 누르기, 만약 출근 시간이 안눌러져 있으면 '먼저 출근을 하세요!' 뜨게 하기
-    @PatchMapping("/attendance/endTime/{memberCode}")
+    @PostMapping("/attendance/endTime/{memberCode}")
     public ResponseEntity<?> handleAttendanceUpdate(@PathVariable Long memberCode) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTime = dateFormat.format(new Date());
@@ -184,7 +190,7 @@ public class MyPageController {
 
 
     //외출시간 출근시간은 그대로 두고, 만약 퇴근이 되어있으면 "퇴근하셔서 외출이 안됩니다"라고 뜨게하기
-    @PatchMapping("/attendance/outTime/{memberCode}")
+    @PostMapping("/attendance/outTime/{memberCode}")
     public ResponseEntity<?> handleAttendanceOutUpdate(@PathVariable Long memberCode) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTime = dateFormat.format(new Date());
@@ -231,7 +237,7 @@ public class MyPageController {
 
 
     //출근이랑 외출이 둘다 날짜가 찏혔을때만 복귀가 가능하게 하고싶어
-    @PatchMapping("/attendance/returnTime/{memberCode}")
+    @PostMapping("/attendance/returnTime/{memberCode}")
     public ResponseEntity<?> handleAttendanceReturnUpdate(@PathVariable Long memberCode) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTime = dateFormat.format(new Date());
