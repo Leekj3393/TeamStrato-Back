@@ -78,5 +78,29 @@ public class MemberService {
 		
 	}
 	
+	/* 직원 아이디 검색 */
+	public Page<MbMemberDto> selectProductListByProductId(int page, String memberId) {
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("productCode").descending());
+		
+		Page<Member> memberList = memberRepository.findByMemberId(pageable, memberId);
+				
+		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
+		
+		return memberDtoList;
+	}
+	
+	/* 직원 이름 검색 */
+	public Page<MbMemberDto> selectProductListByProductName(int page, String memberName) {
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("productCode").descending());
+		
+		Page<Member> memberList = memberRepository.findByMemberName(pageable, memberName);
+				
+		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
+		
+		return memberDtoList;
+	}
+	
 	
 }

@@ -27,4 +27,11 @@ public class AuthController {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "로그인 완료", authService.login(memberDto)));
 	}
+	
+	/* Id찾기 */
+	@PostMapping("/findid")
+	public ResponseEntity<ResponseDto> findid(@RequestBody MbMemberDto memberDto) {
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "입력하신 정보의 Id : ", authService.findMemberIdByMemberNameAndResidentNo(memberDto)));
+	}
 }
