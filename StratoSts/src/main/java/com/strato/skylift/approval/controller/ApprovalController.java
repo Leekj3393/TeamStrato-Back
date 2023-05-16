@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.strato.skylift.approval.dto.ApprovalDto;
 import com.strato.skylift.approval.dto.ApprovalLineDto;
-import com.strato.skylift.approval.dto.RequestDto;
 import com.strato.skylift.approval.repository.AppMemberRepository;
 import com.strato.skylift.approval.service.ApprovalService;
 import com.strato.skylift.common.ResponseDto;
 import com.strato.skylift.member.dto.MbMemberDto;
+import com.strato.skylift.notice.dto.RequestDto;
 
 import lombok.extern.slf4j.Slf4j;
 
