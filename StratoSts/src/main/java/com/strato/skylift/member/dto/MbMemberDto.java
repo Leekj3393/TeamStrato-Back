@@ -49,8 +49,6 @@ public class MbMemberDto implements UserDetails {
 	
 	private MbMemberRoleDto memberRole;
 	
-	private MemberRole memberRole2;
-	
 	private MbFileDto memberFile;
 	
 	@JsonIgnore
