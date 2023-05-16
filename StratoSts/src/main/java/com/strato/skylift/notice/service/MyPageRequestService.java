@@ -69,7 +69,6 @@ public void updateRequest(Member member, Long requestCode, RequestDto requestDto
 
 
 
-    //인서트 하기 근데 날짜를 ...ㅠㅠ
     @Transactional
     public void insertRequest(Member member, RequestDto requestDto) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -82,6 +81,13 @@ public void updateRequest(Member member, Long requestCode, RequestDto requestDto
             e.printStackTrace();
         }
 
+        // Check if the member has already made a request of the same type
+        List<Request> existingRequests = requestRepository.findRequestByMemberAndRequsetType(member, requestDto.getRequsetType());
+        if (!existingRequests.isEmpty()) {
+            throw new RuntimeException(requestDto.getRequsetType() + " 신청은 1번 이상 신청할 수 없습니다.");
+        }
+
+
         Request request = new Request();
         request.setMember(member);
         request.setRequestReason(requestDto.getRequestReason());
@@ -91,5 +97,6 @@ public void updateRequest(Member member, Long requestCode, RequestDto requestDto
 
         requestRepository.save(request);
     }
+
 
 }

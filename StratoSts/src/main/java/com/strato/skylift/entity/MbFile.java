@@ -20,7 +20,7 @@ import lombok.Setter;
 @SequenceGenerator(name="FILE_SEQ_GENERATOR",
 			sequenceName="SEQ_FILE",
 			initialValue=1, allocationSize=1)
-public class File {
+public class MbFile {
 	
 	@Id
 	@Column(name="FILE_CODE")
@@ -36,6 +36,8 @@ public class File {
 	@Column(name="FILE_TYPE")
 	private String fileType;
 	
+	@Column(name="MEMBER_CODE")
+	private Long memberCode;
 	
 
 }

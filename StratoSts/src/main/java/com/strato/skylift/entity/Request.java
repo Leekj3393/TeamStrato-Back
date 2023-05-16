@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "TBL_REQUEST")
@@ -34,4 +36,7 @@ public class Request
     @Column(name = "REQUEST_END")
     private Date requestEnd;
 
+    @OneToMany
+    @JoinColumn(name = "request")
+    private List<Approval> approvals = new ArrayList<>();
 }

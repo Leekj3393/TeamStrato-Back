@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,15 +16,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import org.hibernate.annotations.DynamicInsert;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Setter
 @Getter
 @Entity
+@DynamicInsert
 @Table(name="TBL_MEMBER")
 @SequenceGenerator(name="MEMBER_SEQ_GENERATOR",
 			sequenceName="SEQ_MEMBER",
@@ -86,9 +87,9 @@ public class Member {
 	@JoinColumn(name = "ROLE_CODE")
 	private MemberRole memberRole;
 
-	@OneToMany
-  @JoinColumn(name = "MEMBER_CODE")
-  private List<File> files = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "MEMBER_CODE")
+	private List<File> files = new ArrayList<>();
 
 	public void update(String memberName, String residentNo, String gender,
 					   String phone, String address, String bankName, String bankNo,

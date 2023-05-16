@@ -1,6 +1,10 @@
 package com.strato.skylift.member.service;
 
+
 import java.util.UUID;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 import javax.transaction.Transactional;
 
@@ -11,8 +15,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.strato.skylift.entity.Department;
+import com.strato.skylift.entity.Job;
+import com.strato.skylift.entity.MbFile;
 import com.strato.skylift.entity.Member;
+import com.strato.skylift.member.dto.MbDepartmentDto;
+import com.strato.skylift.member.dto.MbFileDto;
+import com.strato.skylift.member.dto.MbJobDto;
 import com.strato.skylift.member.dto.MbMemberDto;
+import com.strato.skylift.member.repository.MbDeptRepository;
+import com.strato.skylift.member.repository.MbFileRepository;
+import com.strato.skylift.member.repository.MbJobRepository;
 import com.strato.skylift.member.repository.MemberRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +35,17 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService {
 
 	private final MemberRepository memberRepository;
+	private final MbJobRepository jobRepository;
+	private final MbDeptRepository deptRepository;	
+	private final MbFileRepository fileRepository;
 	private final ModelMapper modelMapper;
 	
-	public MemberService(MemberRepository memberRepository, ModelMapper modelMapper) {
+	public MemberService(MemberRepository memberRepository, ModelMapper modelMapper, 
+			MbJobRepository jobRepository, MbDeptRepository deptRepository, MbFileRepository fileRepository) {
 		this.memberRepository = memberRepository;
+		this.jobRepository = jobRepository;
+		this.deptRepository = deptRepository;
+		this.fileRepository = fileRepository;
 		this.modelMapper = modelMapper;
 	}
 	
@@ -53,8 +73,9 @@ public class MemberService {
 
 	/* 직원 등록 */
 	@Transactional
-	public void insertMember(MbMemberDto memberDto) {
+	public void insertMember(MbMemberDto memberDto, MbFileDto fileDto) {
 		
+
 		String imageName = UUID.randomUUID().toString().replace("-", "");
 		
 		
@@ -65,6 +86,18 @@ public class MemberService {
 		
 		memberRepository.save(modelMapper.map(memberDto, Member.class));
 		
+		log.info("memberDto : {}", memberDto);
+		
+		log.info("fileDto : {}", fileDto);
+		
+		
+		Member newMember = memberRepository.save(modelMapper.map(memberDto, Member.class));
+		
+		if(fileDto != null) {
+			fileDto.setMemberCode(newMember.getMemberCode());
+			
+			fileRepository.save(modelMapper.map(fileDto, MbFile.class));
+		}
 	}
 
 	/* 직원 수정 */
@@ -110,6 +143,30 @@ public class MemberService {
 		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
 		
 		return memberDtoList;
+	}
+	
+	/* 직급 조회 */
+	public List<MbJobDto> selectJobList() {
+		
+		List<Job> jobList = jobRepository.findAll();
+		
+		List<MbJobDto> jobDtoList = jobList.stream()
+	            .map(job -> modelMapper.map(job, MbJobDto.class))
+	            .collect(Collectors.toList());
+		
+		return jobDtoList;
+	}
+	
+	/* 부서 조회 */
+	public List<MbDepartmentDto> selectDeptList() {
+		
+		List<Department> deptList = deptRepository.findAll();
+		
+		List<MbDepartmentDto> deptDtoList = deptList.stream()
+				.map(dept -> modelMapper.map(dept, MbDepartmentDto.class))
+				.collect(Collectors.toList());
+		
+		return deptDtoList;
 	}
 	
 	

@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
     List<Request> findRequestByMember(Member member);
+    List<Request> findRequestByMemberAndRequsetType(Member member, String requsetType);
+
 
 }
 
