@@ -1,12 +1,11 @@
 package com.strato.skylift.member.dto;
 
-import com.strato.skylift.education.dto.ClassDto;
-import com.strato.skylift.education.dto.EducationDto;
-import com.strato.skylift.member.dto.MbMemberDto;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import lombok.Data;
-
-@Data
+@Getter
+@Setter
 public class MbFileDto {
 	
 	private Long fileCode;
@@ -17,9 +16,6 @@ public class MbFileDto {
 
 	private String fileType;
 
-	private MbMemberDto member;
+	private Long memberCode;
 
-	private EducationDto education;
-
-	private ClassDto edClass;
 }
