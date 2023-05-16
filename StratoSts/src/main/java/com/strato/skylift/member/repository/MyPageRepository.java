@@ -15,8 +15,6 @@ import java.util.Optional;
 @Repository
 public interface MyPageRepository extends JpaRepository<Member, Long> {
 
-    //1. 마이페이지 멤버 기본 정보 조회
-    //@Query("SELECT m FROM Member m WHERE m.memberCode = :memberCode")
     Optional<Member> findByMemberCode(@Param("memberCode") Long memberCode);
 
 
