@@ -1,5 +1,7 @@
 package com.strato.skylift.member.service;
 
+import java.util.UUID;
+
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -52,6 +54,14 @@ public class MemberService {
 	/* 직원 등록 */
 	@Transactional
 	public void insertMember(MbMemberDto memberDto) {
+		
+		String imageName = UUID.randomUUID().toString().replace("-", "");
+		
+		
+			
+			memberDto.setFiles(null);
+			
+		
 		
 		memberRepository.save(modelMapper.map(memberDto, Member.class));
 		

@@ -65,15 +65,10 @@ public class MemberController {
 			@RequestParam(value="file", required=false) ArrayList<MultipartFile> files
 			) {
 		
-		MbFileDto fileDto = new MbFileDto();
+			
+			memberService.insertMember(memberDto);
+			
 		
-		String savedFileName="";
-		
-		String uploadPath="C:/Lecture/Strato/workspace-back3/TeamStrato-Back/StratoSts/src/resources/images";
-		
-		
-		
-		memberService.insertMember(memberDto);
 		
 		return ResponseEntity
 				.ok()
