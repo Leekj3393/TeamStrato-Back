@@ -14,8 +14,8 @@ import java.util.Date;
         initialValue=1, allocationSize=1)
 public class Notice
 {
-    @GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "NOTICE_SEQ_GENERATOR")
     @Id @Column(name = "NOTICE_CODE")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "NOTICE_SEQ_GENERATOR")
     private Long noticeCode;
 
     @Column(name = "NOTICE_TITLE")
