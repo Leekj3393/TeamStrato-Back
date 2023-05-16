@@ -50,21 +50,26 @@ public class ApprovalController {
 		// 로그인 구현되면 아래 두 행은 삭제하기!!
 		memberDto = new MbMemberDto();
 		memberDto.setMemberCode(1L);
+		
+		
 		appDto.setMemberDto(memberDto);
 		log.info("memberDto : {}", memberDto);
+		
 		
 		requestCode = reqDto.getRequestCode();
 		log.info("requestCode : {}", requestCode);
 		
 		if(requestCode != null) {
+			appDto.setRequest(reqDto);
 			appDto.setAppTitle(reqDto.getRequsetType());
 			appDto.setAppContent(reqDto.getRequestReason());
-			appDto.setAppCode(requestCode);
 			
 			appServ.insertRequestToAppTest(appDto);
 		} else {
 			appServ.registAppTest(appDto);
 		}
+		
+		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 등록 성공"));
 	}
 	
