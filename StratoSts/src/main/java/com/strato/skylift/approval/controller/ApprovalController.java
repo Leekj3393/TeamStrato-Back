@@ -3,6 +3,7 @@ package com.strato.skylift.approval.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,11 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.strato.skylift.approval.dto.ApprovalDto;
 import com.strato.skylift.approval.dto.ApprovalLineDto;
+import com.strato.skylift.approval.dto.RequestDto;
 import com.strato.skylift.approval.repository.AppMemberRepository;
 import com.strato.skylift.approval.service.ApprovalService;
 import com.strato.skylift.common.ResponseDto;
 import com.strato.skylift.member.dto.MbMemberDto;
-import com.strato.skylift.notice.dto.RequestDto;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,7 +43,7 @@ public class ApprovalController {
 	//테스트
 	@PostMapping("/regist")
 	public ResponseEntity<ResponseDto> registApprovalTest(@RequestBody ApprovalDto appDto,
-														   RequestDto reqDto,
+														   @ModelAttribute RequestDto reqDto,
 														  @AuthenticationPrincipal MbMemberDto memberDto,
 														  Long requestCode
 														  ) {
@@ -60,7 +61,7 @@ public class ApprovalController {
 		log.info("requestCode : {}", requestCode);
 		
 		if(requestCode != null) {
-			appDto.setRequest(reqDto);
+//			appDto.setRequest(reqDto);
 			appDto.setAppTitle(reqDto.getRequsetType());
 			appDto.setAppContent(reqDto.getRequestReason());
 			
