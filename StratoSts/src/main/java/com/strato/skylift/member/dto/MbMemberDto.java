@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.strato.skylift.entity.MemberRole;
 
 import lombok.Data;
 
@@ -47,6 +48,8 @@ public class MbMemberDto implements UserDetails {
 	private MbDepartmentDto department;
 	
 	private MbMemberRoleDto memberRole;
+	
+	private MemberRole memberRole2;
 	
 	private MbFileDto memberFile;
 	
