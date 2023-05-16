@@ -70,7 +70,7 @@ public class EquipmentService
 
     public Page<EquipmentDTO> findByCategory(Long category, int page)
     {
-        Pageable pageable = PageRequest.of(page - 1, 8 , Sort.by("equipmentCode").ascending());
+        Pageable pageable = PageRequest.of(page - 1, 4 , Sort.by("equipmentCode").ascending());
 
         Page<Equipment> equipment = equipmentRepositroy.findByCategoryCode(category,pageable);
 

@@ -49,11 +49,11 @@ public class EquipmentController
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"test",responseDtoWithPaging));
     }
 
-    @GetMapping("/detail")
+    @GetMapping("/detail/{categoryCode}")
     public ResponseEntity<ResponseDto> detail(@RequestParam(name = "page")int page
-                                        , @RequestParam(name = "category")Long category)
+                                        , @PathVariable Long categoryCode)
     {
-        Page<EquipmentDTO> equipment = equipmentService.findByCategory(category,page);
+        Page<EquipmentDTO> equipment = equipmentService.findByCategory(categoryCode,page);
 
         PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(equipment);
         ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging(equipment.getContent(),pagingButtonInfo);

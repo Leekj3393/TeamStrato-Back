@@ -17,8 +17,8 @@ public class CSequipmentCatgoryDTO
     private String categoryName;
     private EquiCategoryDTO equCategory;
     private Long categoryCount;
-    @JsonFormat(pattern = "yyyy-MM-dd-HH-mm")
+    @JsonFormat(pattern = "yyyy-MM-dd-HH:mm")
     private Date equipmentCreateDate;
-    @JsonFormat(pattern = "yyyy-MM-dd-HH-mm")
+    @JsonFormat(pattern = "yyyy-MM-dd-HH:mm")
     private Date  equipmentModifyDate;
 }
