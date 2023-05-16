@@ -2,6 +2,7 @@ package com.strato.skylift.member.service;
 
 import com.strato.skylift.entity.Attendance;
 import com.strato.skylift.entity.Member;
+import com.strato.skylift.exception.UserNotFoundException;
 import com.strato.skylift.member.dto.MbAttendanceDto;
 import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.repository.AttendanceRepository;
@@ -66,13 +67,20 @@ public class MyPageService {
         if (!memberOptional.isPresent()) {
             throw new IllegalArgumentException("조회하는 직원이 없습니다. memberCode=" + memberCode);
         }
+
         Member member = memberOptional.get();
-        List<Attendance> attendanceList = attendanceRepository.findAllByMember(member);
+        Optional<Attendance> attendanceList = attendanceRepository.findAllByMemberMemberCode(memberCode);
         List<MbAttendanceDto> mbAttendanceList = attendanceList.stream()
-                .map(attendance -> modelMapper.map(attendance, MbAttendanceDto.class))
+                .map(attendance -> {
+                    MbAttendanceDto mbAttendanceDto = modelMapper.map(attendance, MbAttendanceDto.class);
+                    log.info("[MyPageService] Member Code: {}, Date: {}, Status: {}", memberCode, mbAttendanceDto.getAttendanceDate(), mbAttendanceDto.getStatus());
+                    return mbAttendanceDto;
+                })
                 .collect(Collectors.toList());
         return mbAttendanceList;
     }
+
+
 
 
 
@@ -94,14 +102,16 @@ public class MyPageService {
 
     }
 
-
-    /* 회원 근태 출석 기록하기 */
+    // 출근 시간
     @Transactional
     public void manageAttendance(Long memberCode) {
+
+
         Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
-            Optional<Attendance> attendanceOptional = attendanceRepository.findAllByMemberMemberCode(memberCode);
+            Optional<Attendance> attendanceOptional = attendanceRepository.findByMember(member);
+
             if (attendanceOptional.isPresent()) {
                 Attendance attendance = attendanceOptional.get();
 
@@ -125,10 +135,14 @@ public class MyPageService {
         }
     }
 
+
+
     /* 회원 근태 퇴근 기록하기 */
     @Transactional
     public void manageAttendanceEndChange(Long memberCode) {
+
         Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
+
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
             Optional<Attendance> attendanceOptional = attendanceRepository.findAllByMemberMemberCode(memberCode);
@@ -144,12 +158,7 @@ public class MyPageService {
                 }
             } else {
                 // 출근을 안눌렀을 경우
-                Attendance newAttendance = new Attendance();
-                newAttendance.setMember(member);
-                newAttendance.setStatus("출근");
-                newAttendance.setAttendanceDate(new Date());
-                newAttendance.setStartTime(new Date());
-                attendanceRepository.save(newAttendance); // 출근 정보 저장
+                throw new IllegalArgumentException("먼저 출근을 하세요!");
             }
         }
     }
@@ -263,5 +272,15 @@ public class MyPageService {
     public long getTotalMemberCount() {
         return myPageRepository.count(); // MyPageRepository는 JPA Repository 인터페이스
     }
+
+    public MbMemberDto selectMyInfo(Long memberCode) {
+
+        log.info("멤버서비스: {}", memberCode  );
+        Member member = myPageRepository.findById(memberCode)
+                .orElseThrow(() -> new UserNotFoundException(memberCode + "를 찾을 수 없습니다"));
+
+        return  modelMapper.map(member,MbMemberDto.class);
+    }
+
 
 }

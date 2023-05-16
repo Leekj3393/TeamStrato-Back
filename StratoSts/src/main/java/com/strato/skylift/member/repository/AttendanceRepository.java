@@ -14,7 +14,9 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     //근태관리
     Optional<Attendance> findAllByMemberMemberCode(Long memberCode);
 
-
-
-    List<Attendance> findAllByMember(Member member);
+    Optional<Attendance> findByMember(Member member);
+//    List<Attendance> findAllByMemberCode(Long memberCode);
+//
+//
+//    List<Attendance> findAllByMember(Member member);
 }
