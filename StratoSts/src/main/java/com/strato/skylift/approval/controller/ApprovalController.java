@@ -1,5 +1,6 @@
 package com.strato.skylift.approval.controller;
 
+import com.strato.skylift.notice.dto.RequestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
