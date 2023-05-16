@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class ApprovalLineDto {
 
-private Long appLineCode;
+	private Long appLineCode;
 	
 	private ApprovalDto approval;
 	
