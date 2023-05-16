@@ -3,11 +3,12 @@ package com.strato.skylift.member.dto;
 import java.util.Collection;
 import java.util.Date;
 
-
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import com.strato.skylift.entity.MemberRole;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -45,7 +46,12 @@ public class MbMemberDto implements UserDetails {
 
 	private MbDepartmentDto department;
 	
-	private MemberRole memberRole;
+	private MbMemberRoleDto memberRole;
+	
+	private MbFileDto memberFile;
+	
+	@JsonIgnore
+	private MultipartFile memberImage;
 	
 	private Collection<? extends GrantedAuthority> authorities;
 	private MbAttendanceDto attendance;
