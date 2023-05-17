@@ -1,10 +1,13 @@
 package com.strato.skylift.member.controller;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,13 +16,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.strato.skylift.common.ResponseDto;
 import com.strato.skylift.common.paging.Pagenation;
 import com.strato.skylift.common.paging.PagingButtonInfo;
 import com.strato.skylift.common.paging.ResponseDtoWithPaging;
+import com.strato.skylift.member.dto.MbDepartmentDto;
 import com.strato.skylift.member.dto.MbFileDto;
+import com.strato.skylift.member.dto.MbJobDto;
 import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.service.MemberService;
 
@@ -31,9 +35,11 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 
 	private final MemberService memberService;
+	private final PasswordEncoder passwordEncoder;
 	
-	public MemberController(MemberService memberService) {
+	public MemberController(MemberService memberService, PasswordEncoder passwordEncoder) {
 		this.memberService = memberService;
+		this.passwordEncoder = passwordEncoder;
 	}
 	
 	/* 직원 전체 조회 */
@@ -59,16 +65,39 @@ public class MemberController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 상세조회에 성공했습니다.", memberService.selectMemberDetail(memberCode)));
 	}
 	
-	/* 직원 등록 - 미완성 */
-	@PostMapping("/members")
-	public ResponseEntity<ResponseDto> insertMember(@ModelAttribute MbMemberDto memberDto,
-			@RequestParam(value="file", required=false) ArrayList<MultipartFile> files
-			) {
+	/* 직원 이미지 조회 */
+	@GetMapping("/memberImage/{memberCode}")
+	public ResponseEntity<ResponseDto> selectMemberImage(@PathVariable Long memberCode) {
 		
-			
-			memberService.insertMember(memberDto);
-			
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 사진조회에 성공했습니다.", memberService.selectMemberImage(memberCode)));
+	}
 		
+	/* 직급, 부서 조회 */
+	@GetMapping("/jobDeptList")
+	public ResponseEntity<ResponseDto> selectJobDeptList() {
+
+	    List<MbJobDto> jobListDto = memberService.selectJobList();
+	    List<MbDepartmentDto> deptListDto = memberService.selectDeptList();
+	    
+	    log.info("jobListDto : {}", jobListDto);
+	    log.info("deptListDto : {}", deptListDto);
+	    
+	    Map<String, Object> data = new HashMap<>();
+	    data.put("job", jobListDto);
+	    data.put("dept", deptListDto);
+
+	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직급 및 부서 조회 완료", data));
+	}
+	
+	/* 직원 등록 */
+	@PostMapping("/regist")
+	public ResponseEntity<ResponseDto> insertMember(@ModelAttribute MbMemberDto memberDto) {
+		
+		System.out.println(memberDto);
+		
+		memberService.insertMember(memberDto);
+		
+		log.info("memberDto : {}", memberDto);
 		
 		return ResponseEntity
 				.ok()

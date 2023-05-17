@@ -48,8 +48,6 @@ public class MbMemberDto implements UserDetails {
 	
 	private MemberRole memberRole;
 	
-	private MbFileDto files;
-	
 	private Collection<? extends GrantedAuthority> authorities;
 	private MbAttendanceDto attendance;
 
