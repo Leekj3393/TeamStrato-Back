@@ -1,8 +1,13 @@
 package com.strato.skylift.approval.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +20,8 @@ import com.strato.skylift.approval.dto.RequestDto;
 import com.strato.skylift.approval.repository.AppMemberRepository;
 import com.strato.skylift.approval.service.ApprovalService;
 import com.strato.skylift.common.ResponseDto;
+import com.strato.skylift.member.dto.MbDepartmentDto;
+import com.strato.skylift.member.dto.MbJobDto;
 import com.strato.skylift.member.dto.MbMemberDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -63,6 +70,23 @@ public class ApprovalController {
 				.ok()
 				.body(new ResponseDto(HttpStatus.OK, "결재선 등록 성공"));
 	}
+	// 직원 전체 목록 조회
+	@GetMapping("/memberList")
+	public ResponseEntity<ResponseDto> selectMemberList() {
+
+	    List<MbMemberDto> memberListDto = appServ.selectMemberList();
+	    List<MbDepartmentDto> deptListDto = appServ.selectDeptList();
+	    
+	    log.info("jobListDto : {}", memberListDto);
+	    log.info("deptListDto : {}", deptListDto);
+	    
+	    Map<String, Object> data = new HashMap<>();
+	    data.put("job", memberListDto);
+	    data.put("dept", deptListDto);
+
+	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 전체 목록 조회 완료", data));
+	}
+	
 	
 	
 /* 8. 결재 승인  */
