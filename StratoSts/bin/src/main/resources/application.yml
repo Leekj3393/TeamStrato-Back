@@ -1,0 +1,4 @@
+# port config
+server:
+  port: 8001
+

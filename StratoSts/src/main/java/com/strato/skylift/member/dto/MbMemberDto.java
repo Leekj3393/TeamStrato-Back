@@ -8,6 +8,9 @@ import com.strato.skylift.entity.Attendance;
 import com.strato.skylift.entity.MemberRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+
+import com.strato.skylift.entity.File;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,7 +38,7 @@ public class MbMemberDto implements UserDetails {
 	private String address;
 
 	private String memberStatus;
-	
+
 	private Date memberHireDate;
 
 	private String bankName;
@@ -104,6 +107,9 @@ public class MbMemberDto implements UserDetails {
 		return false;
 	}
 
+
+
+
 	public void setAttendance(MbAttendanceDto attendance) {
 		this.attendance = attendance;
 	}
@@ -112,3 +118,4 @@ public class MbMemberDto implements UserDetails {
 
 
 }
+
