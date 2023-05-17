@@ -26,8 +26,7 @@ public class ApprovalController {
 	
 	private final ApprovalService appServ;
 	
-	public ApprovalController (ApprovalService appServ
-			) {
+	public ApprovalController (ApprovalService appServ) {
 		
 		this.appServ = appServ;
 		
@@ -38,12 +37,14 @@ public class ApprovalController {
 /* 3. 결재문서 조회 - 결재 완료함 */
 /* 4. 결재문서 조회 - 결재 반려함 */
 /* 5. 결재문서 조회 - 상신 문서함(본인이 상신한 문서함) */
-/* 6. 기안문 작성  */
-	//테스트
+/* 6. 기안문 작성 -완료?? */
 	@PostMapping("/regist")
 	public ResponseEntity<ResponseDto> registApproval(@RequestBody ApprovalDto appDto,
-														  @AuthenticationPrincipal MbMemberDto memberDto
+													  @AuthenticationPrincipal MbMemberDto memberDto
 														  ) {
+		memberDto = new MbMemberDto();
+		memberDto.setMemberCode(1L);
+		
 		appDto.setMemberDto(memberDto);
 		log.info("memberDto : {}", memberDto);
 		appServ.registApp(appDto);
