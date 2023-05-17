@@ -1,5 +1,6 @@
 package com.strato.skylift.approval.controller;
 
+import com.strato.skylift.notice.dto.RequestDto;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.strato.skylift.approval.dto.ApprovalDto;
 import com.strato.skylift.approval.dto.ApprovalLineDto;
-import com.strato.skylift.approval.dto.RequestDto;
 import com.strato.skylift.approval.repository.AppMemberRepository;
 import com.strato.skylift.approval.service.ApprovalService;
 import com.strato.skylift.common.ResponseDto;

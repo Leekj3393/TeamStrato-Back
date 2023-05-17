@@ -26,12 +26,12 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class TokenProvider {
-	
+
 	private static final String AUTHORITIES_KEY = "auth";
 	private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // 1초 x 60 x 30 = 30분
 	private final Key key;
 	private static final String BEARER_TYPE = "bearer";
-	
+
 	private final UserDetailsService userDetailsService;
 
 	public TokenProvider(@Value("${jwt.secret}") String secretKey, UserDetailsService userDetailsService) {
@@ -40,9 +40,9 @@ public class TokenProvider {
 		this.userDetailsService = userDetailsService;
 	}
 	public MbTokenDto generateTokenDto(MbMemberDto member) {
-		
+
 		log.info("[TokenProvider] generateTokenDto Start =======================================");
-		
+
 		// Claims라고 불리우는 JWT body(payload)에 정보 담기
 		Claims claims = Jwts.claims().setSubject(member.getMemberId());
 		// 권한도 claim에 담기
@@ -57,30 +57,30 @@ public class TokenProvider {
 				.setExpiration(accessTokenExpiresIn)
 				.signWith(key, SignatureAlgorithm.HS512)
 				.compact();
-		
+
 		log.info("[TokenProvider] generateTokenDto End =========================================");
-		
+
 		return new MbTokenDto(BEARER_TYPE, member.getMemberName(), accessToken, accessTokenExpiresIn.getTime());
 	}
 	public boolean validateToken(String jwt) {
-		
+
 		Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
-		
+
 		return true;
 	}
-	
+
 	/* DB에서 해당 User에 대한 정보를 조회 후 Authentication 타입으로 반환하는 메소드 */
 	public Authentication getAuthentication(String jwt) {
-		
+
 		Claims claims = parseClaims(jwt);
-		
+
 		UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
-		
+
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 	}
-	
+
 	private Claims parseClaims(String jwt) {
-		
+
 		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
 	}
 

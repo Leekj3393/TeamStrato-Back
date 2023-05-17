@@ -20,9 +20,6 @@ public class Request
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "REQUEST_SEQ_GENERATOR")
     private Long requestCode;
 
-    @ManyToOne
-    @JoinColumn(name = "MEMBER_CODE")
-    private Member member;
 
     @Column(name = "REQUEST_REASON")
     private String requestReason;
@@ -36,7 +33,6 @@ public class Request
     @Column(name = "REQUEST_END")
     private Date requestEnd;
 
-    @OneToMany
-    @JoinColumn(name = "request")
+    @OneToMany(mappedBy = "request")
     private List<Approval> approvals = new ArrayList<>();
 }

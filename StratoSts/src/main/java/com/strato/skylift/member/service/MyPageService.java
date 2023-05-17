@@ -49,18 +49,6 @@ public class MyPageService {
         return mbMemberDto;
     }
 
-    //
-//    public List<MbAttendanceDto> getAttendanceByMemberCode(Long memberCode) {
-//        Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
-//        if (!memberOptional.isPresent()) {
-//            throw new IllegalArgumentException("조회하는 직원이 없습니다. memberCode=" + memberCode);
-//        }
-//        Member member = memberOptional.get();
-//        List<Attendance> attendanceList = attendanceRepository.findAllByMember(member);
-//        return attendanceList.stream()
-//                .map(attendance -> modelMapper.map(attendance, MbAttendanceDto.class))
-//                .collect(Collectors.toList());
-//    }
 
     public List<MbAttendanceDto> getAttendanceByMemberCode(Long memberCode) {
         Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
@@ -83,24 +71,45 @@ public class MyPageService {
 
 
 
-
-
-
-    /* 회원 정보 수정하기 */
     @Transactional
-    public void updateMember(MbMemberDto mbMemberDto) {
+    public MbMemberDto updateMember(MbMemberDto mbMemberDto) {
+        Member originMember = myPageRepository.findByMemberCode(mbMemberDto.getMemberCode())
+                .orElseThrow(() -> new IllegalArgumentException("해당 직원이 없습니다. memberCode=" + mbMemberDto.getMemberCode()));
 
-            Member originMember = myPageRepository.findByMemberCode(mbMemberDto.getMemberCode())
-                    .orElseThrow(() -> new IllegalArgumentException("해당 직원이 없습니다. memberCode=" + mbMemberDto.getMemberCode()));
+        if (mbMemberDto.getBankName() != null) {
+            originMember.setBankName(mbMemberDto.getBankName());
+        }
 
-            originMember.update(
-                    mbMemberDto.getBankName(),
-                    mbMemberDto.getAddress(),
-                    mbMemberDto.getPhone(),
-                    mbMemberDto.getBankNo()
-            );
+        if (mbMemberDto.getAddress() != null) {
+            originMember.setAddress(mbMemberDto.getAddress());
+        }
 
+        if (mbMemberDto.getPhone() != null) {
+            originMember.setPhone(mbMemberDto.getPhone());
+        }
+
+        if (mbMemberDto.getBankNo() != null) {
+            originMember.setBankNo(mbMemberDto.getBankNo());
+        }
+
+        Member updatedMember = myPageRepository.save(originMember); // 변경된 필드를 데이터베이스에 저장
+
+        return convertToDto(updatedMember);
     }
+
+
+
+    private MbMemberDto convertToDto(Member member) {
+        MbMemberDto dto = new MbMemberDto();
+        dto.setMemberCode(member.getMemberCode());
+        dto.setBankName(member.getBankName());
+        dto.setAddress(member.getAddress());
+        dto.setPhone(member.getPhone());
+        dto.setBankNo(member.getBankNo());
+        return dto;
+    }
+
+
 
     // 출근 시간
     @Transactional
@@ -212,7 +221,7 @@ public class MyPageService {
 
     /* 회원 근태 복귀 기록하기 */
     @Transactional
-    public void manageAttendanceRetrunChange(Long memberCode) {
+    public void manageAttendanceReturnChange(Long memberCode) {
         Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
@@ -220,19 +229,19 @@ public class MyPageService {
             if (attendanceOptional.isPresent()) {
                 Attendance attendance = attendanceOptional.get();
 
-                // 출근한 상태인지 체크
-                if (attendance.getStatus().equals("출근")) {
+                // 외출한 상태인지 체크
+                if (attendance.getStatus().equals("외출")) {
                     if (attendance.getOutTime() != null && attendance.getReturnTime() == null) {
-                        // 출근 및 외출이 동시에 기록된 경우에만 복귀 가능
+                        // 외출 시간이 기록되어 있고, 복귀 시간이 아직 기록되지 않은 경우에만 복귀 가능
                         attendance.setReturnTime(new Date()); // 복귀 시간 업데이트
                         attendance.setStatus("복귀"); // 출석 상태를 "복귀"로 변경
                         attendanceRepository.save(attendance); // 출근 정보 업데이트
                     } else {
-                        throw new RuntimeException("출근 후 외출을 먼저 해주세요.");
+                        throw new RuntimeException("외출 후 복귀를 눌러주세요.");
                     }
                 } else {
-                    // 출근을 먼저 해주세요.
-                    throw new RuntimeException("출근을 먼저 해주세요.");
+                    // 외출을 먼저 해주세요.
+                    throw new RuntimeException("외출을 먼저 해주세요.");
                 }
             } else {
                 // 출근을 안눌렀을 경우
@@ -247,6 +256,7 @@ public class MyPageService {
             throw new RuntimeException("로그인을 다시 확인하세요.");
         }
     }
+
 
 
 
@@ -281,6 +291,12 @@ public class MyPageService {
 
         return  modelMapper.map(member,MbMemberDto.class);
     }
+
+
+    public List<Attendance> getAllAttendances() {
+        return attendanceRepository.findAll();
+    }
+
 
 
 }

@@ -2,16 +2,11 @@ package com.strato.skylift.entity;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.DynamicInsert;
 
 import lombok.Getter;
@@ -20,19 +15,22 @@ import lombok.Setter;
 @Entity
 @Table(name = "TBL_APPROVAL")
 @SequenceGenerator(name = "APPROVAL_SEQ_GENERATOR",
-                   sequenceName = "SEQ_APPROVAL",
-                    initialValue = 1 , allocationSize = 0)
+        sequenceName = "SEQ_APPROVAL",
+        initialValue = 1 , allocationSize = 0)
 @Getter @Setter @DynamicInsert
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "appCode")
 public class Approval
 {
     @Id @Column(name = "APP_CODE")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "APPROVAL_SEQ_GENERATOR")
     private Long appCode;
-    
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name ="MEMBER_CODE")
     private Member member;
 
+    //쓰지말라고
     @ManyToOne
     @JoinColumn(name = "REQUEST_CODE")
     private Request request;
