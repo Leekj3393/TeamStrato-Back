@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -78,15 +79,6 @@ public class MyPageController {
             return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"조회성공",responseDtoWithPaging));
         }
 
-        //로그인한 멤버의 정보 조회하기
-//        @GetMapping("/members/{memberCode}")
-//    public ResponseEntity<ResponseDto> selectMemberCode(@PathVariable("memberCode") Long memberCode){
-//            return  ResponseEntity
-//                    .ok()
-//                    .body(new ResponseDto(HttpStatus.OK,"조회성공",myPageService.findByMemberCode(memberCode)));
-//
-//        }
-
     @GetMapping("/members/{memberCode}")
     public ResponseEntity<ResponseDto> selectMemberCode(
             @PathVariable("memberCode") Long memberCode,
@@ -108,16 +100,27 @@ public class MyPageController {
                 .body(new ResponseDto(HttpStatus.OK, "조회성공", myPageService.selectMyInfo(member.getMemberCode())));
     }
 
+    @GetMapping("/workInfo")
+    public List<Attendance> getAllAttendances(@AuthenticationPrincipal MbMemberDto member) {
+        // 여기서 member는 현재 로그인한 사용자의 세부 정보를 포함하고 있습니다.
+        // 이 정보를 사용하여 사용자에 따라 다른 로직을 수행하거나, 특정 사용자에게만 정보를 반환하도록 할 수 있습니다.
+        return myPageService.getAllAttendances();
+    }
 
-        //멤버 기본정보 수정하기
-        @PutMapping("/members/modify/{memberCode}")
-    public ResponseEntity<ResponseDto> updateMember(@ModelAttribute MbMemberDto mbMemberDto) {
-            myPageService.updateMember(mbMemberDto);
 
-            return ResponseEntity
-                    .ok()
-                    .body(new ResponseDto(HttpStatus.OK,"회원 정보 변경 완료"));
-        }
+
+    @PutMapping("/members/modify")
+    public ResponseEntity<ResponseDto> updateMember(@AuthenticationPrincipal MbMemberDto authenticatedMemberDto, @RequestBody MbMemberDto updatedMemberDto) {
+        // 현재 인증된 사용자의 정보로 기존 멤버 정보를 가져옴
+        log.info("MbMemberDto :{}", authenticatedMemberDto);
+        return ResponseEntity
+                .ok()
+                .body(new ResponseDto(HttpStatus.OK,"회원 정보 변경 완료"));
+    }
+
+
+
+
 
         //근태관리 - 출석 누르기
         @PostMapping("/attendance")
@@ -148,21 +151,21 @@ public class MyPageController {
     @PostMapping("/attendance/outTime")
     public ResponseEntity<?> handleAttendanceOutUpdate(@AuthenticationPrincipal MbMemberDto member) {
         try {
-            myPageService.manageAttendanceEndChange(member.getMemberCode());
+            myPageService.manageAttendanceOutChange(member.getMemberCode());
             return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
 
     //출근이랑 외출이 둘다 날짜가 찏혔을때만 복귀가 가능하게 하고싶어
-    @PostMapping("/attendance/returnTime/{memberCode}")
+    @PostMapping("/attendance/returnTime")
     public ResponseEntity<?> handleAttendanceReturnUpdate(@AuthenticationPrincipal MbMemberDto member) {
         try {
-            myPageService.manageAttendanceEndChange(member.getMemberCode());
+            myPageService.manageAttendanceReturnChange(member.getMemberCode());
             return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

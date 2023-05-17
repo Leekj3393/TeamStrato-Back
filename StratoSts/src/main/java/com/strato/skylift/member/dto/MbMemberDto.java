@@ -2,7 +2,10 @@ package com.strato.skylift.member.dto;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
+import com.strato.skylift.entity.Attendance;
+import com.strato.skylift.entity.MemberRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +50,8 @@ public class MbMemberDto implements UserDetails {
 	private MbDepartmentDto department;
 	
 	private MbMemberRoleDto memberRole;
+
+	private MemberRole memberRole2;
 	
 	private MbFileDto memberFile;
 	
@@ -101,4 +106,8 @@ public class MbMemberDto implements UserDetails {
 	public void setAttendance(MbAttendanceDto attendance) {
 		this.attendance = attendance;
 	}
+
+
+
+
 }
