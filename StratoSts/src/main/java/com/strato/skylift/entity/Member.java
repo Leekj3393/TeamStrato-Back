@@ -124,9 +124,10 @@ public class Member {
 		this.department = department;
 		this.job = job;
     
+
+}
   /* 임시비밀번호  */
 	public void update(String memberPwd) {
 		this.memberPwd = memberPwd;
 	}
 }
-

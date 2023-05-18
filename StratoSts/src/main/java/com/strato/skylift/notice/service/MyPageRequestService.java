@@ -1,15 +1,26 @@
 package com.strato.skylift.notice.service;
 
+import com.strato.skylift.approval.dto.ApprovalDto;
+import com.strato.skylift.entity.Approval;
+import com.strato.skylift.entity.Member;
 import com.strato.skylift.entity.Request;
 import com.strato.skylift.member.repository.MyPageRepository;
+import com.strato.skylift.notice.dto.RequestDto;
 import com.strato.skylift.notice.repository.ApprovalRepositoryMyPage;
 import com.strato.skylift.notice.repository.RequestRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 @Slf4j
 @Service
 @AllArgsConstructor
@@ -24,79 +35,48 @@ public class MyPageRequestService {
     private final MyPageRepository myPageRepository;
 
     //모든 리퀘스트 찾기
-    //모든 리퀘스트 찾기
-//    public List<Request> getAllRequests() {
-//        return requestRepository.findAllWithApprovalsAndMembers();
-//    }
     public List<Request> getAllRequests(Long memberCode) {
         return approvalRepository.findAllRequestsByMemberCode(memberCode);
     }
 
 
-//    public List<Request> getMemberRequests(Long memberCode) {
-//        Member member = myPageRepository.findById(memberCode)
-//                .orElseThrow(() -> new IllegalArgumentException("No member found with id " + memberCode));
-//        log.info("Received requests : {}", member);
-//        return requestRepository.findRequestByMember(member);
-//    }
+    //리 퀘스트 등록하기
+    @Transactional
+    public void insertRequest(Long memberCode, RequestDto requestDto) {
+        // Find Member by memberCode
+        Member member = myPageRepository.findById(memberCode)
+                .orElseThrow(() -> new IllegalArgumentException("아이디를 다시 확인해주세요 :  " + memberCode));
 
+        // Create new Request
+        Request newRequest = new Request();
+        newRequest.setRequestReason(requestDto.getRequestReason());
+        newRequest.setRequsetType(requestDto.getRequsetType());
+        newRequest.setRequestStart(requestDto.getRequestStart());
+        newRequest.setRequestEnd(requestDto.getRequestEnd());
+        Request savedRequest = requestRepository.save(newRequest);
 
-//
-////수정 서비스
-//@Transactional
-//public void updateRequest(Member member, Long requestCode, RequestDto requestDto) {
-//    Request request = requestRepository.findById(requestCode)
-//            .orElseThrow(() -> new IllegalArgumentException("No request found with id " + requestCode));
-//
-//    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-//    Date requestStart = null;
-//    Date requestEnd = null;
-//    try {
-//        requestStart = formatter.parse(requestDto.getRequestStart());
-//        requestEnd = formatter.parse(requestDto.getRequestEnd());
-//    } catch (ParseException e) {
-//        e.printStackTrace();
-//    }
-//
-//    request.getApprovals(member);
-//    request.setRequestReason(requestDto.getRequestReason());
-//    request.setRequsetType(requestDto.getRequsetType());
-//    request.setRequestStart(requestStart);
-//    request.setRequestEnd(requestEnd);
-//
-//    requestRepository.save(request);
-//}
-//
-//
-//
-//    @Transactional
-//    public void insertRequest(Member member, RequestDto requestDto) {
-//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-//        Date requestStart = null;
-//        Date requestEnd = null;
-//        try {
-//            requestStart = formatter.parse(requestDto.getRequestStart());
-//            requestEnd = formatter.parse(requestDto.getRequestEnd());
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        // Check if the member has already made a request of the same type
-//        List<Request> existingRequests = requestRepository.findRequestByMemberAndRequsetType(member, requestDto.getRequsetType());
-//        if (!existingRequests.isEmpty()) {
-//            throw new RuntimeException(requestDto.getRequsetType() + " 신청은 1번 이상 신청할 수 없습니다.");
-//        }
-//
-//
-//        Request request = new Request();
-//        request.setMember(member);
-//        request.setRequestReason(requestDto.getRequestReason());
-//        request.setRequsetType(requestDto.getRequsetType());
-//        request.setRequestStart(requestStart);
-//        request.setRequestEnd(requestEnd);
-//
-//        requestRepository.save(request);
-//    }
+        // Create new Approval
+        Approval newApproval = new Approval();
+        newApproval.setMember(member);
+        newApproval.setRequest(savedRequest);
+        newApproval.setAppTitle(requestDto.getRequsetType());
+        newApproval.setAppContent(requestDto.getRequestReason());
+        newApproval.setAppType(requestDto.getRequsetType());
+        newApproval.setAppStatus("대기");
+        newApproval.setAppRegistDate(new Date());
+        newApproval.setApprovedDate(new Date());
+        newApproval.setAppWdlDate(new Date());
+
+        // Save new Approval
+        approvalRepository.save(newApproval);
+    }
+    //리퀘스트 삭제하기
+    public void deleteRequest(Long memberCode, RequestDto requestDto) {
+        Request request = requestRepository.findById(memberCode).orElseThrow(() ->
+                new IllegalArgumentException("아이디를 다시 확인해주세요 :  " + memberCode));
+
+        requestRepository.deleteById(memberCode);
+    }
 
 
 }
