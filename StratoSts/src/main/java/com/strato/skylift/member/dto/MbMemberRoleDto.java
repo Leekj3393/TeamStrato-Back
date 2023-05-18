@@ -8,4 +8,6 @@ public class MbMemberRoleDto {
     private Long roleCode;
 
     private String roleName;
+    
+    private String roleDes;
 }
