@@ -21,5 +21,7 @@ public class MemberRole
     @Column(name = "ROLE_NAME")
     private String roleName;
     
+    @Column(name= "ROLE_DES")
+    private String roleDes;
     
 }

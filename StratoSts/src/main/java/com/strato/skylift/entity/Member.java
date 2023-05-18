@@ -90,7 +90,8 @@ public class Member {
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "MEMBER_CODE")
 	private List<File> files = new ArrayList<>();
-
+	
+	/* 직원 정보 수정 */
 	public void update(String memberName, String residentNo, String gender,
 					   String phone, String address, String bankName, String bankNo,
 					   Long memberSalary, Long memberAnnual) {
@@ -111,6 +112,21 @@ public class Member {
 		this.address = address;
 		this.phone = phone;
 		this.bankNo = bankNo;
+	}
+	
+	/* 직원 권한 부여 */
+	public void update(MemberRole memberRole) {
+		this.memberRole = memberRole;
+	}
+	
+	/* 직원 인사이동 */
+	public void update(Department department, Job job) {
+		this.department = department;
+		this.job = job;
+    
+  /* 임시비밀번호  */
+	public void update(String memberPwd) {
+		this.memberPwd = memberPwd;
 	}
 }
 
