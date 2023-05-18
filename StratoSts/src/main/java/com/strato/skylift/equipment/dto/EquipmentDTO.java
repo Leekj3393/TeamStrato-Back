@@ -11,7 +11,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter @Setter
+@Getter @Setter @ToString
 public class EquipmentDTO
 {
     private Long EquipmentCode;
