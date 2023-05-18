@@ -93,7 +93,7 @@ public class MemberController {
 	@PostMapping("/regist")
 	public ResponseEntity<ResponseDto> insertMember(@ModelAttribute MbMemberDto memberDto) {
 		
-		System.out.println(memberDto);
+		System.out.println(memberDto);  
 		
 		memberService.insertMember(memberDto);
 		
