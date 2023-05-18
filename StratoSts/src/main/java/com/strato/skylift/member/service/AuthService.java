@@ -3,13 +3,10 @@ package com.strato.skylift.member.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.strato.skylift.jwt.TokenProvider;
 import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.dto.MbTokenDto;
 import com.strato.skylift.entity.Member;
-import com.strato.skylift.member.exception.DuplicatedUserEmailRuntimeException;
 import com.strato.skylift.member.exception.LoginFailedException;
 import com.strato.skylift.member.repository.MemberRepository;
 

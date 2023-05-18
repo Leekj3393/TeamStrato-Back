@@ -11,16 +11,19 @@ import org.springframework.stereotype.Service;
 
 import com.strato.skylift.approval.dto.ApprovalDto;
 import com.strato.skylift.approval.dto.ApprovalLineDto;
+import com.strato.skylift.approval.repository.AppDeptRepository;
+import com.strato.skylift.approval.repository.AppJobRepository;
+import com.strato.skylift.approval.repository.AppMemberRepository;
 import com.strato.skylift.approval.repository.ApprovalLineRepository;
 import com.strato.skylift.approval.repository.ApprovalRepository;
 import com.strato.skylift.entity.Approval;
 import com.strato.skylift.entity.ApprovalLine;
 import com.strato.skylift.entity.Department;
+import com.strato.skylift.entity.Job;
 import com.strato.skylift.entity.Member;
 import com.strato.skylift.member.dto.MbDepartmentDto;
+import com.strato.skylift.member.dto.MbJobDto;
 import com.strato.skylift.member.dto.MbMemberDto;
-import com.strato.skylift.member.repository.MbDeptRepository;
-import com.strato.skylift.member.repository.MemberRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,19 +32,22 @@ import lombok.extern.slf4j.Slf4j;
 public class ApprovalService {
 
 	private final ApprovalRepository appRepo;
-	private final MemberRepository mbRepo;
-	private final MbDeptRepository deptRepo;
+	private final AppMemberRepository mbRepo;
+	private final AppDeptRepository deptRepo;
+	private final AppJobRepository jobRepo;
 	private final ApprovalLineRepository appLineRepo;
 	private final ModelMapper mm;
 	
 	public ApprovalService(ApprovalRepository appRepo, 
 						   ApprovalLineRepository appLineRepo,
-						   MemberRepository mbRepo,
-						   MbDeptRepository deptRepo,
+						   AppMemberRepository mbRepo,
+						   AppDeptRepository deptRepo,
+						   AppJobRepository jobRepo,
 						   ModelMapper mm) {
 		this.appRepo = appRepo;
 		this.mbRepo = mbRepo;
 		this.deptRepo = deptRepo;
+		this.jobRepo = jobRepo;
 		this.appLineRepo = appLineRepo;
 		this.mm = mm;
 	}
@@ -65,37 +71,45 @@ public class ApprovalService {
 	public void insertAppLine(ApprovalLineDto applineDto) {
 		log.info("[ApprovalService] insertAppLine start ===========================================");
 		log.info("[ApprovalService] applineDto : {}", applineDto);
-		
 		appLineRepo.save(mm.map(applineDto, ApprovalLine.class));
-		
-		
 		log.info("[ApprovalService] insertAppLine end ===========================================");
-		
 	}
 
-	// 직원 전체 조회
+
+//	// 부서 조회
+//	public List<MbDepartmentDto> selectDeptList() {
+//		
+//		List<Department> deptList = deptRepo.findAll();
+//		
+//		List<MbDepartmentDto> deptDtoList = deptList.stream()
+//				.map(dept2 -> mm.map(dept2, MbDepartmentDto.class))
+//				.collect(Collectors.toList());
+//		
+//		return deptDtoList;
+//	}
+//
+//
+//	// 직급 조회
+//	public List<MbJobDto> selectJobList() {
+//		List<Job> jobList = jobRepo.findAll();
+//		
+//		List<MbJobDto> jobDtoList = jobList.stream()
+//				.map(job2 -> mm.map(job2, MbJobDto.class))
+//				.collect(Collectors.toList());
+//		
+//		return jobDtoList;
+//	}
+
+	// 직원 전체 조회 >> 부서순 정렬되도록!~!!!
 	public List<MbMemberDto> selectMemberList() {
 		List<Member> memberList = mbRepo.findAll();
 		
 		List<MbMemberDto> MemberDtoList = memberList.stream()
-	            .map(member -> mm.map(member, MbMemberDto.class))
-	            .collect(Collectors.toList());
+				.map(appline -> mm.map(appline, MbMemberDto.class))
+				.collect(Collectors.toList());
 		
 		return MemberDtoList;
 	}
-
-	// 부서 조회
-	public List<MbDepartmentDto> selectDeptList() {
-		
-		List<Department> deptList = deptRepo.findAll();
-		
-		List<MbDepartmentDto> deptDtoList = deptList.stream()
-				.map(dept -> mm.map(dept, MbDepartmentDto.class))
-				.collect(Collectors.toList());
-		
-		return deptDtoList;
-	}
-
 
 
 
