@@ -249,7 +249,7 @@ public class MyPageService {
                         throw new RuntimeException("외출 후 복귀를 눌러주세요.");
                     }
                 } else {
-                    // 외출을 먼저 해주세요.
+                    // 외출을 먼저 해주세요.라고 뜨게하기
                     throw new RuntimeException("외출을 먼저 해주세요.");
                 }
             } else {
