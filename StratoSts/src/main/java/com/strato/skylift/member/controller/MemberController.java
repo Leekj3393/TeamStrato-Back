@@ -22,9 +22,9 @@ import com.strato.skylift.common.paging.Pagenation;
 import com.strato.skylift.common.paging.PagingButtonInfo;
 import com.strato.skylift.common.paging.ResponseDtoWithPaging;
 import com.strato.skylift.member.dto.MbDepartmentDto;
-import com.strato.skylift.member.dto.MbFileDto;
 import com.strato.skylift.member.dto.MbJobDto;
 import com.strato.skylift.member.dto.MbMemberDto;
+import com.strato.skylift.member.dto.MbMemberRoleDto;
 import com.strato.skylift.member.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -136,8 +136,10 @@ public class MemberController {
 	}
 	
 	/* 직원 수정 */
-	@PutMapping("/members")
+	@PutMapping("/update")
 	public ResponseEntity<ResponseDto> updateMember(@ModelAttribute MbMemberDto memberDto) {
+		
+		log.info("memberDto : {}", memberDto);
 		
 		memberService.updateMember(memberDto);
 		
@@ -146,4 +148,38 @@ public class MemberController {
 				.body(new ResponseDto(HttpStatus.OK,"직원 수정 성공"));
 	}
 	
+	/* 직원 권한 수정 */
+	@PutMapping("/updaterole")
+	public ResponseEntity<ResponseDto> updateRoleMember(@ModelAttribute MbMemberDto memberDto) {
+		
+		log.info("memberDto : {}", memberDto);
+		
+		memberService.updateRoleMember(memberDto);
+		
+		return ResponseEntity 
+				.ok()
+				.body(new ResponseDto(HttpStatus.OK,"직원 권한 수정 성공"));
+	}
+	
+	/* 권한 조회 */
+	@GetMapping("/memberRoleList")
+	public ResponseEntity<ResponseDto> selectMemberRoleList() {
+
+	    List<MbMemberRoleDto> memberRoleDto = memberService.selectMemberRoleList();
+	    
+	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직급 및 부서 조회 완료", memberRoleDto));
+	}
+	
+	/* 직원 인사이동 */
+	@PutMapping("/updateRequest")
+	public ResponseEntity<ResponseDto> updateJobDeptMember(@ModelAttribute MbMemberDto memberDto) {
+		
+		log.info("memberDto : {}", memberDto);
+		
+		memberService.updateJobDeptMember(memberDto);
+		
+		return ResponseEntity 
+				.ok()
+				.body(new ResponseDto(HttpStatus.OK,"직원 인사이동 성공"));
+	}
 }
