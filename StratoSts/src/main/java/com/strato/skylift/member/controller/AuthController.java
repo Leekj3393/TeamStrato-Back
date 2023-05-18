@@ -56,9 +56,9 @@ public class AuthController {
 	
     /* 비밀번호 찾기 이메일 보내기 */
     @PostMapping("/send")
-    public String sendMail(@RequestParam(required = false) String email, @RequestParam(required = false) String residentNo) {
-    	Member member = authService.findMemberIdByResidentNo(residentNo);
-        MailDto mail = mailService.createMailAndChangePassword(email);
+    public String sendMail(@RequestBody MbMemberDto memberDto) {
+    	Member member = authService.findMemberIdByResidentNo(memberDto.getResidentNo());
+    	MailDto mail = mailService.createMailAndChangePassword(memberDto.getMemberId());
         mailService.mailSend(mail);
         return "redirect:/login";
     }
