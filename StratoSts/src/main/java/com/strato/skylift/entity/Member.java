@@ -112,5 +112,9 @@ public class Member {
 		this.phone = phone;
 		this.bankNo = bankNo;
 	}
+	
+	public void update(String memberPwd) {
+		this.memberPwd = memberPwd;
+	}
 }
 

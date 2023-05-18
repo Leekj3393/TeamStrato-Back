@@ -72,5 +72,39 @@ public class AuthService {
 		
 		return FindMemberId;
 	}
+	
+	/* 직원 비밀번호 변경 */
+//	public MbMemberDto updateMemberPwdByMemberId(String memberId, String memberPwd) {
+//		
+//		Member member = memberRepository.updateMemberPwdByMemberId(memberId, memberPwd)
+//				.orElseThrow(() -> new IllegalArgumentException("해당 아이디의 직원이 없습니다. memberId : "));
+//		
+//		MbMemberDto memberDto1 = modelMapper.map(member, MbMemberDto.class);
+//		
+//		return memberDto1;
+//	}
+	
+	@Transactional
+	public void updateMemberPwdByMemberId(String memberId, String pass) {
+		
+		Member member = memberRepository.findByMemberId(memberId)
+				.orElseThrow(() -> new IllegalArgumentException("해당 아이디의 직원이 없습니다. memberId : " + memberId));
+		
+		member.setMemberPwd(pass);
+		
+	}
+
+	public Member findByMemberId(String memberId) {
+		
+		Member member = memberRepository.findByMemberId(memberId)
+				.orElseThrow(() -> new IllegalArgumentException("해당 이메일의 직원이 없습니다. memberId : " + memberId));
+		
+		MbMemberDto memberDto = modelMapper.map(member, MbMemberDto.class);
+		
+		return member;
+	
+	
+	}
+
 
 }
