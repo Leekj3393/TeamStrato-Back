@@ -1,6 +1,5 @@
 package com.strato.skylift.approval.controller;
 
-import com.strato.skylift.notice.dto.RequestDto;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.strato.skylift.approval.dto.ApprovalDto;
 import com.strato.skylift.approval.dto.ApprovalLineDto;
-import com.strato.skylift.approval.repository.AppMemberRepository;
 import com.strato.skylift.approval.service.ApprovalService;
 import com.strato.skylift.common.ResponseDto;
 import com.strato.skylift.member.dto.MbDepartmentDto;
@@ -49,8 +46,8 @@ public class ApprovalController {
 	public ResponseEntity<ResponseDto> registApproval(@RequestBody ApprovalDto appDto,
 													  @AuthenticationPrincipal MbMemberDto memberDto
 														  ) {
-		memberDto = new MbMemberDto();
-		memberDto.setMemberCode(1L);
+//		memberDto = new MbMemberDto();
+//		memberDto.setMemberCode(1L);
 		
 		appDto.setMemberDto(memberDto);
 		log.info("memberDto : {}", memberDto);
@@ -70,19 +67,25 @@ public class ApprovalController {
 				.ok()
 				.body(new ResponseDto(HttpStatus.OK, "결재선 등록 성공"));
 	}
+	
 	// 직원 전체 목록 조회
 	@GetMapping("/memberList")
 	public ResponseEntity<ResponseDto> selectMemberList() {
 
+//	    List<MbDepartmentDto> deptListDto = appServ.selectDeptList();
+//	    List<MbJobDto> jobListDto = appServ.selectJobList();
 	    List<MbMemberDto> memberListDto = appServ.selectMemberList();
-	    List<MbDepartmentDto> deptListDto = appServ.selectDeptList();
 	    
-	    log.info("jobListDto : {}", memberListDto);
-	    log.info("deptListDto : {}", deptListDto);
+	    
+	    
+//	    log.info("deptListDto : {}", deptListDto);
+//	    log.info("jobListDto : {}", jobListDto);
+	    log.info("memberListDto : {}", memberListDto);
 	    
 	    Map<String, Object> data = new HashMap<>();
-	    data.put("job", memberListDto);
-	    data.put("dept", deptListDto);
+//	    data.put("dept", deptListDto);
+//	    data.put("job", jobListDto);
+	    data.put("appline", memberListDto);
 
 	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 전체 목록 조회 완료", data));
 	}
