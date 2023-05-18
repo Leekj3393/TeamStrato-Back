@@ -4,7 +4,10 @@ import com.strato.skylift.common.ResponseDto;
 import com.strato.skylift.common.paging.Pagenation;
 import com.strato.skylift.common.paging.PagingButtonInfo;
 import com.strato.skylift.common.paging.ResponseDtoWithPaging;
+import com.strato.skylift.entity.EquCategory;
 import com.strato.skylift.equipment.dto.CSequipmentCatgoryDTO;
+import com.strato.skylift.equipment.dto.EQFileDTO;
+import com.strato.skylift.equipment.dto.EquiCategoryDTO;
 import com.strato.skylift.equipment.dto.EquipmentDTO;
 import com.strato.skylift.equipment.service.EquipmentService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -53,6 +58,7 @@ public class EquipmentController
     public ResponseEntity<ResponseDto> detail(@RequestParam(name = "page")int page
                                         , @PathVariable Long categoryCode)
     {
+        log.info("equipmentCode : " + categoryCode);
         Page<EquipmentDTO> equipment = equipmentService.findByCategory(categoryCode,page);
 
         PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(equipment);
@@ -61,9 +67,20 @@ public class EquipmentController
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"성공",responseDtoWithPaging));
     }
 
+    @GetMapping("/regist")
+    public ResponseEntity<ResponseDto> registEquipment()
+    {
+        List<EquiCategoryDTO> equiCategoryDTO = equipmentService.findByCategoryAll();
+
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"성공",equiCategoryDTO));
+    }
+
     @PostMapping("/regist")
     public ResponseEntity<ResponseDto> regist(@ModelAttribute EquipmentDTO equipmentDTO)
     {
+        log.info("[regist] equipmentDTO : " , equipmentDTO);
+        log.info("[regist] equipmentDTO.files : " , equipmentDTO.getFiles());
+
         equipmentService.regist(equipmentDTO);
 
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"등록성공"));
@@ -81,21 +98,13 @@ public class EquipmentController
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"성공",responseDtoWithPaging));
     }
 
-    @PostMapping("/modify")
-    public ResponseEntity<ResponseDto> modifyReqs(@ModelAttribute EquipmentDTO equipmentDTO)
-    {
-
-        return null;
-    }
-
     @PutMapping("/modify")
     public ResponseEntity<ResponseDto> modifyEqu(@ModelAttribute EquipmentDTO equipmentDTO)
     {
-
-
-        return null;
+        equipmentService.modifyEquipment(equipmentDTO);
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"넹"));
     }
-
+    
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseDto> deleteEqu(@ModelAttribute EquipmentDTO equipmentDTO)
     {
