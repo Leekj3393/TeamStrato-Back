@@ -2,9 +2,7 @@ package com.strato.skylift.member.service;
 
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -23,6 +21,7 @@ import com.strato.skylift.entity.Department;
 import com.strato.skylift.entity.Job;
 import com.strato.skylift.entity.MbFile;
 import com.strato.skylift.entity.Member;
+import com.strato.skylift.entity.MemberRole;
 import com.strato.skylift.member.dto.MbDepartmentDto;
 import com.strato.skylift.member.dto.MbFileDto;
 import com.strato.skylift.member.dto.MbJobDto;
@@ -31,6 +30,7 @@ import com.strato.skylift.member.dto.MbMemberRoleDto;
 import com.strato.skylift.member.repository.MbDeptRepository;
 import com.strato.skylift.member.repository.MbFileRepository;
 import com.strato.skylift.member.repository.MbJobRepository;
+import com.strato.skylift.member.repository.MbMemberRoleRepository;
 import com.strato.skylift.member.repository.MemberRepository;
 import com.strato.skylift.member.util.MbFileUploadUtils;
 
@@ -44,6 +44,7 @@ public class MemberService {
 	private final MbJobRepository jobRepository;
 	private final MbDeptRepository deptRepository;	
 	private final MbFileRepository fileRepository;
+	private final MbMemberRoleRepository memberRoleRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final ModelMapper modelMapper;
 	
@@ -55,11 +56,12 @@ public class MemberService {
 	
 	public MemberService(MemberRepository memberRepository, ModelMapper modelMapper, 
 			MbJobRepository jobRepository, MbDeptRepository deptRepository, MbFileRepository fileRepository,
-			PasswordEncoder passwordEncoder) {
+			PasswordEncoder passwordEncoder, MbMemberRoleRepository memberRoleRepository) {
 		this.memberRepository = memberRepository;
 		this.jobRepository = jobRepository;
 		this.deptRepository = deptRepository;
 		this.fileRepository = fileRepository;
+		this.memberRoleRepository = memberRoleRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.modelMapper = modelMapper;
 	}
@@ -153,7 +155,7 @@ public class MemberService {
 				/* 기존에 저장 된 이미지 삭제 */
 				MbFile memberFile = fileRepository.findByMemberCode(memberDto.getMemberCode());
 				
-				MbFileUploadUtils.deleteFile(IMAGE_DIR, memberFile.getFilePath());
+				MbFileUploadUtils.deleteFile(IMAGE_DIR + "/member", memberFile.getFilePath());
 				
 				/* DB에 저장될 imageUrl 값을 수정 */
 				memberFile.setFilePath(replaceFileName);
@@ -182,8 +184,6 @@ public class MemberService {
 			
 	}
 		
-		
-	
 	/* 직원 아이디 검색 */
 	public Page<MbMemberDto> selectProductListByProductId(int page, String memberId) {
 		
@@ -230,6 +230,43 @@ public class MemberService {
 				.collect(Collectors.toList());
 		
 		return deptDtoList;
+	}
+	
+	/* 직원 권한 변경 */
+	@Transactional
+	public void updateRoleMember(MbMemberDto memberDto) {
+		
+		Member originMember = memberRepository.findById(memberDto.getMemberCode())
+				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 직원이 없습니다. memberCode : " + memberDto.getMemberCode() ));
+		
+		originMember.update(
+				modelMapper.map(memberDto.getMemberRole(), MemberRole.class)
+				);
+	}
+
+	/* 직원 인사 이동 */
+	@Transactional
+	public void updateJobDeptMember(MbMemberDto memberDto) {
+		
+		Member originMember = memberRepository.findById(memberDto.getMemberCode())
+				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 직원이 없습니다. memberCode : " + memberDto.getMemberCode() ));
+		
+		originMember.update(
+				modelMapper.map(memberDto.getDepartment(), Department.class),
+				modelMapper.map(memberDto.getJob(), Job.class)				
+				);
+	}
+	
+	/* 권한 조회 */
+	public List<MbMemberRoleDto> selectMemberRoleList() {
+		
+		List<MemberRole> memberRoleList = memberRoleRepository.findAll();
+		
+		List<MbMemberRoleDto> memberRoleDtoList = memberRoleList.stream()
+				.map(role -> modelMapper.map(role, MbMemberRoleDto.class))
+				.collect(Collectors.toList());
+		
+		return memberRoleDtoList;
 	}
 	
 	
