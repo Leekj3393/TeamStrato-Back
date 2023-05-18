@@ -46,7 +46,7 @@ public class TokenProvider {
 		// Claims라고 불리우는 JWT body(payload)에 정보 담기
 		Claims claims = Jwts.claims().setSubject(member.getMemberId());
 		// 권한도 claim에 담기
-		List<MemberRole> roles = Collections.singletonList(member.getMemberRole2());
+		List<String> roles = Collections.singletonList(member.getMemberRole().getRoleName());
 		claims.put(AUTHORITIES_KEY, roles);
 		// 토큰 만료 시간 설정
 		long now = new Date().getTime();
