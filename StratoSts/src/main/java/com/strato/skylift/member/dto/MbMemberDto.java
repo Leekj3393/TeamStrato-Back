@@ -4,8 +4,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import com.strato.skylift.approval.dto.ApprovalDto;
 import com.strato.skylift.entity.Attendance;
 import com.strato.skylift.entity.MemberRole;
+import com.strato.skylift.notice.dto.RequestDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,6 +56,10 @@ public class MbMemberDto implements UserDetails {
 	private MemberRole memberRole2;
 	
 	private MbFileDto memberFile;
+
+	private RequestDto request;
+
+	private ApprovalDto approval;
 	
 	@JsonIgnore
 	private MultipartFile memberImage;

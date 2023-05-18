@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -49,16 +50,6 @@ public class MyPageRequestController {
 
 
 
-
-    //로그인한 멤버의 코드 조회
-//    @GetMapping("/request/{memberCode}")
-//    public List<Request> getMemberRequests(@PathVariable Long memberCode) {
-//        Member member = myPageRepository.findById(memberCode)
-//                .orElseThrow(() -> new IllegalArgumentException("멤버 아이디 다시 확인하십 " + memberCode));
-//        log.info("Received requests: {}", member);
-//        return requestRepository.findRequestByMember(member);
-//    }
-
 //    //로그인한 멤버의 코드로 리퀘스트 수정하기
 //    @PatchMapping("/request/modify/{memberCode}/{requestCode}")
 //    public ResponseEntity<ResponseDto> updateMember(@PathVariable Long memberCode, @PathVariable Long requestCode, @ModelAttribute RequestDto requestDto) {
@@ -72,19 +63,15 @@ public class MyPageRequestController {
 //    }
 //
 //
-//    //리퀘스트요청 인서트
-//    @PostMapping("/request/insert/{memberCode}")
-//    public ResponseEntity<ResponseDto> insertRequestGo(@PathVariable Long memberCode, @RequestBody RequestDto requestDto) {
-//        Member member = myPageRepository.findById(memberCode)
-//                .orElseThrow(() -> new IllegalArgumentException("No member found with id " + memberCode));
-//        myPageRequestService.insertRequest(member, requestDto);
-//
-//        log.info("member: {}", member);
-//
-//        return ResponseEntity
-//                .ok()
-//                .body(new ResponseDto(HttpStatus.OK, "리퀘스트 등록 완료"));
-//    }
+    //리퀘스트요청 인서트
+//@PostMapping("/request/insert")
+//public ResponseEntity<ResponseDto> insertRequestGo(@AuthenticationPrincipal MbMemberDto memberDto, @RequestBody RequestDto requestDto) {
+//    myPageRequestService.insertRequest(memberDto.getMemberCode(), requestDto);
+//    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "리퀘스트 등록 완료"));
+//}
+
+
+
 
 
 

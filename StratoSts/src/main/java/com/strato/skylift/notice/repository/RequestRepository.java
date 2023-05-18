@@ -8,12 +8,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
     @Query("SELECT r FROM Request r LEFT JOIN FETCH r.approvals a LEFT JOIN FETCH a.member")
     List<Request> findAllWithApprovalsAndMembers();
 
+//        Optional<Member> findByMemberCode(Long memberCode);
 
 }
 

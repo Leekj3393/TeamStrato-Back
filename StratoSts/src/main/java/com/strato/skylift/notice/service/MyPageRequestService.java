@@ -1,7 +1,11 @@
 package com.strato.skylift.notice.service;
 
+import com.strato.skylift.approval.dto.ApprovalDto;
+import com.strato.skylift.entity.Approval;
+import com.strato.skylift.entity.Member;
 import com.strato.skylift.entity.Request;
 import com.strato.skylift.member.repository.MyPageRepository;
+import com.strato.skylift.notice.dto.RequestDto;
 import com.strato.skylift.notice.repository.ApprovalRepositoryMyPage;
 import com.strato.skylift.notice.repository.RequestRepository;
 import lombok.AllArgsConstructor;
@@ -9,13 +13,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 @Slf4j
 @Service
 @AllArgsConstructor
 public class MyPageRequestService {
 
-    private final RequestRepository requestRepository;
+//    private final RequestRepository requestRepository;
 
     private final ModelMapper modelMapper;
 
@@ -31,6 +41,38 @@ public class MyPageRequestService {
     public List<Request> getAllRequests(Long memberCode) {
         return approvalRepository.findAllRequestsByMemberCode(memberCode);
     }
+
+
+
+//    public void insertRequest(Long memberCode, RequestDto requestDto) {
+//        // Find Member by memberCode
+//        Member member = myPageRepository.findById(memberCode)
+//                .orElseThrow(() -> new IllegalArgumentException("No member found with id " + memberCode));
+//
+//        // Create new Request
+//        Request newRequest = new Request();
+//        newRequest.setRequestReason(requestDto.getRequestReason());
+//        newRequest.setRequsetType(requestDto.getRequsetType());
+//        newRequest.setRequestStart(requestDto.getRequestStart());
+//        newRequest.setRequestEnd(requestDto.getRequestEnd());
+//        Request savedRequest = requestRepository.save(newRequest);
+//
+//        // Create new Approval
+//        Approval newApproval = new Approval();
+//        newApproval.setMember(member);
+//        newApproval.setRequest(savedRequest);
+//        newApproval.setAppTitle(requestDto.getRequsetType());
+//        newApproval.setAppContent(requestDto.getRequestReason());
+//        newApproval.setAppType(requestDto.getRequsetType());
+//        newApproval.setAppStatus("결제중");
+//        newApproval.setAppRegistDate(new Date());
+//        newApproval.setApprovedDate(new Date());
+//        newApproval.setAppWdlDate(new Date());
+//
+//        // Save new Approval
+//        approvalRepository.save(newApproval);
+//    }
+
 
 
 //    public List<Request> getMemberRequests(Long memberCode) {
