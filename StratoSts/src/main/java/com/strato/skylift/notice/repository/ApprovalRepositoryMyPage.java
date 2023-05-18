@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ApprovalRepositoryMyPage extends JpaRepository<Approval, Long> {
 
-    //리퀘스트 -> 어프로발에서 멤버에 멤버 코드
+    //리퀘스트 -> 어프로발에서 멤버에 멤버 코드 이건 머지된거
     @Query("SELECT a.request FROM Approval a WHERE a.member.memberCode = :memberCode")
     List<Request> findAllRequestsByMemberCode(@Param("memberCode") Long memberCode);
 
