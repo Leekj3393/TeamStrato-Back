@@ -30,6 +30,7 @@ public class Approval
     @JoinColumn(name ="MEMBER_CODE")
     private Member member;
 
+    //쓰지말라고
     @ManyToOne
     @JoinColumn(name = "REQUEST_CODE")
     private Request request;
