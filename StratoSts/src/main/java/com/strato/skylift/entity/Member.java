@@ -123,6 +123,10 @@ public class Member {
 	public void update(Department department, Job job) {
 		this.department = department;
 		this.job = job;
+    
+  /* 임시비밀번호  */
+	public void update(String memberPwd) {
+		this.memberPwd = memberPwd;
 	}
 }
 
