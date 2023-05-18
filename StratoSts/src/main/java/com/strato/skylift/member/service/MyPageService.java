@@ -17,6 +17,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -114,8 +116,6 @@ public class MyPageService {
     // 출근 시간
     @Transactional
     public void manageAttendance(Long memberCode) {
-
-
         Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
@@ -126,23 +126,32 @@ public class MyPageService {
 
                 // 출근 버튼을 누를 때 출근 시간만 업데이트하고 퇴근, 외출, 복귀 시간은 null로 유지
                 if (isToday(attendance.getAttendanceDate())) {
-                    attendance.setStartTime(new Date()); // 출근 시간 업데이트
-                    attendance.setEndTime(null); // 퇴근 시간 null로 설정
-                    attendance.setOutTime(null); // 외출 시간 null로 설정
-                    attendance.setReturnTime(null); // 복귀 시간 null로 설정
-                    attendanceRepository.save(attendance); // 출근 정보 업데이트
+                    // 이미 출근한 경우 알림 메시지 표시
+                    throw new IllegalStateException("이미 출근하셨습니다."); // 출근 상태 메시지
                 }
-            } else {
-                // 처음 출근하는 경우
-                Attendance newAttendance = new Attendance();
-                newAttendance.setMember(member);
-                newAttendance.setStatus("출근");
-                newAttendance.setAttendanceDate(new Date());
-                newAttendance.setStartTime(new Date());
-                attendanceRepository.save(newAttendance); // 출근 정보 저장
+
+                // 퇴근, 외출, 복귀 상태일 때 출근 불가능한 경우 알림 메시지 표시
+                if (attendance.getEndTime() != null || attendance.getOutTime() != null || attendance.getReturnTime() != null) {
+                    throw new IllegalStateException("이미 출근하셔서 출근이 불가능합니다."); // 출근 불가능 상태 메시지
+                }
             }
+
+            // 오늘 출근한 경우 출근 불가능한 상태로 처리
+            List<Attendance> todayAttendances = attendanceRepository.findByAttendanceDateAndMember(new Date(), member);
+            if (!todayAttendances.isEmpty()) {
+                throw new IllegalStateException("오늘 이미 출근하셨습니다. 더 이상 출근이 불가능합니다."); // 오늘 출근 불가능 상태 메시지
+            }
+
+            // 처음 출근하는 경우
+            Attendance newAttendance = new Attendance();
+            newAttendance.setMember(member);
+            newAttendance.setStatus("출근");
+            newAttendance.setAttendanceDate(new Date());
+            newAttendance.setStartTime(new Date());
+            attendanceRepository.save(newAttendance); // 출근 정보 저장
         }
     }
+
 
 
 
@@ -240,7 +249,7 @@ public class MyPageService {
                         throw new RuntimeException("외출 후 복귀를 눌러주세요.");
                     }
                 } else {
-                    // 외출을 먼저 해주세요.
+                    // 외출을 먼저 해주세요.라고 뜨게하기
                     throw new RuntimeException("외출을 먼저 해주세요.");
                 }
             } else {
@@ -296,6 +305,22 @@ public class MyPageService {
     public List<Attendance> getAllAttendances() {
         return attendanceRepository.findAll();
     }
+
+    //오늘 해당하는 출근만 조회하기
+
+
+    public List<Attendance> getTodayAttendances() {
+        LocalDate localDate = LocalDate.now();
+        Date startOfDay = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date endOfDay = Date.from(localDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        log.info("Finding attendance for date: {}", localDate);
+        List<Attendance> attendances = attendanceRepository.findByAttendanceDateBetween(startOfDay, endOfDay);
+        log.info("Found {} attendance records for today", attendances.size());
+        return attendances;
+    }
+
+
 
 
 
