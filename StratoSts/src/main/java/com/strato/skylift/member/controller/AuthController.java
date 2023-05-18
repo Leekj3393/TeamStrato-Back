@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.strato.skylift.common.ResponseDto;
+import com.strato.skylift.entity.Member;
 import com.strato.skylift.mail.dto.MailDto;
 import com.strato.skylift.mail.service.MailService;
 import com.strato.skylift.member.dto.MbMemberDto;
@@ -55,8 +56,9 @@ public class AuthController {
 	
     /* 비밀번호 찾기 이메일 보내기 */
     @PostMapping("/send")
-    public String sendMail(@RequestParam(required = false) String Email) {
-        MailDto mail = mailService.createMailAndChangePassword(Email);
+    public String sendMail(@RequestParam(required = false) String email, @RequestParam(required = false) String residentNo) {
+    	Member member = authService.findMemberIdByResidentNo(residentNo);
+        MailDto mail = mailService.createMailAndChangePassword(email);
         mailService.mailSend(mail);
         return "redirect:/login";
     }

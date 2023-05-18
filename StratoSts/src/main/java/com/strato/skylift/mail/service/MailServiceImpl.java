@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.strato.skylift.entity.Member;
 import com.strato.skylift.mail.dto.MailDto;
-import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.service.AuthService;
 import com.strato.skylift.member.service.MemberService;
 
