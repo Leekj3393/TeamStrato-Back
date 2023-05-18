@@ -1,5 +1,6 @@
 package com.strato.skylift.entity;
 
+import com.strato.skylift.equipment.entity.EquipmentFile;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -40,7 +41,13 @@ public class Equipment
 
     @OneToMany
     @JoinColumn(name = "EQUIPMENT_CODE")
-    private List<File> files = new ArrayList<>();
+    private List<EquipmentFile> files = new ArrayList<>();
 
-
+    public void update(Long category , String equipmentName , Date equipmentModifyDate , String equipmentStatus)
+    {
+        this.equCategory.setCategoryCode(category);
+        this.equipmentName = equipmentName;
+        this.equipmentModifyDate = equipmentModifyDate;
+        this.equipmentStatus = equipmentStatus;
+    }
 }
