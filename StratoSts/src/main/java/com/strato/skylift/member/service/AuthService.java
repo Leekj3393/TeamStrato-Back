@@ -5,11 +5,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.strato.skylift.entity.Member;
 import com.strato.skylift.jwt.TokenProvider;
 import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.dto.MbTokenDto;
-import com.strato.skylift.entity.Member;
-import com.strato.skylift.member.exception.DuplicatedUserEmailRuntimeException;
 import com.strato.skylift.member.exception.LoginFailedException;
 import com.strato.skylift.member.repository.MemberRepository;
 
@@ -94,6 +93,18 @@ public class AuthService {
 		
 	}
 
+	public Member findMemberIdByResidentNo(String residentNo) {
+		
+		Member member = memberRepository.findMemberIdByResidentNo(residentNo)
+				.orElseThrow(() -> new IllegalArgumentException("해당 생년월일의 직원이 없습니다. residentNo : " + residentNo));
+		
+		MbMemberDto memberDto = modelMapper.map(member, MbMemberDto.class);
+		
+		return member;
+	
+	
+	}
+	
 	public Member findByMemberId(String memberId) {
 		
 		Member member = memberRepository.findByMemberId(memberId)
