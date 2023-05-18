@@ -3,11 +3,17 @@ package com.strato.skylift.member.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.strato.skylift.common.ResponseDto;
+import com.strato.skylift.entity.Member;
+import com.strato.skylift.mail.dto.MailDto;
+import com.strato.skylift.mail.service.MailService;
 import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.service.AuthService;
 
@@ -16,9 +22,11 @@ import com.strato.skylift.member.service.AuthService;
 public class AuthController {
 
 	private final AuthService authService;
+	private final MailService mailService;
 	
-	public AuthController(AuthService authService) {
+	public AuthController(AuthService authService, MailService mailService) {
 		this.authService = authService;
+		this.mailService = mailService;
 	}
 	
 	/* 로그인 */
@@ -34,4 +42,25 @@ public class AuthController {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "입력하신 정보의 Id : ", authService.findMemberIdByMemberNameAndResidentNo(memberDto)));
 	}
+	
+	/* 직원 비밀번호 수정 */
+	@PutMapping("/members/updatePwd")
+	public ResponseEntity<ResponseDto> updateMemberPwdByMemberId(@ModelAttribute String memberId, String pass) {
+		
+		authService.updateMemberPwdByMemberId(memberId, pass);
+		
+		return ResponseEntity 
+				.ok()
+				.body(new ResponseDto(HttpStatus.OK,"직원 수정 성공"));
+	}
+	
+    /* 비밀번호 찾기 이메일 보내기 */
+    @PostMapping("/send")
+    public String sendMail(@RequestParam(required = false) String email, @RequestParam(required = false) String residentNo) {
+    	Member member = authService.findMemberIdByResidentNo(residentNo);
+        MailDto mail = mailService.createMailAndChangePassword(email);
+        mailService.mailSend(mail);
+        return "redirect:/login";
+    }
+	
 }
