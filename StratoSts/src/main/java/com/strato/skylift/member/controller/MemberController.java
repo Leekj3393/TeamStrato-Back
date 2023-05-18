@@ -127,7 +127,7 @@ public class MemberController {
 		
 		Page<MbMemberDto> memberDtoList = memberService.selectProductListByProductName(page, memberName);
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberDtoList);
-		
+		   
 		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(memberDtoList.getContent());
