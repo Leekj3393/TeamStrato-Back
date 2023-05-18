@@ -10,8 +10,8 @@ import java.util.Date;
 @Entity
 @Table(name = "TBL_ATTENDANCE")
 @SequenceGenerator(name = "ATTENDANCE_SEQ_GENERATOR",
-                  sequenceName = "SEQ_ATTENDANCE",
-                    initialValue = 1 , allocationSize = 0)
+        sequenceName = "SEQ_ATTENDANCE",
+        initialValue = 1 , allocationSize = 0)
 @Getter @Setter @DynamicInsert
 public class Attendance
 {

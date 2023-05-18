@@ -48,28 +48,19 @@ public class MyPageRequestController {
         return ResponseEntity.ok(requests);
     }
 
-
-
-//    //로그인한 멤버의 코드로 리퀘스트 수정하기
-//    @PatchMapping("/request/modify/{memberCode}/{requestCode}")
-//    public ResponseEntity<ResponseDto> updateMember(@PathVariable Long memberCode, @PathVariable Long requestCode, @ModelAttribute RequestDto requestDto) {
-//        Member member = myPageRepository.findById(memberCode)
-//                .orElseThrow(() -> new IllegalArgumentException("No member found with id " + memberCode));
-//        myPageRequestService.updateRequest(member, requestCode, requestDto);
-//
-//        return ResponseEntity
-//                .ok()
-//                .body(new ResponseDto(HttpStatus.OK, "리퀘스트 수정 완료"));
-//    }
-//
-//
     //리퀘스트요청 인서트
-//@PostMapping("/request/insert")
-//public ResponseEntity<ResponseDto> insertRequestGo(@AuthenticationPrincipal MbMemberDto memberDto, @RequestBody RequestDto requestDto) {
-//    myPageRequestService.insertRequest(memberDto.getMemberCode(), requestDto);
-//    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "리퀘스트 등록 완료"));
-//}
+@PostMapping("/request/insert")
+public ResponseEntity<ResponseDto> insertRequestGo(@AuthenticationPrincipal MbMemberDto memberDto, @RequestBody RequestDto requestDto) {
+    myPageRequestService.insertRequest(memberDto.getMemberCode(), requestDto);
+    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "리퀘스트 등록 완료"));
+}
 
+
+    @DeleteMapping("/request/delete")
+    public ResponseEntity<ResponseDto> deleteRequest(@AuthenticationPrincipal MbMemberDto memberDto, @PathVariable RequestDto requestDto) {
+        myPageRequestService.deleteRequest(memberDto.getMemberCode(), requestDto);
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "리퀘스트 삭제 완료"));
+    }
 
 
 
