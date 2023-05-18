@@ -3,6 +3,7 @@ package com.strato.skylift.approval.dto;
 import java.util.Date;
 
 import com.strato.skylift.member.dto.MbMemberDto;
+import com.strato.skylift.notice.dto.RequestDto;
 
 import lombok.Data;
 
