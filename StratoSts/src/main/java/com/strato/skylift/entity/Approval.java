@@ -31,6 +31,7 @@ public class Approval
     private Member member;
 
     //쓰지말라고
+//	유정씨 이거 지우니깐 오류나네요 구냥 둘게유~~!!! 리퀘스트랑 pk fk 관계라 지우면 안되나봐요~~!!
     @ManyToOne
     @JoinColumn(name = "REQUEST_CODE")
     private Request request;
