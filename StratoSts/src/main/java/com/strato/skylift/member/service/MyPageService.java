@@ -74,30 +74,31 @@ public class MyPageService {
 
 
     @Transactional
-    public MbMemberDto updateMember(MbMemberDto mbMemberDto) {
-        Member originMember = myPageRepository.findByMemberCode(mbMemberDto.getMemberCode())
-                .orElseThrow(() -> new IllegalArgumentException("해당 직원이 없습니다. memberCode=" + mbMemberDto.getMemberCode()));
+    public MbMemberDto updateMember(MbMemberDto authenticatedMemberDto, MbMemberDto updatedMemberDto) {
+        Member originMember = myPageRepository.findByMemberCode(authenticatedMemberDto.getMemberCode())
+                .orElseThrow(() -> new IllegalArgumentException("해당 직원이 없습니다. memberCode=" + authenticatedMemberDto.getMemberCode()));
 
-        if (mbMemberDto.getBankName() != null) {
-            originMember.setBankName(mbMemberDto.getBankName());
+        if (updatedMemberDto.getBankName() != null) {
+            originMember.setBankName(updatedMemberDto.getBankName());
         }
 
-        if (mbMemberDto.getAddress() != null) {
-            originMember.setAddress(mbMemberDto.getAddress());
+        if (updatedMemberDto.getAddress() != null) {
+            originMember.setAddress(updatedMemberDto.getAddress());
         }
 
-        if (mbMemberDto.getPhone() != null) {
-            originMember.setPhone(mbMemberDto.getPhone());
+        if (updatedMemberDto.getPhone() != null) {
+            originMember.setPhone(updatedMemberDto.getPhone());
         }
 
-        if (mbMemberDto.getBankNo() != null) {
-            originMember.setBankNo(mbMemberDto.getBankNo());
+        if (updatedMemberDto.getBankNo() != null) {
+            originMember.setBankNo(updatedMemberDto.getBankNo());
         }
 
         Member updatedMember = myPageRepository.save(originMember); // 변경된 필드를 데이터베이스에 저장
 
         return convertToDto(updatedMember);
     }
+
 
 
 
