@@ -178,36 +178,9 @@ public class MemberService {
 			
 		}	catch (IOException e) {	
 			e.printStackTrace();
-		}
-			
-			
-			
+		}									
 	}
-		
-	/* 직원 아이디 검색 */
-	public Page<MbMemberDto> selectProductListByProductId(int page, String memberId) {
-		
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("productCode").descending());
-		
-		Page<Member> memberList = memberRepository.findByMemberId(pageable, memberId);
-				
-		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
-		
-		return memberDtoList;
-	}
-	
-	/* 직원 이름 검색 */
-	public Page<MbMemberDto> selectProductListByProductName(int page, String memberName) {
-		
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("productCode").descending());
-		
-		Page<Member> memberList = memberRepository.findByMemberName(pageable, memberName);
-				
-		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
-		
-		return memberDtoList;
-	}
-	
+			
 	/* 직급 조회 */
 	public List<MbJobDto> selectJobList() {
 		
@@ -267,6 +240,52 @@ public class MemberService {
 				.collect(Collectors.toList());
 		
 		return memberRoleDtoList;
+	}
+	
+	/* 직원 이름으로 검색 */
+	public Page<MbMemberDto> selectMemberListByMemberName(int page, String memberName) {
+		
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("memberCode").ascending());
+		
+		Page<Member> memberList = memberRepository.findByMemberName(pageable, memberName);
+		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
+		
+		log.info("memberList : {}", memberList);
+		return memberDtoList;
+	}
+	
+	/* 직원 사번으로 검색 */
+	public Page<MbMemberDto> selectMemberListByMemberCode(int page, Long memberCode) {
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("memberCode").ascending());
+		
+		Page<Member> memberList = memberRepository.findByMemberCode(pageable, memberCode);
+		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
+		
+		return memberDtoList;
+	}
+	
+	/* 부서명으로 검색 */
+	public Page<MbMemberDto> selectMemberListByDeptName(int page, String deptName) {
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("memberCode").ascending());
+		
+		Page<Member> memberList = memberRepository.findByDeptName(pageable, deptName);
+		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
+		
+		return memberDtoList;		
+	}
+
+	/* 직급으로 검색 */
+	public Page<MbMemberDto> selectMemberListByJobName(int page, String jobName) {
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("memberCode").ascending());
+		
+		Page<Member> memberList = memberRepository.findByJobName(pageable, jobName);
+		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
+		
+		return memberDtoList;		
 	}
 	
 	

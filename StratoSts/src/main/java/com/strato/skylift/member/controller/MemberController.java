@@ -58,6 +58,66 @@ public class MemberController {
 		
 	}
 	
+	/* 직원 목록 조회 - 이름기준, 페이징*/
+	@GetMapping("/names/{memberName}")
+	public ResponseEntity<ResponseDto> selectMemberListByMemberName (
+		@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") String memberName) {
+		
+		Page<MbMemberDto> memberDtoList = memberService.selectMemberListByMemberName(page, memberName);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberDtoList);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(memberDtoList.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공", responseDtoWithPaging));
+	}
+	
+	/* 직원 목록 조회 - 사번기준, 페이징*/
+	@GetMapping("/codes/{memberCode}")
+	public ResponseEntity<ResponseDto> selectMemberListByMemberCode (
+		@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") Long memberCode) {
+		
+		Page<MbMemberDto> memberDtoList = memberService.selectMemberListByMemberCode(page, memberCode);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberDtoList);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(memberDtoList.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공", responseDtoWithPaging));
+	}
+	
+	/* 직원 목록 조회 - 부서명기준, 페이징*/
+	@GetMapping("/department/{deptName}")
+	public ResponseEntity<ResponseDto> selectMemberListByDeptName (
+		@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") String deptName) {
+		
+		Page<MbMemberDto> memberDtoList = memberService.selectMemberListByDeptName(page, deptName);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberDtoList);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(memberDtoList.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공", responseDtoWithPaging));
+	}
+	
+	/* 직원 목록 조회 - 직급명기준, 페이징*/
+	@GetMapping("/job/{jobName}")
+	public ResponseEntity<ResponseDto> selectMemberListByjobName (
+		@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") String jobName) {
+		
+		Page<MbMemberDto> memberDtoList = memberService.selectMemberListByJobName(page, jobName);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberDtoList);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(memberDtoList.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공", responseDtoWithPaging));
+	}
+	
 	/* 직원 상세 조회 */
 	@GetMapping("/members/{memberCode}")
 	public ResponseEntity<ResponseDto> selectMemberDetail(@PathVariable Long memberCode) {
@@ -103,38 +163,7 @@ public class MemberController {
 				.ok()
 				.body(new ResponseDto(HttpStatus.OK, "직원 등록 성공"));
 	}
-	
-	/* 직원 조회 - 아이디로 검색*/
-	@GetMapping("/memberList/searchMbId")
-	public ResponseEntity<ResponseDto> selectMemberListByMemberId(
-			@RequestParam(name="page", defaultValue="1")int page, @RequestParam(name="search") String memberId ) {
 		
-		Page<MbMemberDto> memberDtoList = memberService.selectProductListByProductName(page, memberId);
-		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberDtoList);
-		
-		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
-		responseDtoWithPaging.setPageInfo(pageInfo);
-		responseDtoWithPaging.setData(memberDtoList.getContent());
-		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "아이디 검색 성공", responseDtoWithPaging));
-	}
-			
-	
-	/* 직원 조회 - 이름으로 검색*/
-	@GetMapping("/memberList/searchMbName")
-	public ResponseEntity<ResponseDto> selectMemberListByMemberName(
-			@RequestParam(name="page", defaultValue="1")int page, @RequestParam(name="search") String memberName ) {
-		
-		Page<MbMemberDto> memberDtoList = memberService.selectProductListByProductName(page, memberName);
-		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberDtoList);
-		   
-		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
-		responseDtoWithPaging.setPageInfo(pageInfo);
-		responseDtoWithPaging.setData(memberDtoList.getContent());
-		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "아이디 검색 성공", responseDtoWithPaging));
-	}
-	
 	/* 직원 수정 */
 	@PutMapping("/update")
 	public ResponseEntity<ResponseDto> updateMember(@ModelAttribute MbMemberDto memberDto) {
