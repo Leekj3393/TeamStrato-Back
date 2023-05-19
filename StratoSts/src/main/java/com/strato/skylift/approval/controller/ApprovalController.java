@@ -17,8 +17,7 @@ import com.strato.skylift.approval.dto.ApprovalDto;
 import com.strato.skylift.approval.dto.ApprovalLineDto;
 import com.strato.skylift.approval.service.ApprovalService;
 import com.strato.skylift.common.ResponseDto;
-import com.strato.skylift.member.dto.MbDepartmentDto;
-import com.strato.skylift.member.dto.MbJobDto;
+import com.strato.skylift.entity.Member;
 import com.strato.skylift.member.dto.MbMemberDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +39,27 @@ public class ApprovalController {
 /* 2. 결재문서 조회 - 결재 진행함 */
 /* 3. 결재문서 조회 - 결재 완료함 */
 /* 4. 결재문서 조회 - 결재 반려함 */
-/* 5. 결재문서 조회 - 상신 문서함(본인이 상신한 문서함) */
-/* 6. 기안문 작성 -완료?? */
+/* 5. 메인화면 결재 대기문서 조회 */
+/* 6. 기안문 작성 - 진행중 */
+	//로그인한 직원의 정보 조회
+//	@GetMapping("/memberInfo")
+//	public ResponseEntity<MbMemberDto> getMemberInfo(@AuthenticationPrincipal MbMemberDto memberDto, Long memberCode) {
+////		memberDto = new MbMemberDto();
+////		memberDto.setMemberCode(1L);
+//	    memberCode = memberDto.getMemberCode();
+//	    MbMemberDto memberInfo = appServ.selectMemberDetailForApproval(memberCode);
+//	    return ResponseEntity.ok(memberInfo);
+//	}
+	
+	@GetMapping("/memberInfo")
+	public ResponseEntity<ResponseDto> getMemberInfoForApproval(@AuthenticationPrincipal MbMemberDto memberDto) {
+		
+//		memberDto = new MbMemberDto();
+//		memberDto.setMemberCode(1L);
+		return ResponseEntity.ok()
+				.body(new ResponseDto(HttpStatus.OK, "기안자 조회 성공", appServ.getMemberInfoForApproval(memberDto.getMemberCode())));
+	}
+	
 	@PostMapping("/regist")
 	public ResponseEntity<ResponseDto> registApproval(@RequestBody ApprovalDto appDto,
 													  @AuthenticationPrincipal MbMemberDto memberDto
@@ -61,7 +79,7 @@ public class ApprovalController {
  * 	- 휴가, 휴직, 퇴직 신청 -> 마이페이지에서 한 뒤 넘어옴
  * 	- 장비 구매, 장비 수리, 장비 폐기 신청 -> 장비관리 페이지에서 한 뒤 넘어옴  */
 	@PostMapping("/appline")
-	public ResponseEntity<ResponseDto> insertAppLine (@RequestBody ApprovalLineDto applineDto){
+	public ResponseEntity<ResponseDto> insertAppLine (@RequestBody ApprovalLineDto applineDto, @AuthenticationPrincipal MbMemberDto memberDto){
 		appServ.insertAppLine(applineDto);
 		return ResponseEntity
 				.ok()
@@ -70,7 +88,7 @@ public class ApprovalController {
 	
 	// 직원 전체 목록 조회
 	@GetMapping("/memberList")
-	public ResponseEntity<ResponseDto> selectMemberList() {
+	public ResponseEntity<ResponseDto> selectMemberList(@AuthenticationPrincipal MbMemberDto memberDto) {
 
 //	    List<MbDepartmentDto> deptListDto = appServ.selectDeptList();
 //	    List<MbJobDto> jobListDto = appServ.selectJobList();

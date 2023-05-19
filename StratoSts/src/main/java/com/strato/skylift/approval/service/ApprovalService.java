@@ -2,6 +2,7 @@ package com.strato.skylift.approval.service;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -13,17 +14,14 @@ import com.strato.skylift.approval.dto.ApprovalDto;
 import com.strato.skylift.approval.dto.ApprovalLineDto;
 import com.strato.skylift.approval.repository.AppDeptRepository;
 import com.strato.skylift.approval.repository.AppJobRepository;
-import com.strato.skylift.approval.repository.AppMemberRepository;
 import com.strato.skylift.approval.repository.ApprovalLineRepository;
 import com.strato.skylift.approval.repository.ApprovalRepository;
 import com.strato.skylift.entity.Approval;
 import com.strato.skylift.entity.ApprovalLine;
-import com.strato.skylift.entity.Department;
-import com.strato.skylift.entity.Job;
 import com.strato.skylift.entity.Member;
-import com.strato.skylift.member.dto.MbDepartmentDto;
-import com.strato.skylift.member.dto.MbJobDto;
+import com.strato.skylift.exception.UserNotFoundException;
 import com.strato.skylift.member.dto.MbMemberDto;
+import com.strato.skylift.member.repository.MemberRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ApprovalService {
 
 	private final ApprovalRepository appRepo;
-	private final AppMemberRepository mbRepo;
+//	private final AppMemberRepository mbRepo;
+	private final MemberRepository mbRepo;
 	private final AppDeptRepository deptRepo;
 	private final AppJobRepository jobRepo;
 	private final ApprovalLineRepository appLineRepo;
@@ -40,7 +39,8 @@ public class ApprovalService {
 	
 	public ApprovalService(ApprovalRepository appRepo, 
 						   ApprovalLineRepository appLineRepo,
-						   AppMemberRepository mbRepo,
+//						   AppMemberRepository mbRepo,
+						   MemberRepository mbRepo,
 						   AppDeptRepository deptRepo,
 						   AppJobRepository jobRepo,
 						   ModelMapper mm) {
@@ -60,6 +60,17 @@ public class ApprovalService {
 /* 4. 결재문서 조회 - 결재 반려함 */
 /* 5. 결재문서 조회 - 상신 문서함(본인이 상신한 문서함) */
 /* 6. 기안문 작성  */
+	// 직원 상세 조회
+	public MbMemberDto selectMemberDetailForApproval(Long memberCode) {
+		Member member = mbRepo.findById(memberCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 직원이 없습니다. memberCode : " + memberCode));
+		
+		MbMemberDto memberDto = mm.map(member, MbMemberDto.class);
+		
+		return memberDto;
+	}
+	
+	// 기안문 등록
 	@Transactional
 	public void registApp(ApprovalDto appDto) {
 		appRepo.save(mm.map(appDto, Approval.class));
@@ -110,6 +121,36 @@ public class ApprovalService {
 		
 		return MemberDtoList;
 	}
+
+
+
+//	public MbMemberDto getMemberInfoByMemberCode(Long memberCode) {
+//
+//		// 로그인한 직원의 멤버코드를 기준으로 db에서 회원정보를 조회한다.
+//		Member member = mbRepo.findById(memberCode).orElseThrow(() -> new IllegalArgumentException("해당 코드의 직원이 없습니다. memberCode : " + memberCode));
+//		MbMemberDto memberDto = mm.map(member, MbMemberDto.class);
+//
+//		// 조회된 직원 정보를 반환한다.
+//		return memberDto;
+//	}
+
+
+	// 직원 조회
+	public Optional<Member> getMemberInfoForApproval(Long memberCode) {
+		log.info("[ApprovalService] selectPurchaseList start ============================== ");
+		log.info("[ApprovalService] memberCode : {}", memberCode);
+		
+		Member member = mbRepo.findById(memberCode)
+				.orElseThrow(() -> new UserNotFoundException("해당 유저가 없습니다."));
+		
+		Optional<Member> memberInfo = mbRepo.findById(memberCode);
+		
+		log.info("[ApprovalService] purchaseList : {}", memberInfo);
+		log.info("[ApprovalService] selectPurchaseList end ============================== ");
+		return memberInfo;
+	}
+
+
 
 
 
