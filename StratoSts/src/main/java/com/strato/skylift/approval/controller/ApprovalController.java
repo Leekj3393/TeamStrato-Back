@@ -53,7 +53,7 @@ public class ApprovalController {
 	
 	@GetMapping("/memberInfo")
 	public ResponseEntity<ResponseDto> getMemberInfoForApproval(@AuthenticationPrincipal MbMemberDto memberDto) {
-		
+		//포스트맨 테스트를 위해서 씀!!
 //		memberDto = new MbMemberDto();
 //		memberDto.setMemberCode(1L);
 		return ResponseEntity.ok()
