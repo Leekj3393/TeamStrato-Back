@@ -4,11 +4,9 @@ import com.strato.skylift.common.paging.Pagenation;
 import com.strato.skylift.entity.EquCategory;
 import com.strato.skylift.entity.Equipment;
 import com.strato.skylift.entity.File;
-import com.strato.skylift.equipment.dto.CSequipmentCatgoryDTO;
-import com.strato.skylift.equipment.dto.EQFileDTO;
-import com.strato.skylift.equipment.dto.EquiCategoryDTO;
-import com.strato.skylift.equipment.dto.EquipmentDTO;
+import com.strato.skylift.equipment.dto.*;
 import com.strato.skylift.equipment.entity.EquipmentFile;
+import com.strato.skylift.equipment.entity.EquipmentRegist;
 import com.strato.skylift.equipment.repository.EQcategoryRepositroy;
 import com.strato.skylift.equipment.repository.EquipmentRepositroy;
 import com.strato.skylift.equipment.repository.FileRepositrory;
@@ -110,18 +108,26 @@ public class EquipmentService
         return equipmentDTO;
     }
 
-    public void regist(EquipmentDTO equipmentDTO)
+    public void regist(EquipmentRegistDTO equipmentRegistDTO)
     {
-        if(equipmentDTO.getEquipmentImage() != null)
+        Date date = new Date();
+        log.info("data : " + date);
+
+        if(equipmentRegistDTO.getImage() != null)
         {
             try
             {
                 String imageName = UUID.randomUUID().toString().replace("-", "");
-                String reFileName = FileUploadUtils.saveFile(IMAGE_DIR + "equipment", imageName, equipmentDTO.getEquipmentImage());
+                String reFileName = FileUploadUtils.saveFile(IMAGE_DIR + "equipment", imageName, equipmentRegistDTO.getImage());
+                equipmentRegistDTO.getFiles().get(0).setFilePath(reFileName);
+                equipmentRegistDTO.getFiles().get(0).setFileName(imageName);
+                equipmentRegistDTO.getFiles().get(0).setFileType("장비");
+                EquipmentRegist equipment = modelMapper.map(equipmentRegistDTO , EquipmentRegist.class);
+                log.info("equipment : " + equipment);
+
             }
             catch (IOException e) { throw new RuntimeException(e); }
         }
-        equipmentRepositroy.save(modelMapper.map(equipmentDTO , Equipment.class));
     }
 
     @Transactional
