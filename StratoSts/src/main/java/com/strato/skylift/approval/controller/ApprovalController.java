@@ -60,24 +60,23 @@ public class ApprovalController {
 	//결재문서 상태별 조회
 	@GetMapping("/list/{appStatus}")
 	public ResponseEntity<ResponseDto> selectWaitingList(ApprovalDto approval, @RequestParam(name="page", defaultValue="1") int page, @PathVariable String appStatus,
-			@AuthenticationPrincipal MbMemberDto member) {
-//		member = new MbMemberDto();
-//		member.getMemberCode();
-//		log.info("member : {}" + member);
+	        @AuthenticationPrincipal MbMemberDto member) {
+
+//		Long memberCode = approval.getMemberDto().getMemberCode();
+//		log.info("memberCode : {}" +memberCode);
 		
-		
-		Page<ApprovalDto> approvalDtoWList = appServ.selectWaitingList(page, appStatus);
-		log.info("approvalDtoWList : {}" + approvalDtoWList);
-		
-		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(approvalDtoWList);
-		
-		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
-		responseDtoWithPaging.setPageInfo(pageInfo);
-		responseDtoWithPaging.setData(approvalDtoWList.getContent());
-		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 대기 목록 조회 성공", responseDtoWithPaging));
-		
+	    Page<ApprovalDto> approvalDtoWList = appServ.selectWaitingList(page, appStatus);
+	    log.info("approvalDtoWList : {}" + approvalDtoWList);
+	    
+	    PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(approvalDtoWList);
+	    
+	    ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+	    responseDtoWithPaging.setPageInfo(pageInfo);
+	    responseDtoWithPaging.setData(approvalDtoWList.getContent());
+	    
+	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 대기 목록 조회 성공", responseDtoWithPaging));
 	}
+
 	
 /* 5. 메인화면 결재 대기문서 조회 */
 /* 6. 기안문 작성 - 진행중 */
@@ -101,11 +100,11 @@ public class ApprovalController {
 		appDto.setMemberDto(memberDto);
 		log.info("memberDto : {}", memberDto);
 		appServ.registApp(appDto);
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 등록 성공"));
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재문서 등록 성공"));
 	}
 	
 	
-/* 7. 결재선, 열람인 선정
+/* 7. 결재선 선정
  * 	- 기안문 작성 -> 전자결재 페이지에서 함
  * 	- 휴가, 휴직, 퇴직 신청 -> 마이페이지에서 한 뒤 넘어옴
  * 	- 장비 구매, 장비 수리, 장비 폐기 신청 -> 장비관리 페이지에서 한 뒤 넘어옴  */
@@ -143,7 +142,13 @@ public class ApprovalController {
 	
 /* 8. 결재 승인  */
 /* 9. 결재 반려  */
-/*  */
+	
+/* 10. 결재 문서 상세페이지 - 포스트맨 테스트 완료!! */
+	@GetMapping("/{appCode}")
+	public ResponseEntity<ResponseDto> selectApprovalDetail(@PathVariable Long appCode) {
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재문서 상세페이지 조회 성공", appServ.selectApprovalDetail(appCode)));
+	}
 /*  */
 /*  */
 
