@@ -207,7 +207,7 @@ public class MemberController {
 		
 		memberService.updateJobDeptMember(memberDto);
 		
-		return ResponseEntity 
+		return ResponseEntity   
 				.ok()
 				.body(new ResponseDto(HttpStatus.OK,"직원 인사이동 성공"));
 	}
