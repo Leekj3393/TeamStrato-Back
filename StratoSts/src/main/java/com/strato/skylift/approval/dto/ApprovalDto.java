@@ -13,7 +13,8 @@ public class ApprovalDto {
 	private Long appCode;
 	
 	private MbMemberDto memberDto;
-
+	
+	//지우면 오류나서 둘게요!!!
 	private RequestDto request;
 	
 	private String appTitle;

@@ -114,9 +114,13 @@ public class MyPageController {
     public ResponseEntity<ResponseDto> updateMember(@AuthenticationPrincipal MbMemberDto authenticatedMemberDto, @RequestBody MbMemberDto updatedMemberDto) {
         // 현재 인증된 사용자의 정보로 기존 멤버 정보를 가져옴
         log.info("MbMemberDto :{}", authenticatedMemberDto);
+
+        // 회원 정보 업데이트
+        MbMemberDto updatedMember = myPageService.updateMember(authenticatedMemberDto, updatedMemberDto);
+
         return ResponseEntity
                 .ok()
-                .body(new ResponseDto(HttpStatus.OK,"회원 정보 변경 완료"));
+                .body(new ResponseDto(HttpStatus.OK,"회원 정보 변경 완료", updatedMember));
     }
 
 
@@ -160,7 +164,6 @@ public class MyPageController {
     }
 
 
-    //출근이랑 외출이 둘다 날짜가 찏혔을때만 복귀가 가능하게 하고싶어
     @PostMapping("/attendance/returnTime")
     public ResponseEntity<?> handleAttendanceReturnUpdate(@AuthenticationPrincipal MbMemberDto member) {
         try {

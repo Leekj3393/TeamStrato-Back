@@ -5,10 +5,7 @@ import com.strato.skylift.common.paging.Pagenation;
 import com.strato.skylift.common.paging.PagingButtonInfo;
 import com.strato.skylift.common.paging.ResponseDtoWithPaging;
 import com.strato.skylift.entity.EquCategory;
-import com.strato.skylift.equipment.dto.CSequipmentCatgoryDTO;
-import com.strato.skylift.equipment.dto.EQFileDTO;
-import com.strato.skylift.equipment.dto.EquiCategoryDTO;
-import com.strato.skylift.equipment.dto.EquipmentDTO;
+import com.strato.skylift.equipment.dto.*;
 import com.strato.skylift.equipment.service.EquipmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -76,12 +73,12 @@ public class EquipmentController
     }
 
     @PostMapping("/regist")
-    public ResponseEntity<ResponseDto> regist(@ModelAttribute EquipmentDTO equipmentDTO)
+    public ResponseEntity<ResponseDto> regist(@ModelAttribute EquipmentRegistDTO equipmentRegistDTO)
     {
-        log.info("[regist] equipmentDTO : " , equipmentDTO);
-        log.info("[regist] equipmentDTO.files : " , equipmentDTO.getFiles());
+        log.info("[regist] equipmentDTO : " , equipmentRegistDTO);
+        log.info("[regist] equipmentDTO.files : " , equipmentRegistDTO.getImage());
 
-        equipmentService.regist(equipmentDTO);
+        equipmentService.regist(equipmentRegistDTO);
 
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"등록성공"));
     }

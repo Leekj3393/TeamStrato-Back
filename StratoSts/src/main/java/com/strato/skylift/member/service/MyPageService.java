@@ -74,30 +74,31 @@ public class MyPageService {
 
 
     @Transactional
-    public MbMemberDto updateMember(MbMemberDto mbMemberDto) {
-        Member originMember = myPageRepository.findByMemberCode(mbMemberDto.getMemberCode())
-                .orElseThrow(() -> new IllegalArgumentException("해당 직원이 없습니다. memberCode=" + mbMemberDto.getMemberCode()));
+    public MbMemberDto updateMember(MbMemberDto authenticatedMemberDto, MbMemberDto updatedMemberDto) {
+        Member originMember = myPageRepository.findByMemberCode(authenticatedMemberDto.getMemberCode())
+                .orElseThrow(() -> new IllegalArgumentException("해당 직원이 없습니다. memberCode=" + authenticatedMemberDto.getMemberCode()));
 
-        if (mbMemberDto.getBankName() != null) {
-            originMember.setBankName(mbMemberDto.getBankName());
+        if (updatedMemberDto.getBankName() != null) {
+            originMember.setBankName(updatedMemberDto.getBankName());
         }
 
-        if (mbMemberDto.getAddress() != null) {
-            originMember.setAddress(mbMemberDto.getAddress());
+        if (updatedMemberDto.getAddress() != null) {
+            originMember.setAddress(updatedMemberDto.getAddress());
         }
 
-        if (mbMemberDto.getPhone() != null) {
-            originMember.setPhone(mbMemberDto.getPhone());
+        if (updatedMemberDto.getPhone() != null) {
+            originMember.setPhone(updatedMemberDto.getPhone());
         }
 
-        if (mbMemberDto.getBankNo() != null) {
-            originMember.setBankNo(mbMemberDto.getBankNo());
+        if (updatedMemberDto.getBankNo() != null) {
+            originMember.setBankNo(updatedMemberDto.getBankNo());
         }
 
         Member updatedMember = myPageRepository.save(originMember); // 변경된 필드를 데이터베이스에 저장
 
         return convertToDto(updatedMember);
     }
+
 
 
 
@@ -112,8 +113,46 @@ public class MyPageService {
     }
 
 
+//
+//    // 출근 시간
+//    @Transactional
+//    public void manageAttendance(Long memberCode) {
+//        Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
+//        if (memberOptional.isPresent()) {
+//            Member member = memberOptional.get();
+//            Optional<Attendance> attendanceOptional = attendanceRepository.findByMember(member);
+//
+//            if (attendanceOptional.isPresent()) {
+//                Attendance attendance = attendanceOptional.get();
+//
+//                // 출근 버튼을 누를 때 출근 시간만 업데이트하고 퇴근, 외출, 복귀 시간은 null로 유지
+//                if (isToday(attendance.getAttendanceDate())) {
+//                    // 이미 출근한 경우 알림 메시지 표시
+//                    throw new IllegalStateException("이미 출근하셨습니다."); // 출근 상태 메시지
+//                }
+//
+//                // 퇴근, 외출, 복귀 상태일 때 출근 불가능한 경우 알림 메시지 표시
+//                if (attendance.getEndTime() != null || attendance.getOutTime() != null || attendance.getReturnTime() != null) {
+//                    throw new IllegalStateException("이미 출근하셔서 출근이 불가능합니다."); // 출근 불가능 상태 메시지
+//                }
+//            }
+//
+//            // 오늘 출근한 경우 출근 불가능한 상태로 처리
+//            List<Attendance> todayAttendances = attendanceRepository.findByAttendanceDateAndMember(new Date(), member);
+//            if (!todayAttendances.isEmpty()) {
+//                throw new IllegalStateException("오늘 이미 출근하셨습니다. 더 이상 출근이 불가능합니다."); // 오늘 출근 불가능 상태 메시지
+//            }
+//
+//            // 처음 출근하는 경우
+//            Attendance newAttendance = new Attendance();
+//            newAttendance.setMember(member);
+//            newAttendance.setStatus("출근");
+//            newAttendance.setAttendanceDate(new Date());
+//            newAttendance.setStartTime(new Date());
+//            attendanceRepository.save(newAttendance); // 출근 정보 저장
+//        }
+//    }
 
-    // 출근 시간
     @Transactional
     public void manageAttendance(Long memberCode) {
         Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
@@ -124,31 +163,26 @@ public class MyPageService {
             if (attendanceOptional.isPresent()) {
                 Attendance attendance = attendanceOptional.get();
 
-                // 출근 버튼을 누를 때 출근 시간만 업데이트하고 퇴근, 외출, 복귀 시간은 null로 유지
                 if (isToday(attendance.getAttendanceDate())) {
-                    // 이미 출근한 경우 알림 메시지 표시
-                    throw new IllegalStateException("이미 출근하셨습니다."); // 출근 상태 메시지
+                    throw new IllegalStateException("이미 출근하셨습니다.");
                 }
 
-                // 퇴근, 외출, 복귀 상태일 때 출근 불가능한 경우 알림 메시지 표시
                 if (attendance.getEndTime() != null || attendance.getOutTime() != null || attendance.getReturnTime() != null) {
-                    throw new IllegalStateException("이미 출근하셔서 출근이 불가능합니다."); // 출근 불가능 상태 메시지
+                    throw new IllegalStateException("이미 출근하셔서 출근이 불가능합니다.");
                 }
             }
 
-            // 오늘 출근한 경우 출근 불가능한 상태로 처리
             List<Attendance> todayAttendances = attendanceRepository.findByAttendanceDateAndMember(new Date(), member);
             if (!todayAttendances.isEmpty()) {
-                throw new IllegalStateException("오늘 이미 출근하셨습니다. 더 이상 출근이 불가능합니다."); // 오늘 출근 불가능 상태 메시지
+                throw new IllegalStateException("오늘 이미 출근하셨습니다. 더 이상 출근이 불가능합니다.");
             }
 
-            // 처음 출근하는 경우
             Attendance newAttendance = new Attendance();
             newAttendance.setMember(member);
             newAttendance.setStatus("출근");
             newAttendance.setAttendanceDate(new Date());
             newAttendance.setStartTime(new Date());
-            attendanceRepository.save(newAttendance); // 출근 정보 저장
+            attendanceRepository.save(newAttendance);
         }
     }
 
