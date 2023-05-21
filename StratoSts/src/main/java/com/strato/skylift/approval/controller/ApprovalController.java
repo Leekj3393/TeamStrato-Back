@@ -4,19 +4,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.strato.skylift.approval.dto.ApprovalDto;
 import com.strato.skylift.approval.dto.ApprovalLineDto;
 import com.strato.skylift.approval.service.ApprovalService;
 import com.strato.skylift.common.ResponseDto;
+import com.strato.skylift.common.paging.Pagenation;
+import com.strato.skylift.common.paging.PagingButtonInfo;
+import com.strato.skylift.common.paging.ResponseDtoWithPaging;
 import com.strato.skylift.entity.Member;
 import com.strato.skylift.member.dto.MbMemberDto;
 
@@ -35,22 +41,65 @@ public class ApprovalController {
 		
 	}
 	
-/* 1. 결재문서 조회 - 결재 대기함 */
-/* 2. 결재문서 조회 - 결재 진행함 */
-/* 3. 결재문서 조회 - 결재 완료함 */
-/* 4. 결재문서 조회 - 결재 반려함 */
+/* 1. 결재문서 조회 - 결재 대기함
+   2. 결재문서 조회 - 결재 진행함 
+   3. 결재문서 조회 - 결재 완료함 
+   4. 결재문서 조회 - 결재 반려함
+   -포스트맨 테스트  */
+//	@GetMapping("/list/{appStatus}")
+//	public ResponseEntity<ResponseDto> selectWaitingList(@RequestParam(name="page", defaultValue="1") int page, @PathVariable String appStatus,
+//			@AuthenticationPrincipal MbMemberDto member, Long memberCode) {
+//		
+////		member = new MbMemberDto();
+////		member.setMemberCode(1L);
+//		
+//		
+//		Page<ApprovalDto> approvalDtoWList = appServ.selectWaitingListByMember(page, appStatus, memberCode);
+//			
+//		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(approvalDtoWList);
+//		
+//		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+//		responseDtoWithPaging.setPageInfo(pageInfo);
+//		responseDtoWithPaging.setData(approvalDtoWList.getContent());
+//		
+//		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 대기 목록 조회 성공", responseDtoWithPaging));
+//		
+//	}
+	// 기안자 정보 조회
+//	ㅠㅠㅠㅠㅠ
+//	@GetMapping("/writerInfo")
+//	public ResponseEntity<ResponseDto> getWriterInfo(ApprovalDto approvalDto, MbMemberDto memberDto) {
+//		approvalDto.getAppCode();		
+//		
+//		
+//		return ResponseEntity.ok()
+//				.body(new ResponseDto(HttpStatus.OK, "기안자 조회 성공", appServ.getWriterInfo(memberDto.getMemberCode())));
+//	}	
+	//결재문서 상태별 조회
+	@GetMapping("/list/{appStatus}")
+	public ResponseEntity<ResponseDto> selectWaitingList(@RequestParam(name="page", defaultValue="1") int page, @PathVariable String appStatus,
+			@AuthenticationPrincipal MbMemberDto member) {
+//		member = new MbMemberDto();
+		member.getMemberCode();
+		log.info("member : {}" + member);
+		
+		
+		Page<ApprovalDto> approvalDtoWList = appServ.selectWaitingList(page, appStatus, member);
+		log.info("approvalDtoWList : {}" + approvalDtoWList);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(approvalDtoWList);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(approvalDtoWList.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 대기 목록 조회 성공", responseDtoWithPaging));
+		
+	}
+	
 /* 5. 메인화면 결재 대기문서 조회 */
 /* 6. 기안문 작성 - 진행중 */
 	//로그인한 직원의 정보 조회
-//	@GetMapping("/memberInfo")
-//	public ResponseEntity<MbMemberDto> getMemberInfo(@AuthenticationPrincipal MbMemberDto memberDto, Long memberCode) {
-////		memberDto = new MbMemberDto();
-////		memberDto.setMemberCode(1L);
-//	    memberCode = memberDto.getMemberCode();
-//	    MbMemberDto memberInfo = appServ.selectMemberDetailForApproval(memberCode);
-//	    return ResponseEntity.ok(memberInfo);
-//	}
-	
 	@GetMapping("/memberInfo")
 	public ResponseEntity<ResponseDto> getMemberInfoForApproval(@AuthenticationPrincipal MbMemberDto memberDto) {
 		//포스트맨 테스트를 위해서 씀!!

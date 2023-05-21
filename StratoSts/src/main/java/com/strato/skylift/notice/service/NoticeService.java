@@ -44,47 +44,9 @@ public class NoticeService {
 		return noticeDtoList;
 	}
 
-// 2. 부서별 공지사항 목록 조회 - 미완성(부서 레포지터리 생기면 그때 완성할 수 있을 것 같음)
-	public Page<NoticeDto> selectNoticeListByDepartment(int page, Long deptCode) {
-		log.info("[NoticeService] selectNoticeListByDepartment start ============================== ");
-		
-		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("deptCode").descending());
-		
-		/* 전달할 부서 엔티티를 먼저 조회한다. */
-//		Department findDepartment = departmentRepository.findById(deptCode)
-//				.orElseThrow(() -> new IllegalArgumentException("해당 부서가 없습니다. deptCode = "+ deptCode));
-//		
-//		Page<Notice> noticeList = noticeRepository.findByDepartment(pageable, findDepartment);
-//		Page<NoticeDto> noticeDtoList = noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
-//	
-//		
-//		log.info("[NoticeService] noticeDtoList.getContent() : {}", noticeDtoList.getContent());
-//		
-//		log.info("[NoticeService] selectNoticeListByDepartment end ============================== ");
-		
-		
-		return null;
-	}
-
-//3. 공지사항 상태별 목록 조회 - 미완성......
-	public Page<NoticeDto> selectNoticeListByNoticeStatus(int page, String noticeStatus) {
-		
-		log.info("[NoticeService] selectNoticeListByNoticeStatus start ============================== ");
-		
-		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("noticeCode").descending());
-		
-		
-		Page<Notice> noticeList = noticeRepository.findByNoticeStatus(pageable, noticeStatus);
-		
-		Page<NoticeDto> noticeDtoList = noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
 	
-		
-		log.info("[NoticeService] noticeDtoList.getContent() : {}", noticeDtoList.getContent());
-		
-		log.info("[NoticeService] selectNoticeListByNoticeStatus end ============================== ");
-		
-		return noticeDtoList;
-	}
+/* 검색 - 제목 */
+/* 검색 - 내용 */
 
 /* A.관리자 공지사항 전체 조회 */
 	public Page<NoticeDto> selectNoticeListForAdmin(int page) {
@@ -105,8 +67,6 @@ public class NoticeService {
 		return noticeDtoList;
 	}
 	
-/* B. 관리자 부서별 조회 */
-/* C. 관리자 상태별 조회 */
 /* D. 관리자 공지 등록 */
 /* E. 관리자 공지 수정 */
 /* F. 관리자 공지 삭제 */

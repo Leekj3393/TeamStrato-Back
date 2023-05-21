@@ -50,54 +50,10 @@ public class NoticeController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
 	
+/* 검색 - 제목 */
+/* 검색 - 내용 */
 	
-/* 2. 공지사항 부서별 목록 조회 - 미완성 
- * 부서테이블 레포지터리가 생기면 그때 마무리하기!!*/
-	@GetMapping("/part/{deptCode}")
-	public ResponseEntity<ResponseDto> selectNoticeListByDepartment(
-			@RequestParam(name="page", defaultValue="1") int page, @PathVariable Long deptCode){
-		
-		log.info("[NoticeController] : selectNoticeListByDepartment start ==================================== ");
-		log.info("[NoticeController] : page : {}", page);
-		
-		Page<NoticeDto> noticeDtoList = noticeService.selectNoticeListByDepartment(page, deptCode);
-		
-		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(noticeDtoList);
-		
-		log.info("[ProductController] : pageInfo : {}", pageInfo);
-		
-		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
-		responseDtoWithPaging.setPageInfo(pageInfo);
-		responseDtoWithPaging.setData(noticeDtoList.getContent());
-		
-		log.info("[NoticeController] : selectNoticeListByDepartment end ==================================== ");
-		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
-	} 
 	
-	/* 3. 공지사항 상태별 목록 조회 - 포스트맨 테스트는 완료!! 
-	 * ??*/
-	@GetMapping("/status/{noticeStatus}")
-	public ResponseEntity<ResponseDto> selectNoticeListByNoticeStatus(
-			@RequestParam(name="page", defaultValue="1") int page, @PathVariable String noticeStatus){
-		
-		log.info("[NoticeController] : selectNoticeListByDepartment start ==================================== ");
-		log.info("[NoticeController] : page : {}", page);
-		
-		Page<NoticeDto> noticeDtoList = noticeService.selectNoticeListByNoticeStatus(page, noticeStatus);
-		
-		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(noticeDtoList);
-		
-		log.info("[ProductController] : pageInfo : {}", pageInfo);
-		
-		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
-		responseDtoWithPaging.setPageInfo(pageInfo);
-		responseDtoWithPaging.setData(noticeDtoList.getContent());
-		
-		log.info("[NoticeController] : selectNoticeListByDepartment end ==================================== ");
-		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
-	} 
 	
 	/* A.관리자 공지사항 전체 조회 - 포스트맨 테스트 완료!!!! 
 	 * 굳이 따로 나눌 필요가 있나 싶다,,,,, 음,,,,, 걍 사용자랑 똑같음
@@ -123,8 +79,6 @@ public class NoticeController {
 	}
 	
 	
-/* B. 관리자 부서별 조회 */
-/* C. 관리자 상태별 조회 */
 /* D. 관리자 공지 등록 */
 /* E. 관리자 공지 수정 */
 /* F. 관리자 공지 삭제 */
