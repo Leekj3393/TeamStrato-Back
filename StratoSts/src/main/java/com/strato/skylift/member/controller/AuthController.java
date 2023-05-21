@@ -15,6 +15,7 @@ import com.strato.skylift.entity.Member;
 import com.strato.skylift.mail.dto.MailDto;
 import com.strato.skylift.mail.service.MailService;
 import com.strato.skylift.member.dto.MbMemberDto;
+import com.strato.skylift.member.exception.LoginFailedException;
 import com.strato.skylift.member.service.AuthService;
 
 @Controller
@@ -44,23 +45,28 @@ public class AuthController {
 	}
 	
 	/* 직원 비밀번호 수정 */
-	@PutMapping("/members/updatePwd")
-	public ResponseEntity<ResponseDto> updateMemberPwdByMemberId(@ModelAttribute String memberId, String pass) {
+	@PostMapping("/updatePwd")
+	public ResponseEntity<ResponseDto> updateMemberPwdByMemberId(@RequestBody MbMemberDto memberDto) {
 		
-		authService.updateMemberPwdByMemberId(memberId, pass);
+		Member member = authService.findByMemberIdAndmemberPwd(memberDto.getMemberId(), memberDto.getMemberPwd());
+		
+		authService.updateMemberPwdByMemberId(memberDto.getMemberId(), memberDto.getUpdatePwd());
 		
 		return ResponseEntity 
 				.ok()
-				.body(new ResponseDto(HttpStatus.OK,"직원 수정 성공"));
+				.body(new ResponseDto(HttpStatus.OK,"비밀번호 수정 성공"));
 	}
 	
     /* 비밀번호 찾기 이메일 보내기 */
     @PostMapping("/send")
-    public String sendMail(@RequestBody MbMemberDto memberDto) {
+    public ResponseEntity<ResponseDto> sendMail(@RequestBody MbMemberDto memberDto) {
     	Member member = authService.findMemberIdByResidentNo(memberDto.getResidentNo());
     	MailDto mail = mailService.createMailAndChangePassword(memberDto.getMemberId());
         mailService.mailSend(mail);
-        return "redirect:/login";
+        
+        return ResponseEntity 
+				.ok()
+				.body(new ResponseDto(HttpStatus.OK,"임시비밀번호 발송 성공"));
     }
 	
 }

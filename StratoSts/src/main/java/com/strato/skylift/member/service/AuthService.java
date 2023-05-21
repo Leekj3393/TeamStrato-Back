@@ -3,11 +3,12 @@ package com.strato.skylift.member.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.strato.skylift.entity.Member;
 import com.strato.skylift.jwt.TokenProvider;
 import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.dto.MbTokenDto;
-import com.strato.skylift.entity.Member;
-import org.springframework.transaction.annotation.Transactional;
 import com.strato.skylift.member.exception.LoginFailedException;
 import com.strato.skylift.member.repository.MemberRepository;
 
@@ -60,27 +61,6 @@ public class AuthService {
 		return tokenDto;
 	}
 	
-	/* Id 찾기 */
-	public MbMemberDto findMemberIdByMemberNameAndResidentNo(MbMemberDto memberDto) {
-		
-		Member member = memberRepository.findByMemberNameAndResidentNo(memberDto.getMemberName(), memberDto.getResidentNo())
-				.orElseThrow(() -> new IllegalArgumentException("해당 정보의 직원이 없습니다. memberCode : " + memberDto.getMemberName()));
-		
-		MbMemberDto FindMemberId = modelMapper.map(member, MbMemberDto.class);
-		
-		return FindMemberId;
-	}
-	
-	/* 직원 비밀번호 변경 */
-//	public MbMemberDto updateMemberPwdByMemberId(String memberId, String memberPwd) {
-//		
-//		Member member = memberRepository.updateMemberPwdByMemberId(memberId, memberPwd)
-//				.orElseThrow(() -> new IllegalArgumentException("해당 아이디의 직원이 없습니다. memberId : "));
-//		
-//		MbMemberDto memberDto1 = modelMapper.map(member, MbMemberDto.class);
-//		
-//		return memberDto1;
-//	}
 	
 	@Transactional
 	public void updateMemberPwdByMemberId(String memberId, String pass) {
@@ -110,6 +90,30 @@ public class AuthService {
 				.orElseThrow(() -> new IllegalArgumentException("해당 이메일의 직원이 없습니다. memberId : " + memberId));
 		
 		MbMemberDto memberDto = modelMapper.map(member, MbMemberDto.class);
+		
+		return member;
+	
+	
+	}
+	
+	/* Id 찾기 */
+	public MbMemberDto findMemberIdByMemberNameAndResidentNo(MbMemberDto memberDto) {
+		
+		Member member = memberRepository.findByMemberNameAndResidentNo(memberDto.getMemberName(), memberDto.getResidentNo())
+				.orElseThrow(() -> new IllegalArgumentException("해당 정보의 직원이 없습니다. memberCode : " + memberDto.getMemberName()));
+		
+		MbMemberDto FindMemberId = modelMapper.map(member, MbMemberDto.class);
+		
+		return FindMemberId;
+	}
+	
+	/* 비밀번호 변경용 */
+	public Member findByMemberIdAndmemberPwd(String memberId, String memberPwd) {
+		
+		Member member = memberRepository.findByMemberIdAndMemberPwd(memberId, memberPwd)
+				.orElseThrow(() -> new IllegalArgumentException("해당 이메일의 직원이 없습니다. memberId : " + memberId));
+		
+		MbMemberDto updatePwd = modelMapper.map(member, MbMemberDto.class);
 		
 		return member;
 	

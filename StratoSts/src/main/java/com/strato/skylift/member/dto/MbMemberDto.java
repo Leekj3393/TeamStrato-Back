@@ -59,6 +59,8 @@ public class MbMemberDto implements UserDetails {
 	
 	private MbFileDto memberFile;
 	
+	private String updatePwd;
+	
 	@JsonIgnore
 	private MultipartFile memberImage;
 	
