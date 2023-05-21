@@ -60,24 +60,23 @@ public class ApprovalController {
 	//결재문서 상태별 조회
 	@GetMapping("/list/{appStatus}")
 	public ResponseEntity<ResponseDto> selectWaitingList(ApprovalDto approval, @RequestParam(name="page", defaultValue="1") int page, @PathVariable String appStatus,
-			@AuthenticationPrincipal MbMemberDto member) {
-//		member = new MbMemberDto();
-//		member.getMemberCode();
-//		log.info("member : {}" + member);
+	        @AuthenticationPrincipal MbMemberDto member) {
+
+//		Long memberCode = approval.getMemberDto().getMemberCode();
+//		log.info("memberCode : {}" +memberCode);
 		
-		
-		Page<ApprovalDto> approvalDtoWList = appServ.selectWaitingList(page, appStatus);
-		log.info("approvalDtoWList : {}" + approvalDtoWList);
-		
-		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(approvalDtoWList);
-		
-		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
-		responseDtoWithPaging.setPageInfo(pageInfo);
-		responseDtoWithPaging.setData(approvalDtoWList.getContent());
-		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 대기 목록 조회 성공", responseDtoWithPaging));
-		
+	    Page<ApprovalDto> approvalDtoWList = appServ.selectWaitingList(page, appStatus);
+	    log.info("approvalDtoWList : {}" + approvalDtoWList);
+	    
+	    PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(approvalDtoWList);
+	    
+	    ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+	    responseDtoWithPaging.setPageInfo(pageInfo);
+	    responseDtoWithPaging.setData(approvalDtoWList.getContent());
+	    
+	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 대기 목록 조회 성공", responseDtoWithPaging));
 	}
+
 	
 /* 5. 메인화면 결재 대기문서 조회 */
 /* 6. 기안문 작성 - 진행중 */
