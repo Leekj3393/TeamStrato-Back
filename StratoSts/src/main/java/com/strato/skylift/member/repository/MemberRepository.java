@@ -26,7 +26,9 @@ public interface MemberRepository extends JpaRepository <Member, Long> {
 	/* Id찾기 */
 	Optional<Member> findByMemberNameAndResidentNo(String memberName, String residentNo);
 	
-	//	/* Pwd 변경 */
+	/* 비밀번호 변경창 용 */
+	Optional<Member> findByMemberIdAndMemberPwd(String memberId, String memberPwd);
+
 	Optional<Member> findMemberIdByResidentNo(String residentNo);
-	//	Optional<Member> updateMemberPwdByMemberId(String memberId, String memberPwd);
+//	Optional<Member> updateMemberPwdByMemberId(String memberId, String memberPwd);
 }
