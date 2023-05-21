@@ -77,21 +77,29 @@ public class ApprovalService {
 	public Page<ApprovalDto> selectWaitingList(int page, String appStatus) {
 		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("appCode").ascending());
 		
+		
+		
+		//직원 정보 조회
+		
+//		Member findMember = mbRepo.findById(memberCode)
+//			.orElseThrow(() -> new IllegalArgumentException("해당 직원이 없습니다. memberCode = "+ memberCode));
+//		log.info("findMember : {}"+ findMember);
+		
 		Page<Approval> approvalList = appRepo.findByAppStatus(pageable, appStatus);
 		Page<ApprovalDto> approvalDtoList = approvalList.map(approval -> mm.map(approval, ApprovalDto.class));
 		
 		return approvalDtoList;
 	}
 	
-	public Page<ApprovalDto> selectWaitingList(int page, String appStatus, MbMemberDto member) {
-		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("appCode").ascending());
-		
-		Page<Approval> approvalList = appRepo.findByAppStatus(pageable, appStatus);
-		Page<ApprovalDto> approvalDtoList = approvalList.map(approval -> mm.map(approval, ApprovalDto.class));
-		
-		
-		return approvalDtoList;
-	}
+//	public Page<ApprovalDto> selectWaitingList(int page, String appStatus, MbMemberDto member) {
+//		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("appCode").ascending());
+//		
+//		Page<Approval> approvalList = appRepo.findByAppStatus(pageable, appStatus);
+//		Page<ApprovalDto> approvalDtoList = approvalList.map(approval -> mm.map(approval, ApprovalDto.class));
+//		
+//		
+//		return approvalDtoList;
+//	}
 
 
 //	public Page<ApprovalDto> selectWaitingListByMember(int page, String appStatus) {
@@ -173,6 +181,17 @@ public class ApprovalService {
 		log.info("[ApprovalService] purchaseList : {}", memberInfo);
 		log.info("[ApprovalService] selectPurchaseList end ============================== ");
 		return memberInfo;
+	}
+
+
+// 10. 결재문서 상세 조회
+	public ApprovalDto selectApprovalDetail(Long appCode) {
+		Approval approval = appRepo.findById(appCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당 결재 문서가 없습니다. appCode : " + appCode));
+		
+		ApprovalDto approvalDto = mm.map(approval, ApprovalDto.class);
+		
+		return approvalDto;		
 	}
 
 
