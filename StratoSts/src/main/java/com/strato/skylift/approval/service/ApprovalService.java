@@ -184,6 +184,17 @@ public class ApprovalService {
 	}
 
 
+// 10. 결재문서 상세 조회
+	public ApprovalDto selectApprovalDetail(Long appCode) {
+		Approval approval = appRepo.findById(appCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당 결재 문서가 없습니다. appCode : " + appCode));
+		
+		ApprovalDto approvalDto = mm.map(approval, ApprovalDto.class);
+		
+		return approvalDto;		
+	}
+
+
 
 
 

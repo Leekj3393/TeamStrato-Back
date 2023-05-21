@@ -100,11 +100,11 @@ public class ApprovalController {
 		appDto.setMemberDto(memberDto);
 		log.info("memberDto : {}", memberDto);
 		appServ.registApp(appDto);
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 등록 성공"));
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재문서 등록 성공"));
 	}
 	
 	
-/* 7. 결재선, 열람인 선정
+/* 7. 결재선 선정
  * 	- 기안문 작성 -> 전자결재 페이지에서 함
  * 	- 휴가, 휴직, 퇴직 신청 -> 마이페이지에서 한 뒤 넘어옴
  * 	- 장비 구매, 장비 수리, 장비 폐기 신청 -> 장비관리 페이지에서 한 뒤 넘어옴  */
@@ -142,7 +142,13 @@ public class ApprovalController {
 	
 /* 8. 결재 승인  */
 /* 9. 결재 반려  */
-/*  */
+	
+/* 10. 결재 문서 상세페이지 - 포스트맨 테스트 완료!! */
+	@GetMapping("/{appCode}")
+	public ResponseEntity<ResponseDto> selectApprovalDetail(@PathVariable Long appCode) {
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재문서 상세페이지 조회 성공", appServ.selectApprovalDetail(appCode)));
+	}
 /*  */
 /*  */
 
