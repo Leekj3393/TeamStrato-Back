@@ -25,9 +25,9 @@ import lombok.Setter;
 public class Class {
 	
 	@Id
-	@Column(name="CLASS_CODE")
+	@Column(name="CLASS_CODE")  
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="CLASS_SEQ_GENERATOR")
-	private Long classCode;
+	private Long classCode;  
 	
 	@Column(name="CLASS_TIME")
 	private Long classTime;
