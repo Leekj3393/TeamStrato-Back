@@ -64,14 +64,14 @@ public class ApprovalService {
    4. 결재문서 조회 - 결재 반려함 */
 	// 테스트 중
 	// 1. 기안자 조회
-	public MbMemberDto getWriterInfo(Long memberCode) {
-		Member member = mbRepo.findById(memberCode)
-				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 직원이 없습니다. memberCode : " + memberCode));
-		
-		MbMemberDto memberDto = mm.map(member, MbMemberDto.class);
-		
-		return memberDto;
-	}
+//	public MbMemberDto getWriterInfo(Long memberCode) {
+//		Member member = mbRepo.findById(memberCode)
+//				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 직원이 없습니다. memberCode : " + memberCode));
+//		
+//		MbMemberDto memberDto = mm.map(member, MbMemberDto.class);
+//		
+//		return memberDto;
+//	}
 	
 	// 2. 상태별 결재문서 목록 조회
 	public Page<ApprovalDto> selectWaitingList(int page, String appStatus) {

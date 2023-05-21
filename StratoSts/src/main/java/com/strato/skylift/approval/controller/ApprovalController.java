@@ -46,25 +46,7 @@ public class ApprovalController {
    3. 결재문서 조회 - 결재 완료함 
    4. 결재문서 조회 - 결재 반려함
    -포스트맨 테스트  */
-//	@GetMapping("/list/{appStatus}")
-//	public ResponseEntity<ResponseDto> selectWaitingList(@RequestParam(name="page", defaultValue="1") int page, @PathVariable String appStatus,
-//			@AuthenticationPrincipal MbMemberDto member, Long memberCode) {
-//		
-////		member = new MbMemberDto();
-////		member.setMemberCode(1L);
-//		
-//		
-//		Page<ApprovalDto> approvalDtoWList = appServ.selectWaitingListByMember(page, appStatus, memberCode);
-//			
-//		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(approvalDtoWList);
-//		
-//		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
-//		responseDtoWithPaging.setPageInfo(pageInfo);
-//		responseDtoWithPaging.setData(approvalDtoWList.getContent());
-//		
-//		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 대기 목록 조회 성공", responseDtoWithPaging));
-//		
-//	}
+
 	// 기안자 정보 조회
 //	ㅠㅠㅠㅠㅠ
 //	@GetMapping("/writerInfo")
@@ -77,14 +59,14 @@ public class ApprovalController {
 //	}	
 	//결재문서 상태별 조회
 	@GetMapping("/list/{appStatus}")
-	public ResponseEntity<ResponseDto> selectWaitingList(@RequestParam(name="page", defaultValue="1") int page, @PathVariable String appStatus,
+	public ResponseEntity<ResponseDto> selectWaitingList(ApprovalDto approval, @RequestParam(name="page", defaultValue="1") int page, @PathVariable String appStatus,
 			@AuthenticationPrincipal MbMemberDto member) {
 //		member = new MbMemberDto();
-		member.getMemberCode();
-		log.info("member : {}" + member);
+//		member.getMemberCode();
+//		log.info("member : {}" + member);
 		
 		
-		Page<ApprovalDto> approvalDtoWList = appServ.selectWaitingList(page, appStatus, member);
+		Page<ApprovalDto> approvalDtoWList = appServ.selectWaitingList(page, appStatus);
 		log.info("approvalDtoWList : {}" + approvalDtoWList);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(approvalDtoWList);
