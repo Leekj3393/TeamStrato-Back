@@ -18,6 +18,7 @@ import com.strato.skylift.approval.dto.ApprovalDto;
 import com.strato.skylift.approval.dto.ApprovalLineDto;
 import com.strato.skylift.approval.repository.AppDeptRepository;
 import com.strato.skylift.approval.repository.AppJobRepository;
+import com.strato.skylift.approval.repository.AppMemberRepository;
 import com.strato.skylift.approval.repository.ApprovalLineRepository;
 import com.strato.skylift.approval.repository.ApprovalRepository;
 import com.strato.skylift.entity.Approval;
@@ -26,6 +27,7 @@ import com.strato.skylift.entity.Member;
 import com.strato.skylift.exception.UserNotFoundException;
 import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.repository.MemberRepository;
+import com.strato.skylift.member.repository.MyPageRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,8 +36,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ApprovalService {
 
 	private final ApprovalRepository appRepo;
-//	private final AppMemberRepository mbRepo;
 	private final MemberRepository mbRepo;
+	private final AppMemberRepository appMbRepo;
 	private final AppDeptRepository deptRepo;
 	private final AppJobRepository jobRepo;
 	private final ApprovalLineRepository appLineRepo;
@@ -43,7 +45,7 @@ public class ApprovalService {
 	
 	public ApprovalService(ApprovalRepository appRepo, 
 						   ApprovalLineRepository appLineRepo,
-//						   AppMemberRepository mbRepo,
+						   AppMemberRepository appMbRepo,
 						   MemberRepository mbRepo,
 						   AppDeptRepository deptRepo,
 						   AppJobRepository jobRepo,
@@ -53,6 +55,7 @@ public class ApprovalService {
 		this.deptRepo = deptRepo;
 		this.jobRepo = jobRepo;
 		this.appLineRepo = appLineRepo;
+		this.appMbRepo = appMbRepo;
 		this.mm = mm;
 	}
 
@@ -134,6 +137,7 @@ public class ApprovalService {
 		appRepo.save(mm.map(appDto, Approval.class));
 	}
 	
+
 	
 /* 7. 결재선, 열람인 선정  */
 	@Transactional
@@ -186,14 +190,41 @@ public class ApprovalService {
 
 // 10. 결재문서 상세 조회
 	public ApprovalDto selectApprovalDetail(Long appCode) {
+		log.info("[ApprovalService] selectApprovalDetail start ============================== ");
+		log.info("[ApprovalService] appCode : {}", appCode);
+		
 		Approval approval = appRepo.findById(appCode)
 				.orElseThrow(() -> new IllegalArgumentException("해당 결재 문서가 없습니다. appCode : " + appCode));
+		log.info("[ApprovalService] approval : {}", approval);
 		
 		ApprovalDto approvalDto = mm.map(approval, ApprovalDto.class);
+		log.info("[ApprovalService] approvalDto : {}", approvalDto);
 		
+		log.info("[ApprovalService] selectApprovalDetail end ============================== ");
 		return approvalDto;		
 	}
 
+
+// 결재 승인/반려
+	@Transactional
+	public void putApprovalAccess(ApprovalLineDto appLineDto) {
+		log.info("[ApprovalService] putApprovalAccess start ============================== ");
+		log.info("[ApprovalService] appLineDto : {}", appLineDto);
+		
+		ApprovalLine beforeAppLine = appLineRepo.findById(appLineDto.getAppLineCode())
+				.orElseThrow(()-> new IllegalArgumentException("해당 코드의 결재선 정보가 없습니다. appLineCode=" + appLineDto.getAppLineCode()));
+		
+		// 조회했던 기존 엔티티의 내용을 수정 -> 별조의 수정 메소드를 정의해서 사용하면 다른 방식의 수정을 막을 수 있다.
+		beforeAppLine.update(
+				appLineDto.getAppPriorYn(),
+				appLineDto.getAppStatus(),
+				appLineDto.getAppTime()
+		);
+				
+		
+		
+		log.info("[ApprovalService] putApprovalAccess end ============================== ");
+	}
 
 
 

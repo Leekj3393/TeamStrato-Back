@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +24,6 @@ import com.strato.skylift.common.ResponseDto;
 import com.strato.skylift.common.paging.Pagenation;
 import com.strato.skylift.common.paging.PagingButtonInfo;
 import com.strato.skylift.common.paging.ResponseDtoWithPaging;
-import com.strato.skylift.entity.Member;
 import com.strato.skylift.member.dto.MbMemberDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -90,12 +90,11 @@ public class ApprovalController {
 				.body(new ResponseDto(HttpStatus.OK, "기안자 조회 성공", appServ.getMemberInfoForApproval(memberDto.getMemberCode())));
 	}
 	
+	// 기안문 작성하기
 	@PostMapping("/regist")
 	public ResponseEntity<ResponseDto> registApproval(@RequestBody ApprovalDto appDto,
-													  @AuthenticationPrincipal MbMemberDto memberDto
-														  ) {
-//		memberDto = new MbMemberDto();
-//		memberDto.setMemberCode(1L);
+			@AuthenticationPrincipal MbMemberDto memberDto
+			) {
 		
 		appDto.setMemberDto(memberDto);
 		log.info("memberDto : {}", memberDto);
@@ -142,6 +141,19 @@ public class ApprovalController {
 	
 /* 8. 결재 승인  */
 /* 9. 결재 반려  */
+	@PutMapping("/approval-accessor")
+	public ResponseEntity<ResponseDto> putApprovalAccess(@RequestBody ApprovalLineDto appLineDto,
+			  @AuthenticationPrincipal MbMemberDto memberDto
+			  ) {
+		
+		appServ.putApprovalAccess(appLineDto);
+		
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDto(HttpStatus.OK, "결재 요청 승인/반려 처리 성공"));
+	}
+	
 	
 /* 10. 결재 문서 상세페이지 - 포스트맨 테스트 완료!! */
 	@GetMapping("/{appCode}")
