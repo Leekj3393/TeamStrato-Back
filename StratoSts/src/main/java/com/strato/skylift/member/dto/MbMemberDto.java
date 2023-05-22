@@ -48,15 +48,13 @@ public class MbMemberDto implements UserDetails {
 	private Long memberSalary;
 
 	private Long memberAnnual;
-
+		
 	private MbJobDto job;
 
 	private MbDepartmentDto department;
 	
 	private MbMemberRoleDto memberRole;
-
-	private MemberRole memberRole2;
-	
+		
 	private MbFileDto memberFile;
 	
 	private String updatePwd;
