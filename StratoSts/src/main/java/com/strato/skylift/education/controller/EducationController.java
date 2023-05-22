@@ -31,7 +31,7 @@ public class EducationController {
 		this.edService = edService;
 	}
 	
-	/* 교육 목록 전체 조회 */
+	/* 교육 목록 전체 조회 */  
 	@GetMapping("/educations")
 	public ResponseEntity<ResponseDto> selectProductList(@RequestParam(name="page", defaultValue="1") int page) {
 		
