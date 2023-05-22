@@ -2,16 +2,18 @@ package com.strato.skylift.equipment.entity;
 
 import com.strato.skylift.entity.Member;
 import com.strato.skylift.entity.Request;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.Date;
+
+
+
+@Entity
+@Table(name = "TBL_APPROVAL")
 @AllArgsConstructor @NoArgsConstructor
-@Getter @Setter @DynamicInsert
+@Getter @Setter @DynamicInsert @ToString
 @SequenceGenerator(name = "APPROVAL_SEQ_GENERATOR",
         sequenceName = "SEQ_APPROVAL",
         initialValue = 1 , allocationSize = 0)

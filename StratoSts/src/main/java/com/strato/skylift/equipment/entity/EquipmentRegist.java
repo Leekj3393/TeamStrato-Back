@@ -1,10 +1,7 @@
 package com.strato.skylift.equipment.entity;
 
 import com.strato.skylift.entity.EquCategory;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
@@ -18,7 +15,7 @@ import java.util.List;
         sequenceName = "SEQ_EQUIPMENT",
         initialValue = 1 , allocationSize = 0)
 @AllArgsConstructor @NoArgsConstructor
-@Getter @Setter @DynamicInsert
+@Getter @Setter @DynamicInsert @ToString
 public class EquipmentRegist
 {
     @Id @Column(name = "EQUIPMENT_CODE")
@@ -41,8 +38,8 @@ public class EquipmentRegist
     @Column(name = "EQUIPMENT_STATUS")
     private String equipmentStatus;
 
-    @OneToMany( cascade = CascadeType.PERSIST)
+    @OneToOne
     @JoinColumn(name = "EQUIPMENT_CODE")
-    private List<EquipmentFile> file = new ArrayList<>();
+    private EquipmentFile file;
 
 }

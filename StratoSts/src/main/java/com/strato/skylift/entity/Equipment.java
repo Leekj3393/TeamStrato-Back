@@ -39,9 +39,9 @@ public class Equipment
     @Column(name = "EQUIPMENT_STATUS")
     private String equipmentStatus;
 
-    @OneToMany
-    @JoinColumn(name = "EQUIPMENT_CODE")
-    private List<EquipmentFile> files = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "FILE_CODE")
+    private File file;
 
     public void update(Long category , String equipmentName , Date equipmentModifyDate , String equipmentStatus)
     {

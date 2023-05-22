@@ -5,9 +5,11 @@ import com.strato.skylift.entity.EquCategory;
 import com.strato.skylift.entity.Equipment;
 import com.strato.skylift.entity.File;
 import com.strato.skylift.equipment.dto.*;
+import com.strato.skylift.equipment.entity.EquipmentApproval;
 import com.strato.skylift.equipment.entity.EquipmentFile;
 import com.strato.skylift.equipment.entity.EquipmentRegist;
 import com.strato.skylift.equipment.repository.EQcategoryRepositroy;
+import com.strato.skylift.equipment.repository.EqApprovalRepositroy;
 import com.strato.skylift.equipment.repository.EquipmentRepositroy;
 import com.strato.skylift.equipment.repository.FileRepositrory;
 import com.strato.skylift.util.FileUploadUtils;
@@ -39,6 +41,7 @@ public class EquipmentService
     private final EQcategoryRepositroy eqCategoryRepositroy;
     private final EquipmentRepositroy equipmentRepositroy;
     private final FileRepositrory fileRepositrory;
+    private final EqApprovalRepositroy eqApprovalRepositroy;
     private final ModelMapper modelMapper;
 
     @Value("${image.image-url}")
@@ -49,25 +52,39 @@ public class EquipmentService
 
     public EquipmentService(EQcategoryRepositroy eqCategoryRepositroy ,
                             EquipmentRepositroy equipmentRepositroy,
-                            FileRepositrory fileRepositrory ,ModelMapper modelMapper)
+                            FileRepositrory fileRepositrory ,
+                            EqApprovalRepositroy eqApprovalRepositroy , ModelMapper modelMapper)
     {
         this.equipmentRepositroy = equipmentRepositroy;
         this.eqCategoryRepositroy = eqCategoryRepositroy;
         this.fileRepositrory = fileRepositrory;
+        this.eqApprovalRepositroy = eqApprovalRepositroy;
         this.modelMapper = modelMapper;
     }
 
 
     public Page<CSequipmentCatgoryDTO> selectCategoryAll(int page)
     {
-        Pageable pageable = PageRequest.of(page - 1, 8 , Sort.by("equipmentCode").ascending());
-        Page<Equipment> equipment = equipmentRepositroy.findAll(pageable);
+        Pageable pageable = PageRequest.of(page - 1, 8 , Sort.by("categoryCode").ascending());
+        Page<EquCategory> category = eqCategoryRepositroy.findAll(pageable);
 
-        Page<CSequipmentCatgoryDTO> cSequipmentCatgoryDTO = equipment.map(equ -> modelMapper.map(equ , CSequipmentCatgoryDTO.class));
+        List<Object> maxCreateDate = equipmentRepositroy.findMaxCreateDate();
+        List<Object> maxModifyDate = equipmentRepositroy.findMaxModifyDate();
+        Page<CSequipmentCatgoryDTO> cSequipmentCatgoryDTO = category.map(equ -> modelMapper.map(equ , CSequipmentCatgoryDTO.class));
+
         List<Long> count = equipmentRepositroy.countByEquCategoryCategoryCode();
-        for(int i = 0; i < cSequipmentCatgoryDTO.getContent().size(); i++)
+        log.info("count : " + count );
+        maxModifyDate.forEach(m -> log.info("m : " + m));
+        for(int i = 0; i < count.size(); i++)
+        {
             cSequipmentCatgoryDTO.getContent().get(i).setCategoryCount(count.get(i));
-        return cSequipmentCatgoryDTO;
+            cSequipmentCatgoryDTO.getContent().get(i).setEquipmentCreateDate((Date) maxCreateDate.get(i));
+            cSequipmentCatgoryDTO.getContent().get(i).setEquipmentModifyDate((Date) maxModifyDate.get(i));
+        }
+
+        cSequipmentCatgoryDTO.forEach(cs ->log.info("cs : {}" , cs));
+       return cSequipmentCatgoryDTO;
+
     }
 
     public Page<EquipmentDTO> selectCategorySerch(String name , String value , int page)
@@ -94,7 +111,7 @@ public class EquipmentService
 
     public Page<EquipmentDTO> findByCategory(Long category, int page)
     {
-        log.info("image url" + IMAGE_URL );
+        log.info("image url" + IMAGE_URL  + "equipment/");
         Pageable pageable = PageRequest.of(page - 1, 4 , Sort.by("equipmentCode").ascending());
 
         Page<Equipment> equipment = equipmentRepositroy.findByCategoryCode(category,pageable);
@@ -103,7 +120,7 @@ public class EquipmentService
 
         for(int i = 0 ; i < equipmentDTO.getContent().size(); i++)
         {
-            equipmentDTO.getContent().get(i).getFiles().get(i).setFilePath(IMAGE_URL + "equipment/" + equipmentDTO.getContent().get(i).getFiles().get(i).getFilePath());
+            equipmentDTO.getContent().get(i).getFile().setFilePath(IMAGE_URL + "equipment/" + equipmentDTO.getContent().get(i).getFile().getFilePath());
         }
         return equipmentDTO;
     }
@@ -119,11 +136,26 @@ public class EquipmentService
             {
                 String imageName = UUID.randomUUID().toString().replace("-", "");
                 String reFileName = FileUploadUtils.saveFile(IMAGE_DIR + "equipment", imageName, equipmentRegistDTO.getImage());
-                equipmentRegistDTO.getFiles().get(0).setFilePath(reFileName);
-                equipmentRegistDTO.getFiles().get(0).setFileName(imageName);
-                equipmentRegistDTO.getFiles().get(0).setFileType("장비");
-                EquipmentRegist equipment = modelMapper.map(equipmentRegistDTO , EquipmentRegist.class);
+                EQFileDTO file = new EQFileDTO(imageName , reFileName , "장비");
+                log.info("file : {} " , file);
+                equipmentRegistDTO.setFile(file);
+
+                Equipment equipment = modelMapper.map(equipmentRegistDTO , Equipment.class);
+                equipment.setEquipmentCreateDate(date);
+                equipment.setEquipmentStatus("결제 대기중");
+
+                equipmentRepositroy.save(equipment);
+
+                Long equipmentCode = equipmentRepositroy.findByMaxCode();
+
+                EquipmentApproval approval = modelMapper.map(equipmentRegistDTO, EquipmentApproval.class);
+                approval.getEquipmentCode().setEquipmentCode(equipmentCode);
+                approval.setAppRegistDate(date);
+
+                eqApprovalRepositroy.save(approval);
+
                 log.info("equipment : " + equipment);
+                log.info("approval : " + approval);
 
             }
             catch (IOException e) { throw new RuntimeException(e); }
