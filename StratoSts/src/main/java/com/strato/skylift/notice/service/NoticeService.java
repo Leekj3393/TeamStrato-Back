@@ -1,6 +1,7 @@
 package com.strato.skylift.notice.service;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,9 @@ import com.strato.skylift.notice.dto.NoticeDto;
 import com.strato.skylift.notice.repository.NoticeRepository;
 
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -66,8 +70,32 @@ public class NoticeService {
 		
 		return noticeDtoList;
 	}
-	
-/* D. 관리자 공지 등록 */
+
+
+
+
+
+
+
+
+
+
+	//유정
+	public Page<Notice> getNoticesByDeptCode(String deptCode, int page) {
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("noticeCode").descending());
+		return noticeRepository.findByDepartmentDeptCode(deptCode, pageable);
+	}
+
+
+
+	public Notice createNotice(NoticeDto noticeDto) {
+		Notice notice = modelMapper.map(noticeDto, Notice.class);
+		return noticeRepository.save(notice);
+	}
+
+
+
+	/* D. 관리자 공지 등록 */
 /* E. 관리자 공지 수정 */
 /* F. 관리자 공지 삭제 */
 

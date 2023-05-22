@@ -7,7 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.strato.skylift.entity.Department;
 import com.strato.skylift.entity.Notice;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface NoticeRepository extends JpaRepository<Notice, Long> {
+    //유정
+    Page<Notice> findByDepartmentDeptCode(String deptCode, Pageable pageable);
+
+    //여기까지 유정
 
 /* 1. 공지사항 전체 목록 조회  findAll 메소드 - 완료!! */
 /* A. 관리자 전체 목록 조회 */

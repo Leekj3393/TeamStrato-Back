@@ -12,6 +12,7 @@ public class NoticeDto {
 	
 	private Long noticeCode;
 	private String noticeTitle;
+	private String noticeContent; // 추가된 필드
 	private String noticeType;
 	private String noticeDelYn;
 	private String noticeStatus;
