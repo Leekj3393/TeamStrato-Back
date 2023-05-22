@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,9 @@ import com.strato.skylift.notice.repository.NoticeRepository;
 import com.strato.skylift.notice.util.NoticeFileUploadUtils;
 
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -82,6 +86,20 @@ public class NoticeService {
 		log.info("[ProductService] selectProductListForAdmin end ============================== ");
 		
 		return noticeDtoList;
+	}
+
+
+	//유정
+	public Page<Notice> getNoticesByDeptCode(String deptCode, int page) {
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("noticeCode").descending());
+		return noticeRepository.findByDepartmentDeptCode(deptCode, pageable);
+	}
+
+
+
+	public Notice createNotice(NoticeDto noticeDto) {
+		Notice notice = modelMapper.map(noticeDto, Notice.class);
+		return noticeRepository.save(notice);
 	}
 
 	/* D. 관리자 공지 등록 */
