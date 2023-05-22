@@ -74,7 +74,7 @@ public class Member {
 
 	@Column(name = "MEMBER_ANNUAL")
 	private Long memberAnnual;
-
+	
 	@ManyToOne
 	@JoinColumn(name = "JOB_CODE")
 	private Job job;

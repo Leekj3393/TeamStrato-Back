@@ -1,10 +1,7 @@
 package com.strato.skylift.equipment.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -12,7 +9,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
+@Getter @Setter @ToString
 public class EquipmentRegistDTO
 {
     private String equipmentName;
@@ -23,9 +20,11 @@ public class EquipmentRegistDTO
 
     private String appContent;
 
+    private String appType;
+
     @JsonIgnore
     private MultipartFile image;
 
-    private List<EQFileDTO> files = new ArrayList<>();
+    private EQFileDTO file;
 
 }

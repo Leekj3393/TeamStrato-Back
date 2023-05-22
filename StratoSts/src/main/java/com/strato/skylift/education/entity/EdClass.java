@@ -1,4 +1,4 @@
-package com.strato.skylift.entity;
+package com.strato.skylift.education.entity;
 
 import java.util.Date;
 
@@ -12,6 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.strato.skylift.entity.Education;
+import com.strato.skylift.entity.Member;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +25,7 @@ import lombok.Setter;
 @SequenceGenerator(name="CLASS_SEQ_GENERATOR",
 			sequenceName="SEQ_CLASS",
 			initialValue=1, allocationSize=1)
-public class Class {
+public class EdClass {
 	
 	@Id
 	@Column(name="CLASS_CODE")  

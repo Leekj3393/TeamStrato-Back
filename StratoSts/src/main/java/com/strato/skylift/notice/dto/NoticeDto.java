@@ -2,6 +2,9 @@ package com.strato.skylift.notice.dto;
 
 import java.util.Date;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.strato.skylift.member.dto.MbDepartmentDto;
 import com.strato.skylift.member.dto.MbMemberDto;
 
@@ -21,6 +24,10 @@ public class NoticeDto {
 	private Date noticeEndDate;
 	private MbMemberDto member;
 	private MbDepartmentDto department;
+	
+	@JsonIgnore
+	private MultipartFile noticeImage;
+	
 
 /*
 NOTICE_CODE	NUMBER
@@ -34,6 +41,5 @@ NOTICE_INIT_DATE	DATE
 NOTICE_END_DATE	DATE
 MEMBER_CODE	NUMBER
 DEPT_CODE	VARCHAR2(1000 BYTE)*/
-	
 	
 }
