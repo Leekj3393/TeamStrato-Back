@@ -73,12 +73,12 @@ public class EquipmentController
     }
 
     @PostMapping("/regist")
-    public ResponseEntity<ResponseDto> regist(@ModelAttribute EquipmentRegistDTO equipmentRegistDTO)
+    public ResponseEntity<ResponseDto> regist(@ModelAttribute EquipmentRegistDTO formData)
     {
-        log.info("[regist] equipmentDTO : " , equipmentRegistDTO);
-        log.info("[regist] equipmentDTO.files : " , equipmentRegistDTO.getImage());
+        log.info("[regist] formData {} : " , formData);
+        log.info("[regist] formData.files {} : " , formData.getImage());
 
-        equipmentService.regist(equipmentRegistDTO);
+        equipmentService.regist(formData);
 
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"등록성공"));
     }

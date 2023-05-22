@@ -13,8 +13,8 @@ import java.util.List;
 
 public interface EQcategoryRepositroy extends JpaRepository<EquCategory , Long>
 {
-    @Query("SELECT c FROM EquCategory c WHERE c.equCategory.categoryCode IS NOT NULL")
-    @EntityGraph(attributePaths = {"equipmeneCode"})
+    @EntityGraph(attributePaths = {"categoryCode"})
+    @Query("SELECT c FROM EquCategory c WHERE c.equCategory.categoryCode IS NOT NULL ORDER BY c.categoryCode")
     Page<EquCategory> findAll(Pageable pageable);
 
     List<EquCategory> findByEquCategoryCategoryCodeIsNotNull();

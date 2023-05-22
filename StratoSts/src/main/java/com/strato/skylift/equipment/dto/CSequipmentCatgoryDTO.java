@@ -1,16 +1,13 @@
 package com.strato.skylift.equipment.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
+@Getter @Setter @ToString
 public class CSequipmentCatgoryDTO
 {
     private Long categoryCode;

@@ -22,7 +22,7 @@ public class EquipmentDTO
     @JsonFormat(pattern = "yyyy-MM-dd-HH:mm")
     private Date equipmentModifyDate;
     private String equipmentStatus;
-    private List<EQFileDTO> files = new ArrayList<>();
+    private EQFileDTO file;
 
     @JsonIgnore
     private MultipartFile equipmentImage;

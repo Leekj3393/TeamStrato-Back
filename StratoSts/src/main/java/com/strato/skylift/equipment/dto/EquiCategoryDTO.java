@@ -1,15 +1,12 @@
 package com.strato.skylift.equipment.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
+@Getter @Setter @ToString
 public class EquiCategoryDTO
 {
     private Long categoryCode;

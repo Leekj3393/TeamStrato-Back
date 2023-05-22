@@ -16,13 +16,25 @@ import java.util.List;
 @Repository
 public interface EquipmentRepositroy extends JpaRepository<Equipment , Long>
 {
-    @EntityGraph(attributePaths = {"equCategory.categoryCode"} ,type = EntityGraph.EntityGraphType.FETCH)
-    Page<Equipment> findAll(Pageable pageable);
+    //@EntityGraph(attributePaths = {"equCategory.categoryCode"} ,type = EntityGraph.EntityGraphType.FETCH)
+    @Query(value = "SELECT MAX(e.equipmentCreateDate)" +
+            "FROM Equipment e " +
+            "GROUP BY e.equCategory " +
+            "ORDER BY e.equCategory.categoryCode ")
+    List<Object> findMaxCreateDate();
+
+    @Query(value = "SELECT MAX(e.equipmentModifyDate)" +
+            "FROM Equipment e " +
+            "GROUP BY e.equCategory " +
+            "ORDER BY e.equCategory.categoryCode ")
+    List<Object> findMaxModifyDate();
 
     @Query(value = "SELECT COUNT(e.equCategory.categoryCode) " +
             "FROM Equipment e " +
-            "WHERE e.equipmentStatus <> '결제대기'" +
-            "GROUP BY e.equCategory.categoryCode")
+            "WHERE e.equipmentStatus <> '폐기'" +
+            "AND e.equCategory.categoryCode IS NOT NULL " +
+            "GROUP BY e.equCategory.categoryCode " +
+            "ORDER BY e.equCategory.categoryCode")
     List<Long> countByEquCategoryCategoryCode();
 
     @EntityGraph(attributePaths = {"equCategory.categoryCode"} ,type = EntityGraph.EntityGraphType.FETCH)
@@ -33,4 +45,6 @@ public interface EquipmentRepositroy extends JpaRepository<Equipment , Long>
     @Query(value = "SELECT e FROM Equipment  e WHERE e.equCategory.categoryCode = :value AND e.equipmentStatus <> '결제대기' ORDER BY e.equipmentCode")
     Page<Equipment> findByCategoryCode(@Param("value")Long value, Pageable pageable);
 
+    @Query(value = "SELECT MAX(e.equipmentCode) from Equipment e")
+    Long findByMaxCode();
 }
