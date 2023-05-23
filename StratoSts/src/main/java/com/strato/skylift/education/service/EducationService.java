@@ -175,7 +175,6 @@ public class EducationService {
 		classRepository.save(modelMapper.map(classDto, EdClass.class));
 	}
 	
-}
 
 
 	/* 원본 영상 시간 추출 메소드 */
