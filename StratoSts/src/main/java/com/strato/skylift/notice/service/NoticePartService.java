@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -32,7 +34,12 @@ public class NoticePartService {
     }
 
 
-
+    public Page<Notice> getNoticesByDeptCodeAndSearch(String deptCode, int page, String search) {
+        if (deptCode == null || search == null) {
+            throw new IllegalArgumentException("deptCode and search cannot be null");
+        }
+        return noticePartRepository.findByDepartment_DeptCodeAndNoticeTitleContaining(deptCode, search, PageRequest.of(page - 1, 10));
+    }
 }
 
 
