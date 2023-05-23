@@ -2,6 +2,7 @@ package com.strato.skylift.notice.service;
 
 import com.strato.skylift.entity.Notice;
 import com.strato.skylift.member.repository.MyPageRepository;
+import com.strato.skylift.notice.dto.NoticeDto;
 import com.strato.skylift.notice.repository.NoticePartRepository;
 import com.strato.skylift.notice.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +11,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -33,13 +39,13 @@ public class NoticePartService {
         return noticeEntity;
     }
 
+/* search */
+        @Transactional
+            public List<Notice> search(String keyword) {
+            List<Notice> noticeList = noticeRepository.findByNoticeTitleContaining(keyword);
+            return noticeList;
+            }
 
-    public Page<Notice> getNoticesByDeptCodeAndSearch(String deptCode, int page, String search) {
-        if (deptCode == null || search == null) {
-            throw new IllegalArgumentException("deptCode and search cannot be null");
-        }
-        return noticePartRepository.findByDepartment_DeptCodeAndNoticeTitleContaining(deptCode, search, PageRequest.of(page - 1, 10));
-    }
 }
 
 

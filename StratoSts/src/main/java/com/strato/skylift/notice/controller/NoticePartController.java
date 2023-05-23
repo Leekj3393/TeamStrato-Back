@@ -18,8 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -53,6 +55,7 @@ public class NoticePartController {
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
     }
 
+    //해당하는 공지사항 코드 조회
     @GetMapping("/notice/part/{noticeCode}")
     public ResponseEntity<ResponseDto> selectNoticeCode(@PathVariable("noticeCode") Long noticeCode) {
         Optional<Notice> noticeOptional = noticePartRepository.findByNoticeCode(noticeCode);
@@ -70,7 +73,7 @@ public class NoticePartController {
 
 
 
-
+    //로그인된 회원의 부서에 맞는 공지사항 불러오기
     @GetMapping("/notice/part")
     public ResponseEntity<ResponseDto> getNoticesForAuthenticatedUser(
             @AuthenticationPrincipal MbMemberDto member,
@@ -89,28 +92,18 @@ public class NoticePartController {
     }
 
 
-    @GetMapping("/notice/search")
-    public ResponseEntity<ResponseDto> getNoticesForAuthenticatedUser(
-            @AuthenticationPrincipal MbMemberDto member,
-            @RequestParam(name="search", defaultValue="") String search,
-            @RequestParam(name="page", defaultValue="1") int page) {
-        String deptCode = member.getDepartment().getDeptCode();
-        Page<Notice> noticeList = noticePartService.getNoticesByDeptCodeAndSearch(deptCode, page, search);
+    //공지사항 서치하기
+        @GetMapping("/noticeMy/search")
+            public String search(String keyword, Model model) {
+            List<Notice> searchList = noticePartService.search(keyword);
 
-        //String deptCode = member.getDepartment().getDeptCode();
-//        Page<Notice> noticeList = noticeService.getNoticesByDeptCode(deptCode, page);
-        Page<NoticeDto> noticeDtoList = noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
-        PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(noticeDtoList);
+            model.addAttribute("searchList", searchList);
 
-        ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
-        responseDtoWithPaging.setPageInfo(pageInfo);
-        responseDtoWithPaging.setData(noticeDtoList.getContent());
-
-        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
-    }
+            return "posts-search";
+            }
 
 
-    //수정
+    //공지사항 인서트하기
     @PostMapping("/notice/insert")
     public ResponseEntity<?> createNotice(@AuthenticationPrincipal MbMemberDto member,
                                           @RequestBody NoticeDto noticeDto) {

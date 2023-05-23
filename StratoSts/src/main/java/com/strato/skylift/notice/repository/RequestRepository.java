@@ -15,6 +15,9 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     @Query("SELECT r FROM Request r LEFT JOIN FETCH r.approvals a LEFT JOIN FETCH a.member")
     List<Request> findAllWithApprovalsAndMembers();
 
+    List<Request> findAllByApprovals_Member(Member member);
+
+
 //        Optional<Member> findByMemberCode(Long memberCode);
 
 }
