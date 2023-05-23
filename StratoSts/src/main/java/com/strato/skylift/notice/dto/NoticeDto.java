@@ -18,10 +18,7 @@ public class NoticeDto {
 	private String noticeContent; // 추가된 필드
 	private String noticeType;
 	private String noticeDelYn;
-	private String noticeStatus;
 	private Date noticeRegistDate;
-	private Date noticeInitDate;
-	private Date noticeEndDate;
 	private MbMemberDto member;
 	private MbDepartmentDto department;
 	
@@ -35,10 +32,7 @@ NOTICE_TITLE	VARCHAR2(2000 BYTE)
 NOTICE_CONTENT	VARCHAR2(3500 BYTE)
 NOTICE_TYPE	VARCHAR2(1000 BYTE)
 NOTICE_DEL_YN	VARCHAR2(1000 BYTE)
-NOTICE_STATUS	VARCHAR2(1000 BYTE)
 NOTICE_REGIST_DATE	DATE
-NOTICE_INIT_DATE	DATE
-NOTICE_END_DATE	DATE
 MEMBER_CODE	NUMBER
 DEPT_CODE	VARCHAR2(1000 BYTE)*/
 	
