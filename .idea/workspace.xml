@@ -4,19 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b03e6050-5647-4e1a-83df-c14b780a1bb5" name="변경" comment="장비 추가가 왜????????????????????????????????????????????????????????????&#10;뷰 -&gt; back단으로 데이터 이사중....">
-      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/repository/EqApprovalRepositroy.java" afterDir="false" />
+    <list default="true" id="b03e6050-5647-4e1a-83df-c14b780a1bb5" name="변경" comment="장비 추가 완료 수정 삭제 로 넘어감">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/EquCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/EquCategory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/Equipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/Equipment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/controller/EquipmentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/controller/EquipmentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/dto/CSequipmentCatgoryDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/dto/CSequipmentCatgoryDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/dto/EQFileDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/dto/EQFileDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/dto/EquiCategoryDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/dto/EquiCategoryDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/dto/EquipmentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/dto/EquipmentDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/dto/EquipmentRegistDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/dto/EquipmentRegistDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/entity/EquipmentApproval.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/entity/EquipmentApproval.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/entity/EquipmentRegist.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/entity/EquipmentRegist.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/repository/EQcategoryRepositroy.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/repository/EQcategoryRepositroy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/repository/EquipmentRepositroy.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/repository/EquipmentRepositroy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/service/EquipmentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/service/EquipmentService.java" afterDir="false" />
@@ -169,7 +159,9 @@
       <workItem from="1684401340321" duration="477000" />
       <workItem from="1684401840531" duration="11028000" />
       <workItem from="1684500638606" duration="1136000" />
-      <workItem from="1684715404701" duration="23984000" />
+      <workItem from="1684715404701" duration="26299000" />
+      <workItem from="1684748323139" duration="130000" />
+      <workItem from="1684800875691" duration="7081000" />
     </task>
     <task id="LOCAL-00001" summary="엔티티 추가 상세 연관관계는 애기해봐야됌">
       <created>1683776741405</created>
@@ -255,7 +247,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684415438177</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="장비 추가 완료 수정 삭제 로 넘어감">
+      <created>1684744127831</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1684744127831</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -364,6 +363,7 @@
     <MESSAGE value="TokenProvider 수정" />
     <MESSAGE value="장비 추가 로직 작성중" />
     <MESSAGE value="장비 추가가 왜????????????????????????????????????????????????????????????&#10;뷰 -&gt; back단으로 데이터 이사중...." />
-    <option name="LAST_COMMIT_MESSAGE" value="장비 추가가 왜????????????????????????????????????????????????????????????&#10;뷰 -&gt; back단으로 데이터 이사중...." />
+    <MESSAGE value="장비 추가 완료 수정 삭제 로 넘어감" />
+    <option name="LAST_COMMIT_MESSAGE" value="장비 추가 완료 수정 삭제 로 넘어감" />
   </component>
 </project>

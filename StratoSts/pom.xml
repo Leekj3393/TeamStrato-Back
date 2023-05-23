@@ -111,7 +111,16 @@
         	<artifactId>ffmpeg</artifactId>
         	<version>0.7.0</version>
     	</dependency>
-				
+
+
+		<!-- 파일다운로드 라이브러리 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>5.3.27</version> <!-- Or the version you are using -->
+		</dependency>
+
+
 	</dependencies>
 
 	<build>

@@ -41,4 +41,7 @@ public class Attendance
     @Column(name = "RETURN_TIME")
     private Date returnTime;
 
+    // Update the last attendance date based on the attendance record
+
+
 }

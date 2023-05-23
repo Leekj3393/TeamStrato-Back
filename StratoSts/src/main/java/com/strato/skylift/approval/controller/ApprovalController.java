@@ -24,6 +24,8 @@ import com.strato.skylift.common.ResponseDto;
 import com.strato.skylift.common.paging.Pagenation;
 import com.strato.skylift.common.paging.PagingButtonInfo;
 import com.strato.skylift.common.paging.ResponseDtoWithPaging;
+import com.strato.skylift.member.dto.MbDepartmentDto;
+import com.strato.skylift.member.dto.MbJobDto;
 import com.strato.skylift.member.dto.MbMemberDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -119,22 +121,22 @@ public class ApprovalController {
 	@GetMapping("/memberList")
 	public ResponseEntity<ResponseDto> selectMemberList(@AuthenticationPrincipal MbMemberDto memberDto) {
 
-//	    List<MbDepartmentDto> deptListDto = appServ.selectDeptList();
-//	    List<MbJobDto> jobListDto = appServ.selectJobList();
+	    List<MbDepartmentDto> deptListDto = appServ.selectDeptList();
+	    List<MbJobDto> jobListDto = appServ.selectJobList();
 	    List<MbMemberDto> memberListDto = appServ.selectMemberList();
 	    
 	    
 	    
-//	    log.info("deptListDto : {}", deptListDto);
-//	    log.info("jobListDto : {}", jobListDto);
+	    log.info("deptListDto : {}", deptListDto);
+	    log.info("jobListDto : {}", jobListDto);
 	    log.info("memberListDto : {}", memberListDto);
 	    
-	    Map<String, Object> data = new HashMap<>();
-//	    data.put("dept", deptListDto);
-//	    data.put("job", jobListDto);
-	    data.put("appline", memberListDto);
+	    Map<String, Object> appline = new HashMap<>();
+	    appline.put("dept", deptListDto);
+	    appline.put("job", jobListDto);
+	    appline.put("accessor", memberListDto);
 
-	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 전체 목록 조회 완료", data));
+	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 전체 목록 조회 완료", appline));
 	}
 	
 	

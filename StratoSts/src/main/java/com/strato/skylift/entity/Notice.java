@@ -49,4 +49,6 @@ public class Notice
     @ManyToOne
     @JoinColumn(name = "DEPT_CODE")
     private Department department;
+
+
 }

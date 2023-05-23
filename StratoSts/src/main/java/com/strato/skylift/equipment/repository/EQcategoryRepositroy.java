@@ -19,4 +19,7 @@ public interface EQcategoryRepositroy extends JpaRepository<EquCategory , Long>
 
     List<EquCategory> findByEquCategoryCategoryCodeIsNotNull();
 
+    @Query("SELECT c from EquCategory c WHERE c.categoryCode != :categoryCode AND c.equCategory.categoryCode IS NOT NULL " +
+            "ORDER BY c.categoryCode")
+    List<EquCategory> findByCategoryName(Long categoryCode);
 }
