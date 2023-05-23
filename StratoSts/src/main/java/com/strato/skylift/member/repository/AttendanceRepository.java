@@ -23,6 +23,10 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
     List<Attendance> findByAttendanceDateAndMember(Date date, Member member);
 
+    Optional<Attendance> findTopByMemberOrderByAttendanceDateDesc(Member member);
+
+    List<Attendance> findLatestAttendanceByMember(Member member);
+
 
     //List<Attendance> findByMemberIn(Long member);
 

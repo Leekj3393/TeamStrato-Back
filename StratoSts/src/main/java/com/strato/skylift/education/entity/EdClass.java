@@ -38,8 +38,8 @@ public class EdClass {
 	@Column(name="CLASS_STATUS")
 	private String classStatus;
 	
-	@Column(name="CLASS_DATE")
-	private Date classDate;
+	@Column(name="CLASS_START")
+	private Date classStart;
 	
 	@Column(name="CLASS_END")
 	private Date classEnd;

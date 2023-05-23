@@ -23,11 +23,14 @@ import com.strato.skylift.approval.repository.ApprovalLineRepository;
 import com.strato.skylift.approval.repository.ApprovalRepository;
 import com.strato.skylift.entity.Approval;
 import com.strato.skylift.entity.ApprovalLine;
+import com.strato.skylift.entity.Department;
+import com.strato.skylift.entity.Job;
 import com.strato.skylift.entity.Member;
 import com.strato.skylift.exception.UserNotFoundException;
+import com.strato.skylift.member.dto.MbDepartmentDto;
+import com.strato.skylift.member.dto.MbJobDto;
 import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.repository.MemberRepository;
-import com.strato.skylift.member.repository.MyPageRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -139,7 +142,7 @@ public class ApprovalService {
 	
 
 	
-/* 7. 결재선, 열람인 선정  */
+/* 7. 결재선 선정  */
 	@Transactional
 	public void insertAppLine(ApprovalLineDto applineDto) {
 		log.info("[ApprovalService] insertAppLine start ===========================================");
@@ -153,12 +156,34 @@ public class ApprovalService {
 		List<Member> memberList = mbRepo.findAll();
 		
 		List<MbMemberDto> MemberDtoList = memberList.stream()
-				.map(appline -> mm.map(appline, MbMemberDto.class))
+				.map(accessor -> mm.map(accessor, MbMemberDto.class))
 				.collect(Collectors.toList());
 		
 		return MemberDtoList;
 	}
 
+	//부서 조회
+	public List<MbDepartmentDto> selectDeptList() {
+		List<Department> deptList = deptRepo.findAll();
+		
+		List<MbDepartmentDto> deptDtoList = deptList.stream()
+				.map(dept -> mm.map(dept, MbDepartmentDto.class))
+				.collect(Collectors.toList());
+		
+		return deptDtoList;
+	}
+
+
+	// 직급 조회
+	public List<MbJobDto> selectJobList() {
+		List<Job> jobList = jobRepo.findAll();
+		
+		List<MbJobDto> jobDtoList = jobList.stream()
+				.map(job -> mm.map(job, MbJobDto.class))
+				.collect(Collectors.toList());
+		
+		return jobDtoList;
+	}
 
 
 //	public MbMemberDto getMemberInfoByMemberCode(Long memberCode) {
@@ -225,6 +250,8 @@ public class ApprovalService {
 		
 		log.info("[ApprovalService] putApprovalAccess end ============================== ");
 	}
+
+
 
 
 

@@ -12,6 +12,10 @@ import java.util.Optional;
 public interface NoticePartRepository extends JpaRepository<Notice, Long> {
     Optional<Notice> findByNoticeCode(Long noticeCode);
 
+    Page<Notice> findByDepartment_DeptCodeAndNoticeTitleContaining(String deptCode, String noticeTitle, Pageable pageable);
+
+
+
     // Page<Notice> findByDeptCode(String department, Pageable pageable);
 }
 
