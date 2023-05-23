@@ -130,8 +130,9 @@ public class NoticeService {
 		}
 	
 	}
-	
-/* E. 관리자 공지 수정 */
+
+
+	/* E. 관리자 공지 수정 */
 /* F. 관리자 공지 삭제 */
 
 	
