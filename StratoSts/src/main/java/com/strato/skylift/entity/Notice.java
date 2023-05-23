@@ -30,17 +30,9 @@ public class Notice
     @Column(name = "NOTICE_DEL_YN")
     private String noticeDelYn;
 
-    @Column(name = "NOTICE_STATUS")
-    private String noticeStatus;
-
     @Column(name = "NOTICE_REGIST_DATE")
     private Date noticeRegistDate;
 
-    @Column(name = "NOTICE_INIT_DATE")
-    private Date noticeInitDate;
-
-    @Column(name = "NOTICE_END_DATE")
-    private Date noticeEndDate;
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_CODE")
