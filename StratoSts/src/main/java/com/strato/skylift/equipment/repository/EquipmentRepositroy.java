@@ -43,8 +43,14 @@ public interface EquipmentRepositroy extends JpaRepository<Equipment , Long>
 
     @EntityGraph(attributePaths = {"equCategory.categoryCode"} ,type = EntityGraph.EntityGraphType.FETCH)
     @Query(value = "SELECT e FROM Equipment  e WHERE e.equCategory.categoryCode = :value AND e.equipmentStatus <> '결제대기' ORDER BY e.equipmentCode")
-    Page<Equipment> findByCategoryCode(@Param("value")Long value, Pageable pageable);
+    Page<Equipment> findByCategoryCode(@Param("value") Long value, Pageable pageable);
+
+
+    @EntityGraph(attributePaths = {"equCategory.categoryCode"} ,type = EntityGraph.EntityGraphType.FETCH)
+    @Query(value = "SELECT e FROM Equipment  e ORDER BY e.equipmentCode")
+    Page<Equipment> findEquipmentAll(Pageable pageable);
 
     @Query(value = "SELECT MAX(e.equipmentCode) from Equipment e")
     Long findByMaxCode();
+
 }

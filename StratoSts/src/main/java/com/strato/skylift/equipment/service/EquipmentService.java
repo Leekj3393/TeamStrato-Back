@@ -109,12 +109,29 @@ public class EquipmentService
         return null;
     };
 
-    public Page<EquipmentDTO> findByCategory(Long category, int page)
+    public Page<EquipmentDTO> findByCategory(Long categoryCode, int page)
     {
         log.info("image url" + IMAGE_URL  + "equipment/");
         Pageable pageable = PageRequest.of(page - 1, 4 , Sort.by("equipmentCode").ascending());
 
-        Page<Equipment> equipment = equipmentRepositroy.findByCategoryCode(category,pageable);
+        Page<Equipment> equipment = equipmentRepositroy.findByCategoryCode(categoryCode,pageable);
+
+        Page<EquipmentDTO> equipmentDTO = equipment.map(equ -> modelMapper.map(equ , EquipmentDTO.class));
+
+        for(int i = 0 ; i < equipmentDTO.getContent().size(); i++)
+        {
+            equipmentDTO.getContent().get(i).getFile().setFilePath(IMAGE_URL + "equipment/" + equipmentDTO.getContent().get(i).getFile().getFilePath());
+        }
+
+        return equipmentDTO;
+    }
+
+    public Page<EquipmentDTO> findEquipmentAll(int page)
+    {
+        log.info("image url" + IMAGE_URL  + "equipment/");
+        Pageable pageable = PageRequest.of(page - 1, 4 , Sort.by("equipmentCode").ascending());
+
+        Page<Equipment> equipment = equipmentRepositroy.findEquipmentAll(pageable);
 
         Page<EquipmentDTO> equipmentDTO = equipment.map(equ -> modelMapper.map(equ , EquipmentDTO.class));
 
@@ -211,5 +228,13 @@ public class EquipmentService
         List<EquiCategoryDTO> equiCategoryDTO = equCategoryList.stream()
                 .map(category -> modelMapper.map(category , EquiCategoryDTO.class)).collect(Collectors.toList());
         return equiCategoryDTO;
+    }
+
+
+    public List<EquiCategoryDTO> findCategoryList(Long categoryCode)
+    {
+        List<EquCategory> categoryList = eqCategoryRepositroy.findByCategoryName(categoryCode);
+
+        return categoryList.stream().map(c -> modelMapper.map(c, EquiCategoryDTO.class)).collect(Collectors.toList());
     }
 }
