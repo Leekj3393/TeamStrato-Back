@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.strato.skylift.entity.Department;
 import com.strato.skylift.entity.Notice;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +15,9 @@ import java.util.Optional;
 public interface NoticeRepository extends JpaRepository<Notice, Long> {
     //유정
     Page<Notice> findByDepartmentDeptCode(String deptCode, Pageable pageable);
+
+    List<Notice> findByNoticeTitleContaining(String keyword);
+
 
     //여기까지 유정
 
