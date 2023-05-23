@@ -40,6 +40,8 @@ public class NoticeFile {
 //	@JoinColumn(name="NOTICE_CODE")
 	@Column(name="NOTICE_CODE")
 	private Long noticeCode;
-	
+
+
+
 
 }

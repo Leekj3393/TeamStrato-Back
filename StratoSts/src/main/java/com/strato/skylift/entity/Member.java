@@ -90,7 +90,10 @@ public class Member {
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "MEMBER_CODE")
 	private List<File> files = new ArrayList<>();
-	
+
+
+
+
 	/* 직원 정보 수정 */
 	public void update(String memberName, String residentNo, String gender,
 					   String phone, String address, String bankName, String bankNo,

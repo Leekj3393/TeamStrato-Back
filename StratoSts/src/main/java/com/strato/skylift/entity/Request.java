@@ -33,6 +33,7 @@ public class Request
     @Column(name = "REQUEST_END")
     private Date requestEnd;
 
-    @OneToMany(mappedBy = "request")
+
+    @OneToMany(mappedBy = "request", cascade = CascadeType.ALL)
     private List<Approval> approvals = new ArrayList<>();
 }

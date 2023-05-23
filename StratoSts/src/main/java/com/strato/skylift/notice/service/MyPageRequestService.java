@@ -43,9 +43,20 @@ public class MyPageRequestService {
     //리 퀘스트 등록하기
     @Transactional
     public void insertRequest(Long memberCode, RequestDto requestDto) {
+
         // Find Member by memberCode
         Member member = myPageRepository.findById(memberCode)
                 .orElseThrow(() -> new IllegalArgumentException("아이디를 다시 확인해주세요 :  " + memberCode));
+
+        // Check if there is a '퇴직' request for the specific member only if the current request is '퇴직 신청'
+        if ("퇴직 신청".equals(requestDto.getRequsetType())) {
+            List<Request> requests = requestRepository.findAllByApprovals_Member(member);
+            boolean hasResignationRequest = requests.stream()
+                    .anyMatch(request -> "퇴직 신청".equals(request.getRequsetType()));
+            if (hasResignationRequest) {
+                throw new IllegalStateException("이미 퇴직 요청이 있습니다. 더 이상 퇴직 신청을 할 수 없습니다.");
+            }
+        }
 
         // Create new Request
         Request newRequest = new Request();
@@ -70,13 +81,15 @@ public class MyPageRequestService {
         // Save new Approval
         approvalRepository.save(newApproval);
     }
-    //리퀘스트 삭제하기
-    public void deleteRequest(Long memberCode, RequestDto requestDto) {
-        Request request = requestRepository.findById(memberCode).orElseThrow(() ->
-                new IllegalArgumentException("아이디를 다시 확인해주세요 :  " + memberCode));
 
-        requestRepository.deleteById(memberCode);
+
+    //리퀘스트 삭제하기
+    public void deleteRequest(Long requestCode) {
+        Request request = requestRepository.findById(requestCode).orElseThrow(() ->
+                new IllegalArgumentException("아이디를 다시 확인해주세요 :  " + requestCode));
+        requestRepository.delete(request);
     }
+
 
 
 }
