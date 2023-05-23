@@ -62,7 +62,7 @@ public class EducationController {
 	}
 	
 	/* 교육 안전카테고리 조회 */
-	@GetMapping("/safety")
+	@GetMapping("/safety")  
 	public ResponseEntity<ResponseDto> selectEduSafetyList(@RequestParam(name="page", defaultValue="1") int page) {
 			
 		Page<EducationDto> educationDtoList = edService.selectEducationSafetyList(page);
