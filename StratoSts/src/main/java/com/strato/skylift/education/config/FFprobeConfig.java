@@ -17,7 +17,7 @@
 //@Configuration
 //@RequiredArgsConstructor
 //public class FFprobeConfig {
-//    
+
 //	@Value("${ffmpeg.mpeg}")
 //    private String ffmpegLocation;
 //
