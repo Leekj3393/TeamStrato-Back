@@ -29,8 +29,8 @@ import com.strato.skylift.entity.Education;
 import com.strato.skylift.entity.EdFile;
 import com.strato.skylift.util.FileUploadUtils;
 
-//import net.bramp.ffmpeg.FFprobe;
-//import net.bramp.ffmpeg.probe.FFmpegFormat;
+import net.bramp.ffmpeg.FFprobe;
+import net.bramp.ffmpeg.probe.FFmpegFormat;
 
 
 
@@ -51,11 +51,11 @@ public class EducationService {
 		this.modelMapper = modelMapper;
 	}
 	
-//	@Value("${video.video-url}")
-//	private String VIDEO_URL;
-//	
-//	@Value("${video.video-dir}")
-//	private String VIDEO_DIR;
+	@Value("${video.video-url}")
+	private String VIDEO_URL;
+	
+	@Value("${video.video-dir}")
+	private String VIDEO_DIR;
 	
 	/* 교육 전체 조회 */
 	public Page<EducationDto> selectEducationList(int page) {
@@ -76,66 +76,66 @@ public class EducationService {
 		
 		EdFileDto fileDto = new EdFileDto();
 		
-//		try {
-//			String replaceFilename = FileUploadUtils.saveFile(VIDEO_DIR, videoName, educationDto.getEducationVideos());
-//			
-//			fileDto.setFileName(videoName);
-//			fileDto.setFilePath(replaceFilename);
-//			fileDto.setFileType("교육영상");
-//			
-//			/* 영상시간 추출해서 저장 */
-//			Long videoDuration = getVideoDuration(educationDto.getEducationVideos());
-//			educationDto.setEdTime(videoDuration);
-//			
-//			Education newEdu = edRepository.save(modelMapper.map(educationDto, Education.class));
-//			
-//			fileDto.setEdCode(newEdu.getEdCode());
-//			
-//			System.out.println("fileDto :" + fileDto);
-//			
-//			edFileRepository.save(modelMapper.map(fileDto, EdFile.class));
-//			
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		
+		try {
+			String replaceFilename = FileUploadUtils.saveFile(VIDEO_DIR, videoName, educationDto.getEducationVideos());
+			
+			fileDto.setFileName(videoName);
+			fileDto.setFilePath(replaceFilename);
+			fileDto.setFileType("교육영상");
+			
+			/* 영상시간 추출해서 저장 */
+			Long videoDuration = getVideoDuration(educationDto.getEducationVideos());
+			educationDto.setEdTime(videoDuration);
+			
+			Education newEdu = edRepository.save(modelMapper.map(educationDto, Education.class));
+			
+			fileDto.setEdCode(newEdu.getEdCode());
+			
+			System.out.println("fileDto :" + fileDto);
+			
+			edFileRepository.save(modelMapper.map(fileDto, EdFile.class));
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/* 원본 영상 시간 추출 메소드 */
-//	private Long getVideoDuration(MultipartFile videoFile) throws IOException {
-//	    // Save the video file to a temporary location
-//	    Path tempFilePath = Files.createTempFile("temp", videoFile.getOriginalFilename());
-//	    try {
-//	        try (InputStream inputStream = videoFile.getInputStream();
-//	             OutputStream outputStream = Files.newOutputStream(tempFilePath)) {
-//	            IOUtils.copy(inputStream, outputStream);
-//	        }
-//
-//	        FFprobe ffprobe = new FFprobe();
-//	        FFmpegFormat format = ffprobe.probe(tempFilePath.toString()).format;
-//	        double durationSeconds = format.duration;
-//
-//	        // Convert duration to milliseconds
-////	        long durationInSeconds = Math.round(durationSeconds);
-//
-////	        return durationInSeconds;
-//	        long durationMillis = (long) (durationSeconds * 1000);
-//
-//	        return durationMillis;
-//	    } finally {
-//	        // Delete the temporary file
-//	        deleteFile(tempFilePath);
-//	    }
-//	}
-//
-//	/* 임시 파일 삭제 메소드 */
-//	private void deleteFile(Path filePath) {
-//	    try {
-//	        Files.deleteIfExists(filePath);
-//	    } catch (IOException e) {
-//	        // Handle exception or log error message
-//	        e.printStackTrace();
-//	    }
-//	}
-//	
+	private Long getVideoDuration(MultipartFile videoFile) throws IOException {
+	    // Save the video file to a temporary location
+	    Path tempFilePath = Files.createTempFile("temp", videoFile.getOriginalFilename());
+	    try {
+	        try (InputStream inputStream = videoFile.getInputStream();
+	             OutputStream outputStream = Files.newOutputStream(tempFilePath)) {
+	            IOUtils.copy(inputStream, outputStream);
+	        }
+
+	        FFprobe ffprobe = new FFprobe();
+	        FFmpegFormat format = ffprobe.probe(tempFilePath.toString()).format;
+	        double durationSeconds = format.duration;
+
+	        // Convert duration to milliseconds
+//	        long durationInSeconds = Math.round(durationSeconds);
+
+//	        return durationInSeconds;
+	        long durationMillis = (long) (durationSeconds * 1000);
+
+	        return durationMillis;
+	    } finally {
+	        // Delete the temporary file
+	        deleteFile(tempFilePath);
+	    }
+	}
+
+	/* 임시 파일 삭제 메소드 */
+	private void deleteFile(Path filePath) {
+	    try {
+	        Files.deleteIfExists(filePath);
+	    } catch (IOException e) {
+	        // Handle exception or log error message
+	        e.printStackTrace();
+	    }
+	}
+	
 }
