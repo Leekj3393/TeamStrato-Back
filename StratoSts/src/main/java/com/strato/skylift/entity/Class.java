@@ -12,12 +12,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
 @Entity
+@DynamicInsert
 @Table(name="TBL_CLASS")
 @SequenceGenerator(name="CLASS_SEQ_GENERATOR",
 			sequenceName="SEQ_CLASS",
@@ -35,8 +38,8 @@ public class Class {
 	@Column(name="CLASS_STATUS")
 	private String classStatus;
 	
-	@Column(name="CLASS_DATE")
-	private Date classDate;
+	@Column(name="CLASS_START")
+	private Date classStart;
 	
 	@Column(name="CLASS_END")
 	private Date classEnd;

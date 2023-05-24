@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -29,15 +31,17 @@ import com.strato.skylift.education.repository.EducationRepository;
 import com.strato.skylift.entity.EdFile;
 import com.strato.skylift.entity.Education;
 import com.strato.skylift.member.dto.MbMemberDto;
+import com.strato.skylift.member.service.MemberService;
 import com.strato.skylift.util.FileUploadUtils;
 
-//import net.bramp.ffmpeg.FFprobe;
-//import net.bramp.ffmpeg.probe.FFmpegFormat;
+import lombok.extern.slf4j.Slf4j;
+import net.bramp.ffmpeg.FFprobe;
+import net.bramp.ffmpeg.probe.FFmpegFormat;
 
 
 
 
-
+@Slf4j
 @Service
 public class EducationService {
 
@@ -55,11 +59,11 @@ public class EducationService {
 		this.modelMapper = modelMapper;
 	}
 
-//   @Value("${video.video-url}")
-//   private String VIDEO_URL;
-//
-//   @Value("${video.video-dir}")
-//   private String VIDEO_DIR;
+   @Value("${video.video-url}")
+   private String VIDEO_URL;
+
+   @Value("${video.video-dir}")
+   private String VIDEO_DIR;
 
 	/* 교육 전체 조회 */
 	public Page<EducationDto> selectEducationList(int page) {
@@ -80,30 +84,67 @@ public class EducationService {
 
 		EdFileDto fileDto = new EdFileDto();
 
-//      try {
-//         String replaceFilename = FileUploadUtils.saveFile(VIDEO_DIR, videoName, educationDto.getEducationVideos());
-//
-//         fileDto.setFileName(videoName);
-//         fileDto.setFilePath(replaceFilename);
-//         fileDto.setFileType("교육영상");
-//
-//         /* 영상시간 추출해서 저장 */
-//         Long videoDuration = getVideoDuration(educationDto.getEducationVideos());
-//         educationDto.setEdTime(videoDuration);
-//
-//         Education newEdu = edRepository.save(modelMapper.map(educationDto, Education.class));
-//
-//         fileDto.setEdCode(newEdu.getEdCode());
-//
-//         System.out.println("fileDto :" + fileDto);
-//
-//         edFileRepository.save(modelMapper.map(fileDto, EdFile.class));
-//
-//      } catch (IOException e) {
-//         e.printStackTrace();
-//      }
-//
+      try {
+         String replaceFilename = FileUploadUtils.saveFile(VIDEO_DIR, videoName, educationDto.getEducationVideos());
+
+         fileDto.setFileName(videoName);
+         fileDto.setFilePath(replaceFilename);
+         fileDto.setFileType("교육영상");
+
+         /* 영상시간 추출해서 저장 */
+         Long videoDuration = getVideoDuration(educationDto.getEducationVideos());
+         educationDto.setEdTime(videoDuration);
+
+         Education newEdu = edRepository.save(modelMapper.map(educationDto, Education.class));
+
+         fileDto.setEdCode(newEdu.getEdCode());
+
+         System.out.println("fileDto :" + fileDto);
+
+         edFileRepository.save(modelMapper.map(fileDto, EdFile.class));
+
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+
 	}
+	
+	/* 원본 영상 시간 추출 메소드 */
+	   	private Long getVideoDuration(MultipartFile videoFile) throws IOException {
+	       // Save the video file to a temporary location
+	       Path tempFilePath = Files.createTempFile("temp", videoFile.getOriginalFilename());
+	       try {
+	           try (InputStream inputStream = videoFile.getInputStream();
+	                OutputStream outputStream = Files.newOutputStream(tempFilePath)) {
+	               IOUtils.copy(inputStream, outputStream);
+	           }
+
+	           FFprobe ffprobe = new FFprobe();
+	           FFmpegFormat format = ffprobe.probe(tempFilePath.toString()).format;
+	           double durationSeconds = format.duration;
+
+	           // Convert duration to milliseconds
+//	           long durationInSeconds = Math.round(durationSeconds);
+
+//	           return durationInSeconds;
+	           long durationMillis = (long) (durationSeconds * 1000);
+
+	           return durationMillis;
+	       } finally {
+	           // Delete the temporary file
+	           deleteFile(tempFilePath);
+	       }
+	   }
+
+	   /* 임시 파일 삭제 메소드 */
+	   private void deleteFile(Path filePath) {
+	       try {
+	           Files.deleteIfExists(filePath);
+	      } catch (IOException e) {
+	          // Handle exception or log error message
+	           e.printStackTrace();
+	       }
+	   }
 	
 	/* 교육 안전리스트 조회 */
 	public Page<EducationDto> selectEducationSafetyList(int page) {
@@ -161,9 +202,16 @@ public class EducationService {
 		return fileDto;
 	}
 	
-	/* 교육 등록 */
+	/* 수강 등록 */
 	@Transactional
 	public void insertClass(MbMemberDto memberDto, Long edCode) {
+		
+		Long memberCode = memberDto.getMemberCode();
+		
+		EdClass classEntity = classRepository.findByMemberAndEducation(memberCode, edCode);
+		System.out.println("classEntity : " + classEntity);
+				
+		if(classEntity == null) {
 		
 		ClassDto classDto = new ClassDto();
 		EducationDto eduDto = new EducationDto();
@@ -172,46 +220,55 @@ public class EducationService {
 		classDto.setEducation(eduDto);
 		classDto.setClassStatus("N");
 		
+		log.info("classDto : {}", classDto);
+		
 		classRepository.save(modelMapper.map(classDto, EdClass.class));
+		}
 	}
 	
+	/* 수강 업데이트 */
+	@Transactional
+	public void updateClass(MbMemberDto memberDto, Long edCode, Long classTime) {
+		
+		Long memberCode = memberDto.getMemberCode();
+		
+		EducationDto originEducation = modelMapper.map(edRepository.findByEdCode(edCode),EducationDto.class);
+		
+		System.out.println("originEducation : " + originEducation);
+		
+		EdClass classInfo = classRepository.findByMemberAndEducation(memberCode, edCode);	
+		ClassDto classDto = modelMapper.map(classInfo, ClassDto.class);
+		classDto.setClassTime(classTime);
+		classDto.setClassEnd(new Date());
+		classDto.setClassView("Y");
+		
+		Long percent = (long) Math.floor(((double) classTime / originEducation.getEdTime()) * 100);
+		
+		classDto.setClassPercent(percent);
+		
+		System.out.println("classTime : " + classTime);
+		System.out.println("originTime : " + originEducation.getEdTime());
+		System.out.println("percent : " + percent);
+		
+		if(percent > 90) {
+			classDto.setClassStatus("Y");
+		}
+		
+		classInfo.update(
+				classDto.getClassTime(),
+				classDto.getClassEnd(),
+				classDto.getClassStatus(),
+				classDto.getClassView(),
+				classDto.getClassPercent()
+				);
+	}
 
-
-	/* 원본 영상 시간 추출 메소드 */
-//   private Long getVideoDuration(MultipartFile videoFile) throws IOException {
-//       // Save the video file to a temporary location
-//       Path tempFilePath = Files.createTempFile("temp", videoFile.getOriginalFilename());
-//       try {
-//           try (InputStream inputStream = videoFile.getInputStream();
-//                OutputStream outputStream = Files.newOutputStream(tempFilePath)) {
-//               IOUtils.copy(inputStream, outputStream);
-//           }
-//
-//           FFprobe ffprobe = new FFprobe();
-//           FFmpegFormat format = ffprobe.probe(tempFilePath.toString()).format;
-//           double durationSeconds = format.duration;
-//
-//           // Convert duration to milliseconds
-////           long durationInSeconds = Math.round(durationSeconds);
-//
-////           return durationInSeconds;
-//           long durationMillis = (long) (durationSeconds * 1000);
-//
-//           return durationMillis;
-//       } finally {
-//           // Delete the temporary file
-//           deleteFile(tempFilePath);
-//       }
-//   }
-//
-//   /* 임시 파일 삭제 메소드 */
-//   private void deleteFile(Path filePath) {
-//       try {
-//           Files.deleteIfExists(filePath);
-//       } catch (IOException e) {
-//           // Handle exception or log error message
-//           e.printStackTrace();
-//       }
-//   }
-//
+	/* 수강한 수강 정보 조회 */
+	public ClassDto selectClassView(MbMemberDto memberDto) {
+		
+		EdClass classView = classRepository.findByMemberCode(memberDto.getMemberCode());
+		
+		return modelMapper.map(classView, ClassDto.class);
+	}
+		
 }
