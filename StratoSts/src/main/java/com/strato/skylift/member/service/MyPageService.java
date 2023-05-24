@@ -112,7 +112,7 @@ public class MyPageService {
         return dto;
     }
 
-
+//오늘 출근하고 출근 되면 오류뜨게하기
     @Transactional
     public void manageAttendance(Long memberCode) {
         Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
@@ -194,7 +194,14 @@ public class MyPageService {
         Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
-            Optional<Attendance> attendanceOptional = attendanceRepository.findAllByMemberMemberCode(memberCode);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            Date today = calendar.getTime();
+            Optional<Attendance> attendanceOptional = attendanceRepository.findByMemberMemberCodeAndAttendanceDate(memberCode, today);
+
             if (attendanceOptional.isPresent()) {
                 Attendance attendance = attendanceOptional.get();
 
@@ -221,13 +228,7 @@ public class MyPageService {
                 }
             } else {
                 // 출근을 안눌렀을 경우
-                Attendance newAttendance = new Attendance();
-                newAttendance.setMember(member);
-                newAttendance.setStatus("출근"); // 출석 상태를 "출근"으로 설정
-                newAttendance.setAttendanceDate(new Date());
-                newAttendance.setStartTime(new Date());
-                attendanceRepository.save(newAttendance); // 출근 정보 저장
-                return; // 메소드 종료
+                throw new RuntimeException("출근을 먼저 해주세요.");
             }
         }
         // 로그인을 다시 확인하세요.
@@ -241,9 +242,10 @@ public class MyPageService {
         Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
-            Optional<Attendance> attendanceOptional = attendanceRepository.findAllByMemberMemberCode(memberCode);
-            if (attendanceOptional.isPresent()) {
-                Attendance attendance = attendanceOptional.get();
+            List<Attendance> attendanceList = attendanceRepository.findLatestAttendanceByMember(member);
+
+            if (!attendanceList.isEmpty()) {
+                Attendance attendance = attendanceList.get(0); // 가장 최근의 출석 기록을 가져옴
 
                 // 외출한 상태인지 체크
                 if (attendance.getStatus().equals("외출")) {
@@ -256,22 +258,19 @@ public class MyPageService {
                         throw new RuntimeException("외출 후 복귀를 눌러주세요.");
                     }
                 } else {
-                    // 외출을 먼저 해주세요.라고 뜨게하기
+                    // 외출을 먼저 해주세요.
                     throw new RuntimeException("외출을 먼저 해주세요.");
                 }
             } else {
                 // 출근을 안눌렀을 경우
-                Attendance newAttendance = new Attendance();
-                newAttendance.setMember(member);
-                newAttendance.setStatus("출근"); // 출석 상태를 "출근"으로 설정
-                newAttendance.setAttendanceDate(new Date());
-                newAttendance.setStartTime(new Date());
-                attendanceRepository.save(newAttendance); // 출근 정보 저장
+                throw new RuntimeException("출근을 먼저 해주세요.");
             }
         } else {
             throw new RuntimeException("로그인을 다시 확인하세요.");
         }
     }
+
+
 
 
 

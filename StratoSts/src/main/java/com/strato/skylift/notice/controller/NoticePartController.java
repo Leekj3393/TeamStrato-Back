@@ -79,8 +79,9 @@ public class NoticePartController {
             @AuthenticationPrincipal MbMemberDto member,
             @RequestParam(name="page", defaultValue="1") int page) {
 
+        //멤버의 부서 코드 가져오기
         String deptCode = member.getDepartment().getDeptCode();
-          Page<Notice> noticeList = noticeService.getNoticesByDeptCode(deptCode, page);
+        Page<Notice> noticeList = noticeService.getNoticesByDeptCode(deptCode, page);
         Page<NoticeDto> noticeDtoList = noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
         PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(noticeDtoList);
 
@@ -93,14 +94,24 @@ public class NoticePartController {
 
 
     //공지사항 서치하기
-        @GetMapping("/noticeMy/search")
-            public String search(String keyword, Model model) {
-            List<Notice> searchList = noticePartService.search(keyword);
+    @GetMapping("/notice/part/search")
+    public ResponseEntity<ResponseDto> searchNoticesForAuthenticatedUser(
+            @AuthenticationPrincipal MbMemberDto member,
+            @RequestParam(name="page", defaultValue="1") int page,
+            @RequestParam(name="title") String title) {
 
-            model.addAttribute("searchList", searchList);
+        String deptCode = member.getDepartment().getDeptCode();
+        Page<Notice> noticeList = noticePartService.findNoticeByTitleAndDeptCode(title, deptCode, page);
+        Page<NoticeDto> noticeDtoList = noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
+        PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(noticeDtoList);
 
-            return "posts-search";
-            }
+        ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+        responseDtoWithPaging.setPageInfo(pageInfo);
+        responseDtoWithPaging.setData(noticeDtoList.getContent());
+
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+    }
+
 
 
     //공지사항 인서트하기
