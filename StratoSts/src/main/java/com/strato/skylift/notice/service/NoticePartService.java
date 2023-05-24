@@ -34,7 +34,7 @@ public class NoticePartService {
     private NoticePartRepository noticePartRepository;
 
     public Optional<Notice> getNoticeByCode(Long noticeCode) {
-        // 공지사항 코드에 해당하는 데이터 조회 로직을 구현합니다.
+        // 공지사항 코드에 해당하는 데이터 조회 로직을 구현
         Optional<Notice> noticeEntity = noticePartRepository.findByNoticeCode(noticeCode);
         return noticeEntity;
     }
@@ -45,6 +45,15 @@ public class NoticePartService {
             List<Notice> noticeList = noticeRepository.findByNoticeTitleContaining(keyword);
             return noticeList;
             }
+
+            //공지사항 검색 조회 번호별
+
+
+    //공지사항 이름 noticeTitile 찾기
+    public Page<Notice> findNoticeByTitleAndDeptCode(String noticeTitle, String deptCode, int page) {
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("noticeCode").descending());
+        return noticeRepository.findByDeptCodeAndNoticeTitle(deptCode, noticeTitle, pageable);
+    }
 
 }
 

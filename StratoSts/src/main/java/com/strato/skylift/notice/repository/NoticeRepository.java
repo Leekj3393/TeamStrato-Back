@@ -19,6 +19,13 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
     List<Notice> findByNoticeTitleContaining(String keyword);
 
 
+    @Query("SELECT n FROM Notice n "
+            + "JOIN n.department d "
+            + "WHERE d.deptCode = :deptCode AND n.noticeTitle LIKE %:noticeTitle%")
+    Page<Notice> findByDeptCodeAndNoticeTitle(@Param("deptCode") String deptCode, @Param("noticeTitle") String noticeTitle, Pageable pageable);
+
+
+
     //여기까지 유정
 
 /* 1. 공지사항 전체 목록 조회  findAll 메소드 - 완료!! */
