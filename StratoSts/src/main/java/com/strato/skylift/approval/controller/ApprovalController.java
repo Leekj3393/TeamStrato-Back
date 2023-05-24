@@ -109,12 +109,50 @@ public class ApprovalController {
  * 	- 기안문 작성 -> 전자결재 페이지에서 함
  * 	- 휴가, 휴직, 퇴직 신청 -> 마이페이지에서 한 뒤 넘어옴
  * 	- 장비 구매, 장비 수리, 장비 폐기 신청 -> 장비관리 페이지에서 한 뒤 넘어옴  */
-	@PostMapping("/appline")
-	public ResponseEntity<ResponseDto> insertAppLine (@RequestBody ApprovalLineDto applineDto, @AuthenticationPrincipal MbMemberDto memberDto){
-		appServ.insertAppLine(applineDto);
+	// 결재 등록페이지에서 등록한 결재문서 정보를 불러옴
+	@GetMapping("/registedApp/{appCode}")
+	public ResponseEntity<ResponseDto> getApprovalInfo(@PathVariable Long appCode) {
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 정보 조회 성공", appServ.getApprovalInfo(appCode)));
+	}
+	
+	// 제1 결재선
+	@PostMapping("/appline1")
+	public ResponseEntity<?> insertAppLine1 
+		   (@RequestBody ApprovalLineDto applineDto, 
+			MbMemberDto selectedMember){
+		
+		appServ.insertAppLine1(selectedMember.getMemberCode(), applineDto.getAppLineCode());
+		
 		return ResponseEntity
 				.ok()
-				.body(new ResponseDto(HttpStatus.OK, "결재선 등록 성공"));
+				.body(new ResponseDto(HttpStatus.OK, "제1 결재선 등록 성공"));
+	}
+	
+	// 제2 결재선
+	@PostMapping("/appline2")
+	public ResponseEntity<?> insertAppLine2 
+	(@RequestBody ApprovalLineDto applineDto, 
+			MbMemberDto selectedMember){
+		
+		appServ.insertAppLine2(selectedMember.getMemberCode(), applineDto.getAppLineCode());
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDto(HttpStatus.OK, "제2 결재선 등록 성공"));
+	}
+	
+	// 최종 결재선
+	@PostMapping("/appline3")
+	public ResponseEntity<?> insertAppLine3 
+	(@RequestBody ApprovalLineDto applineDto, 
+			MbMemberDto selectedMember){
+		
+		appServ.insertAppLine3(selectedMember.getMemberCode(), applineDto.getAppLineCode());
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDto(HttpStatus.OK, "최종 결재선 등록 성공"));
 	}
 	
 	// 직원 전체 목록 조회

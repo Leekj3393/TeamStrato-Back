@@ -134,11 +134,56 @@ public class ApprovalService {
 	
 /* 7. 결재선 선정  */
 	@Transactional
-	public void insertAppLine(ApprovalLineDto applineDto) {
-		log.info("[ApprovalService] insertAppLine start ===========================================");
-		log.info("[ApprovalService] applineDto : {}", applineDto);
-		appLineRepo.save(mm.map(applineDto, ApprovalLine.class));
-		log.info("[ApprovalService] insertAppLine end ===========================================");
+	public void insertAppLine1(Long memberCode, Long appCode) {
+		Optional<Member> memberOptional = appMbRepo.findById(memberCode);
+		Optional<Approval> approvalOptional = appRepo.findById(appCode);
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            Approval approval = approvalOptional.get();
+            
+            ApprovalLine newAppline1 = new ApprovalLine();
+            newAppline1.setMember(member);
+            newAppline1.setAppPriorYn("Y");
+            newAppline1.setApproval(approval);
+            newAppline1.setAppStatus("결재 대기");
+            newAppline1.setAppOrder(1L);
+            appLineRepo.save(newAppline1);
+        }
+	}
+	@Transactional
+	public void insertAppLine2(Long memberCode, Long appCode) {
+		Optional<Member> memberOptional = appMbRepo.findById(memberCode);
+		Optional<Approval> approvalOptional = appRepo.findById(appCode);
+		if (memberOptional.isPresent()) {
+			Member member = memberOptional.get();
+			Approval approval = approvalOptional.get();
+			
+			ApprovalLine newAppline2 = new ApprovalLine();
+			newAppline2.setMember(member);
+			newAppline2.setAppPriorYn("N");
+			newAppline2.setApproval(approval);
+			newAppline2.setAppStatus("결재 대기");
+			newAppline2.setAppOrder(2L);
+			appLineRepo.save(newAppline2);
+		}
+	}
+	
+	@Transactional
+	public void insertAppLine3(Long memberCode, Long appCode) {
+		Optional<Member> memberOptional = appMbRepo.findById(memberCode);
+		Optional<Approval> approvalOptional = appRepo.findById(appCode);
+		if (memberOptional.isPresent()) {
+			Member member = memberOptional.get();
+			Approval approval = approvalOptional.get();
+			
+			ApprovalLine newAppline3 = new ApprovalLine();
+			newAppline3.setMember(member);
+			newAppline3.setAppPriorYn("N");
+			newAppline3.setApproval(approval);
+			newAppline3.setAppStatus("결재 대기");
+			newAppline3.setAppOrder(3L);
+			appLineRepo.save(newAppline3);
+		}
 	}
 
 	// 직원 전체 조회 >> 부서순 정렬되도록!~!!!
@@ -223,6 +268,22 @@ public class ApprovalService {
 		
 		log.info("[ApprovalService] putApprovalAccess end ============================== ");
 	}
+
+
+
+	public ApprovalDto getApprovalInfo(Long appCode) {
+		
+		Approval approval = appRepo.findById(appCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 결재 문서가 없습니다. appCode : " + appCode));
+		
+		ApprovalDto approvalDto = mm.map(approval, ApprovalDto.class);
+		
+		return approvalDto;
+	}
+
+
+
+
 
 
 
