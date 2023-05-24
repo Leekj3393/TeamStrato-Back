@@ -102,6 +102,13 @@ public class EquipmentController
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"ㅎㅇ",categoryList));
     }
 
+    @PostMapping("/statusUpdate")
+    public ResponseEntity<ResponseDto> statusUpdate(@ModelAttribute ApprovalEquipmentDTO approvalEquipmentDTO)
+    {
+        equipmentService.statusUpdate(approvalEquipmentDTO);
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"완료"));
+    }
+
     @PutMapping("/modify")
     public ResponseEntity<ResponseDto> modifyEqu(@ModelAttribute EquipmentDTO equipmentDTO)
     {

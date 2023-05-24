@@ -16,7 +16,7 @@ import java.util.List;
 @SequenceGenerator(name = "EQUIPMENT_SEQ_GENERATOR",
                   sequenceName = "SEQ_EQUIPMENT",
                 initialValue = 1 , allocationSize = 0)
-@Getter @Setter @DynamicInsert @ToString
+@Getter @Setter @DynamicInsert
 public class Equipment
 {
     @Id @Column(name = "EQUIPMENT_CODE")
@@ -26,6 +26,7 @@ public class Equipment
     @ManyToOne
     @JoinColumn(name = "CATEGORY_CODE")
     private EquCategory equCategory;
+
 
     @Column(name = "EQUIPMENT_NAME")
     private String equipmentName;
@@ -41,11 +42,11 @@ public class Equipment
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "FILE_CODE")
-    private File file;
+    private EquipmentFile file;
 
-    public void update(Long category , String equipmentName , Date equipmentModifyDate , String equipmentStatus)
+    public void update(EquCategory equCategory , String equipmentName , Date equipmentModifyDate , String equipmentStatus)
     {
-        this.equCategory.setCategoryCode(category);
+        this.equCategory = equCategory;
         this.equipmentName = equipmentName;
         this.equipmentModifyDate = equipmentModifyDate;
         this.equipmentStatus = equipmentStatus;
