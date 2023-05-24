@@ -125,8 +125,6 @@ public class ApprovalController {
 	    List<MbJobDto> jobListDto = appServ.selectJobList();
 	    List<MbMemberDto> memberListDto = appServ.selectMemberList();
 	    
-	    
-	    
 	    log.info("deptListDto : {}", deptListDto);
 	    log.info("jobListDto : {}", jobListDto);
 	    log.info("memberListDto : {}", memberListDto);
@@ -137,6 +135,13 @@ public class ApprovalController {
 	    appline.put("accessor", memberListDto);
 
 	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 전체 목록 조회 완료", appline));
+	}
+	
+	// 결재선으로 선택된 직원 정보 조회
+	@GetMapping("/selectedMember/{memberCode}")
+	public ResponseEntity<ResponseDto> selectedMember(MbMemberDto member, @PathVariable Long memberCode) {
+		return ResponseEntity.ok()
+				.body(new ResponseDto(HttpStatus.OK, "직원 상세 조회 성공", appServ.getSelectedMemberInfo(member.getMemberCode())));
 	}
 	
 	
