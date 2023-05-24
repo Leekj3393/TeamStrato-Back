@@ -33,7 +33,6 @@ public class Notice
     @Column(name = "NOTICE_REGIST_DATE")
     private Date noticeRegistDate;
 
-
     @ManyToOne
     @JoinColumn(name = "MEMBER_CODE")
     private Member member;

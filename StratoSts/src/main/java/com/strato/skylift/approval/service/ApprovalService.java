@@ -97,30 +97,6 @@ public class ApprovalService {
 		return approvalDtoList;
 	}
 	
-//	public Page<ApprovalDto> selectWaitingList(int page, String appStatus, MbMemberDto member) {
-//		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("appCode").ascending());
-//		
-//		Page<Approval> approvalList = appRepo.findByAppStatus(pageable, appStatus);
-//		Page<ApprovalDto> approvalDtoList = approvalList.map(approval -> mm.map(approval, ApprovalDto.class));
-//		
-//		
-//		return approvalDtoList;
-//	}
-
-
-//	public Page<ApprovalDto> selectWaitingListByMember(int page, String appStatus) {
-//		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("appCode").ascending());
-//		
-//		//직원 정보 조회
-////		Member findMember = mbRepo.findById(memberCode)
-////				.orElseThrow(() -> new IllegalArgumentException("해당 직원이 없습니다. memberCode = "+ memberCode));
-//		
-//		Page<Approval> approvalList = appRepo.findByMemberAndAppStatus(pageable, appStatus);
-//		
-//		Page<ApprovalDto> approvalDtoList = approvalList.map(approval -> mm.map(approval, ApprovalDto.class));
-//		
-//		return approvalDtoList;
-//	}
 	
 /* 5. 결재문서 조회 - 상신 문서함(본인이 상신한 문서함) */
 /* 6. 기안문 작성  */
@@ -132,6 +108,20 @@ public class ApprovalService {
 		MbMemberDto memberDto = mm.map(member, MbMemberDto.class);
 		
 		return memberDto;
+	}
+	// 로그인한 직원 조회
+	public Optional<Member> getMemberInfoForApproval(Long memberCode) {
+		log.info("[ApprovalService] selectPurchaseList start ============================== ");
+		log.info("[ApprovalService] memberCode : {}", memberCode);
+		
+		Member member = mbRepo.findById(memberCode)
+				.orElseThrow(() -> new UserNotFoundException("해당 유저가 없습니다."));
+		
+		Optional<Member> memberInfo = mbRepo.findById(memberCode);
+		
+		log.info("[ApprovalService] purchaseList : {}", memberInfo);
+		log.info("[ApprovalService] selectPurchaseList end ============================== ");
+		return memberInfo;
 	}
 	
 	// 기안문 등록
@@ -173,7 +163,6 @@ public class ApprovalService {
 		return deptDtoList;
 	}
 
-
 	// 직급 조회
 	public List<MbJobDto> selectJobList() {
 		List<Job> jobList = jobRepo.findAll();
@@ -186,33 +175,17 @@ public class ApprovalService {
 	}
 
 
-//	public MbMemberDto getMemberInfoByMemberCode(Long memberCode) {
-//
-//		// 로그인한 직원의 멤버코드를 기준으로 db에서 회원정보를 조회한다.
-//		Member member = mbRepo.findById(memberCode).orElseThrow(() -> new IllegalArgumentException("해당 코드의 직원이 없습니다. memberCode : " + memberCode));
-//		MbMemberDto memberDto = mm.map(member, MbMemberDto.class);
-//
-//		// 조회된 직원 정보를 반환한다.
-//		return memberDto;
-//	}
-
-
-	// 직원 조회
-	public Optional<Member> getMemberInfoForApproval(Long memberCode) {
-		log.info("[ApprovalService] selectPurchaseList start ============================== ");
-		log.info("[ApprovalService] memberCode : {}", memberCode);
-		
+	// 결재선으로 선택된 직원의 정보를 조회함
+	public Optional<Member> getSelectedMemberInfo(Long memberCode) {
 		Member member = mbRepo.findById(memberCode)
 				.orElseThrow(() -> new UserNotFoundException("해당 유저가 없습니다."));
 		
 		Optional<Member> memberInfo = mbRepo.findById(memberCode);
 		
-		log.info("[ApprovalService] purchaseList : {}", memberInfo);
-		log.info("[ApprovalService] selectPurchaseList end ============================== ");
 		return memberInfo;
 	}
-
-
+	
+	
 // 10. 결재문서 상세 조회
 	public ApprovalDto selectApprovalDetail(Long appCode) {
 		log.info("[ApprovalService] selectApprovalDetail start ============================== ");
@@ -250,6 +223,19 @@ public class ApprovalService {
 		
 		log.info("[ApprovalService] putApprovalAccess end ============================== ");
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
