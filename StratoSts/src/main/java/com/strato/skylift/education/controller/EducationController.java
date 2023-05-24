@@ -40,7 +40,7 @@ public class EducationController {
 	}
 	
 	/* 교육 목록 전체 조회 */    
-	@GetMapping("/educations")
+	@GetMapping("/educations")   
 	public ResponseEntity<ResponseDto> selectProductList(@RequestParam(name="page", defaultValue="1") int page) {
 		
 		log.info("[ProductController] : selectProductList start =================================");
