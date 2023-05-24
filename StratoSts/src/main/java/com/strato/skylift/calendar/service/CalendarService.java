@@ -1,7 +1,10 @@
 package com.strato.skylift.calendar.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -25,11 +28,11 @@ public class CalendarService {
 	}
 	
 	// 1. 개인 일정 조회
-	public List<CalendarDto> findCalendarByMemberCode(Long memberCode){
+	public List<CalendarDto> findCalendarByMemberCodeAndDivision(Long memberCode, String division){
 		
 		log.info("[CalendarService] memberCode : {}", memberCode);
 		
-		List<Calendar> calendarList = calendarRepository.findCalendarByMemberCode(memberCode);
+		List<Calendar> calendarList = calendarRepository.findCalendarByMemberCodeAndDivision(memberCode, division);
 		
 		List<CalendarDto> calendarDto = calendarList.stream().map(calendar -> modelMapper.map(calendar, CalendarDto.class)).collect(Collectors.toList());
 		
@@ -47,5 +50,35 @@ public class CalendarService {
 		
 		return calendarDto;
 	}
+
+	@Transactional
+	public void insertCalendar(CalendarDto calendarDto) {
+		
+	
+		calendarDto.setTitle(calendarDto.getTitle());
+		calendarDto.setContent(calendarDto.getContent());
+		calendarDto.setStart(calendarDto.getStart());
+		calendarDto.setEnd(calendarDto.getEnd());
+		calendarDto.setColor(calendarDto.getColor());
+		calendarDto.setDeptCode(calendarDto.getDeptCode());
+		calendarDto.setMemberCode(calendarDto.getMemberCode());
+		calendarDto.setDivision(calendarDto.getDivision());
+		
+		Calendar calendar = calendarRepository.save(modelMapper.map(calendarDto, Calendar.class));
+	}
+
+	public void updateCalendar(CalendarDto calendarDto) {
+		
+		calendarDto.setTitle(calendarDto.getTitle());
+		calendarDto.setContent(calendarDto.getContent());
+		calendarDto.setStart(calendarDto.getStart());
+		calendarDto.setEnd(calendarDto.getEnd());
+		calendarDto.setColor(calendarDto.getColor());
+		calendarDto.setMemberCode(calendarDto.getMemberCode());
+		
+		Calendar calendar = calendarRepository.save(modelMapper.map(calendarDto, Calendar.class));
+		
+	}
+
 
 }

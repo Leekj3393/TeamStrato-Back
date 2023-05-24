@@ -13,7 +13,6 @@ public class CalendarDto {
 
 	private Long calendarCode;
 	private String deptCode;
-	private Long categoryNo;
 	private Long memberCode;
 	private String division;
 	private String title;
@@ -22,6 +21,5 @@ public class CalendarDto {
 	private Date end;
 	private Date registTime;
 	private Date updateTime;
-	private String deleteYn;
 	private String color;
 }
