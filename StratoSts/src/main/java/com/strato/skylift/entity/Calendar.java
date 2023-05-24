@@ -18,7 +18,7 @@ import lombok.Setter;
 @Entity
 @Table(name="TBL_SCH_CALANDER") // 여기도 테이블명 오타 수정시 수정 필요
 @SequenceGenerator(name="CALENDAR_SEQ_GENERATOR",
-			sequenceName="SEQ_CALANDER", // 시퀀스명 오타 수정시 해당부분 수정 필요
+			sequenceName="SEQ_SCH_CALANDER", // 시퀀스명 오타 수정시 해당부분 수정 필요
 			initialValue=1, allocationSize=1)
 public class Calendar {
 
@@ -30,8 +30,6 @@ public class Calendar {
 	@Column(name="DEPT_CODE")
 	private String deptCode;
 	
-	@Column(name="CATEGORY_NO")
-	private Long categoryNo;
 	
 	@Column(name="MEMBER_CODE")
 	private Long memberCode;
@@ -56,9 +54,6 @@ public class Calendar {
 	
 	@Column(name="UPDATE_TIME")
 	private Date updateTime;
-	
-	@Column(name="DELETE_YN")
-	private String deleteYn;
 	
 	@Column(name="CATEGORY_COLOR")
 	private String color;
