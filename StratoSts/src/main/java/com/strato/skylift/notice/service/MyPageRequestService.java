@@ -87,8 +87,18 @@ public class MyPageRequestService {
     public void deleteRequest(Long requestCode) {
         Request request = requestRepository.findById(requestCode).orElseThrow(() ->
                 new IllegalArgumentException("아이디를 다시 확인해주세요 :  " + requestCode));
+        // Find related approval
+        Approval approval = (Approval) approvalRepository.findByRequest(request)
+                .orElseThrow(() -> new IllegalArgumentException("승인 요청을 찾을 수 없습니다 : " + requestCode));
+
+        // Check if the request's status is '대기'
+        if (!"대기".equals(approval.getAppStatus())) {
+            throw new IllegalStateException("이 요청은 '대기' 상태가 아니므로 삭제할 수 없습니다.");
+        }
+
         requestRepository.delete(request);
     }
+
 
 
 
