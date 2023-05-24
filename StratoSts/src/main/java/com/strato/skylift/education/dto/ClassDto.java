@@ -15,9 +15,13 @@ public class ClassDto {
 
 	private String classStatus;
 
-	private Date classDate;
+	private Date classStart;
 
 	private Date classEnd;
+	
+	private String classView;
+	
+	private Long classPercent;
 
 	private MbMemberDto member;
 

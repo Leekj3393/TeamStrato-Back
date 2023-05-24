@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ import com.strato.skylift.common.ResponseDto;
 import com.strato.skylift.common.paging.Pagenation;
 import com.strato.skylift.common.paging.PagingButtonInfo;
 import com.strato.skylift.common.paging.ResponseDtoWithPaging;
+import com.strato.skylift.education.dto.ClassDto;
 import com.strato.skylift.education.dto.EdFileDto;
 import com.strato.skylift.education.dto.EducationDto;
 import com.strato.skylift.education.service.EducationService;
@@ -139,6 +141,8 @@ public class EducationController {
 	@PostMapping("/classRegist")
 	public ResponseEntity<ResponseDto> insertClass(@AuthenticationPrincipal MbMemberDto memberDto, @RequestParam(name="edCode") Long edCode) {
 		
+		System.out.println("동작");
+		
 		edService.insertClass(memberDto, edCode);
 		
 		return ResponseEntity
@@ -146,14 +150,25 @@ public class EducationController {
 				.body(new ResponseDto(HttpStatus.OK, "수강 등록 성공"));
 	}
 	
+	/* 수강 정보 업데이트 */
+	@PutMapping("/classUpdate")
+	public ResponseEntity<ResponseDto> updateClass(@AuthenticationPrincipal MbMemberDto memberDto, @RequestParam(name="edCode") Long edCode,
+			@RequestParam(name="playTime") long classTime
+			) {
+		
+		edService.updateClass(memberDto, edCode, classTime);
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDto(HttpStatus.OK,"수강 수정 성공"));
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/* 수강한 수강정보 조회 */
+	@GetMapping("/classView")
+	public ResponseEntity<ResponseDto> selectClassView(@AuthenticationPrincipal MbMemberDto memberDto) {
+		
+		ClassDto classDto = edService.selectClassView(memberDto);
+				
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공", classDto));
+	}
 }
