@@ -12,8 +12,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.strato.skylift.approval.dto.ApprovalDto;
+import com.strato.skylift.entity.Approval;
 import com.strato.skylift.entity.Notice;
 import com.strato.skylift.entity.NoticeFile;
+import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.notice.dto.NoticeDto;
 import com.strato.skylift.notice.dto.NoticeFileDto;
 import com.strato.skylift.notice.repository.NoticeFileRepository;
@@ -54,7 +57,7 @@ public class NoticeService {
 	public Page<NoticeDto> selectNoticeList(int page) {
 		log.info("[NoticeService] selectNoticeList start ============================== ");
 		
-		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("noticeCode").descending());
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("noticeCode").descending());
 		
 		Page<Notice> noticeList = noticeRepository.findAll(pageable);
 		
@@ -84,7 +87,7 @@ public class NoticeService {
 		
 		log.info("[NoticeService] noticeDtoList.getContent() : {}", noticeDtoList.getContent());
 		
-		log.info("[ProductService] selectProductListForAdmin end ============================== ");
+		log.info("[NoticeService] selectProductListForAdmin end ============================== ");
 		
 		return noticeDtoList;
 	}
@@ -131,6 +134,30 @@ public class NoticeService {
 		}
 	
 	}
+
+	public NoticeDto selectNoticeDetail(Long noticeCdoe) {
+		log.info("[NoticeService] selectNoticeDetail start ============================== ");
+		log.info("[NoticeService] noticeCdoe : {}", noticeCdoe);
+		
+		Notice notice = noticeRepository.findById(noticeCdoe)
+				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 게시글이 없습니다. noticeCdoe : " + noticeCdoe));
+		log.info("[NoticeService] notice : {}", notice);
+		
+		NoticeDto noticeDto = modelMapper.map(notice, NoticeDto.class);
+		log.info("[NoticeService] noticeDto : {}", noticeDto);
+		
+		log.info("[NoticeService] selectNoticeDetail end ============================== ");
+		return noticeDto;	
+	}
+
+//	public List<NoticeDto> countNotices() {
+//		List<Notice> noticeList = noticeRepository.findAll();
+//		
+//		List<NoticeDto> noticeListDto = noticeList.stream()
+//				.map(notice -> modelMapper.map(notice, NoticeDto.class))
+//				.collect(Collectors.toList());
+//		return noticeListDto;
+//	}
 
 
 

@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.boot.model.Caching;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.jcache.interceptor.JCacheOperationSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -90,20 +92,38 @@ public class EquipmentService
     public Page<EquipmentDTO> selectCategorySerch(String name , String value , int page)
     {
         Pageable pageable = PageRequest.of(page - 1, 8 , Sort.by("equipmentCode").ascending());
-        if(name.equals("EquipmentName"))
+        if(name.equals("equipmentName"))
         {
-
-            log.info("g2");
-            Page<Equipment> equipment = equipmentRepositroy.findByCategoryCodeCategoryName(value,pageable);
-
-            return equipment.map(equ -> modelMapper.map(equ , EquipmentDTO.class));
+            log.info("selectCategorySerch g2");
+            Page<Equipment> equipment = equipmentRepositroy.findByEquipmentNameLike(value,pageable);
+            Page<EquipmentDTO> equipmentDTO = equipment.map(equ -> modelMapper.map(equ , EquipmentDTO.class));
+            equipmentDTO.forEach(e -> log.info("e : {}", e));
+            for(int i = 0 ; i < equipmentDTO.getContent().size(); i++)
+            {
+                equipmentDTO.getContent().get(i).getFile().setFilePath(IMAGE_URL + "equipment/" + equipmentDTO.getContent().get(i).getFile().getFilePath());
+            }
+            return equipmentDTO;
         }
-        else if(name.equals("category"))
+        else if(name.equals("equipmentCode"))
+        {
+            Page<Equipment> equipment = equipmentRepositroy.findById(Long.parseLong(value),pageable);
+            Page<EquipmentDTO> equipmentDTO = equipment.map(equ -> modelMapper.map(equ , EquipmentDTO.class));
+            for(int i = 0 ; i < equipmentDTO.getContent().size(); i++)
+            {
+                equipmentDTO.getContent().get(i).getFile().setFilePath(IMAGE_URL + "equipment/" + equipmentDTO.getContent().get(i).getFile().getFilePath());
+            }
+            return equipmentDTO;
+        }
+        else if(name.equals("categoryName"))
         {
             log.info("ㅎ2");
             Page<Equipment> equipment = equipmentRepositroy.findByCategoryCode(Long.parseLong(value),pageable);
-
-            return equipment.map(equ -> modelMapper.map(equ , EquipmentDTO.class));
+            Page<EquipmentDTO> equipmentDTO = equipment.map(equ -> modelMapper.map(equ , EquipmentDTO.class));
+            for(int i = 0 ; i < equipmentDTO.getContent().size(); i++)
+            {
+                equipmentDTO.getContent().get(i).getFile().setFilePath(IMAGE_URL + "equipment/" + equipmentDTO.getContent().get(i).getFile().getFilePath());
+            }
+            return equipmentDTO;
         }
 
         return null;
@@ -120,7 +140,6 @@ public class EquipmentService
         for(int i = 0 ; i < equipmentDTO.getContent().size(); i++)
         {
             equipmentDTO.getContent().get(i).getFile().setFilePath(IMAGE_URL + "equipment/" + equipmentDTO.getContent().get(i).getFile().getFilePath());
-            log.info("A3-" + i);
         }
         log.info("A4");
         return equipmentDTO;
@@ -220,20 +239,6 @@ public class EquipmentService
         catch (IOException e) { throw new RuntimeException(e); }
     }
 
-    @Transactional
-    public void saveFile(EQFileDTO eqFileDTO)
-    {
-        String imageName = UUID.randomUUID().toString().replace("-","");
-        try {
-            String reFileName = FileUploadUtils.saveFile(IMAGE_DIR + "equipment", imageName, eqFileDTO.getEquipmentImage());
-            eqFileDTO.setFilePath(reFileName);
-            EquipmentFile file = modelMapper.map(eqFileDTO , EquipmentFile.class);
-            fileRepositrory.save(file);
-        }
-        catch (IOException e) { throw new RuntimeException(e);}
-
-    }
-
     public List<EquiCategoryDTO> findByCategoryAll()
     {
         List<EquCategory> equCategoryList = eqCategoryRepositroy.findByEquCategoryCategoryCodeIsNotNull();
@@ -243,7 +248,6 @@ public class EquipmentService
         return equiCategoryDTO;
     }
 
-
     public List<EquiCategoryDTO> findCategoryList(Long categoryCode)
     {
         List<EquCategory> categoryList = eqCategoryRepositroy.findByCategoryName(categoryCode);
@@ -251,5 +255,13 @@ public class EquipmentService
         return categoryList.stream().map(c -> modelMapper.map(c, EquiCategoryDTO.class)).collect(Collectors.toList());
     }
 
+    @Transactional
+    public void deleteStatus(Long[] code)
+    {
+        List<Long> c = Arrays.asList(code);
 
+        List<Equipment> equipment = equipmentRepositroy.findByEquipmentCodeIn(c);
+
+        equipment.forEach(e -> { e.setEquipmentStatus("폐기"); e.setEquipmentModifyDate(new Date()); });
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.strato.skylift.entity.Approval;
+import com.strato.skylift.member.dto.MbMemberDto;
 
 public interface ApprovalRepository extends JpaRepository<Approval, Long> {
 
@@ -21,6 +22,9 @@ public interface ApprovalRepository extends JpaRepository<Approval, Long> {
 	//일단...	
 	@EntityGraph(attributePaths= {"member"})
 	Page<Approval> findByAppStatus(Pageable pageable, String appStatus);
+
+	@EntityGraph(attributePaths= {"member"})
+	Page<Approval> findByAppStatusAndMember(Pageable pageable, String appStatus, MbMemberDto approvalWriter);
 
 	//
 

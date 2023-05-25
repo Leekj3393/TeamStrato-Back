@@ -39,18 +39,6 @@ public class EquipmentController
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"성공",responseDtoWithPaging));
     }
 
-    @GetMapping("searchEquipment/{searchName}")
-    public ResponseEntity<ResponseDto> searchEquipment(@RequestParam(name = "page", defaultValue = "1") int page,
-                                                       @PathVariable String searchName , @RequestParam(name = "value") String value)
-    {
-        Page<EquipmentDTO> equipment = equipmentService.selectCategorySerch(searchName, value , page);
-
-        PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(equipment);
-        ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging(equipment.getContent(),pagingButtonInfo);
-
-        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"test",responseDtoWithPaging));
-    }
-
     @GetMapping("/detail/{categoryCode}")
     public ResponseEntity<ResponseDto> detail(@RequestParam(name = "page")int page
                                         , @PathVariable Long categoryCode)
@@ -102,6 +90,21 @@ public class EquipmentController
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"ㅎㅇ",categoryList));
     }
 
+    @GetMapping("/modify/serach")
+    public ResponseEntity<ResponseDto> searchEquipment(@RequestParam(name = "page", defaultValue = "1") int page,
+                                                       @RequestParam(name= "type") String searchName , @RequestParam(name = "value") String value)
+    {
+        log.info("type : {}" , searchName);
+        log.info("value : {} " , value);
+
+        Page<EquipmentDTO> equipment = equipmentService.selectCategorySerch(searchName, value , page);
+
+        PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(equipment);
+        ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging(equipment.getContent(),pagingButtonInfo);
+
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"test",responseDtoWithPaging));
+    }
+
     @PostMapping("/statusUpdate")
     public ResponseEntity<ResponseDto> statusUpdate(@ModelAttribute ApprovalEquipmentDTO approvalEquipmentDTO)
     {
@@ -115,6 +118,15 @@ public class EquipmentController
         equipmentService.modifyEquipment(equipmentDTO);
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"넹"));
     }
+
+    @PutMapping("/delete")
+    public ResponseEntity<ResponseDto> deleteUpdate(@RequestBody Long[] code)
+    {
+        equipmentService.deleteStatus(code);
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"완료"));
+    }
+
+
 
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseDto> deleteEqu(@ModelAttribute EquipmentDTO equipmentDTO)

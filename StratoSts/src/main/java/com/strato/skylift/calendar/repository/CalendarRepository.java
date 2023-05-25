@@ -11,6 +11,8 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long> {
 	List<Calendar> findCalendarByDeptCodeAndDivision(String deptCode, String division);
 
 	List<Calendar> findCalendarByMemberCodeAndDivision(Long memberCode, String division);
+
+	List<Calendar> deleteCalendarByCalendarCode(Long calendarCode);
 	
 
 }
