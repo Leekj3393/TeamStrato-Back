@@ -3,7 +3,6 @@ package com.strato.skylift.calendar.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,5 +62,13 @@ public class CalendarController {
 		return ResponseEntity
 				.ok()
 				.body(new ResponseDto(HttpStatus.OK, "일정 수정 성공"));
+	}
+	
+	@PostMapping("/delete")
+	public ResponseEntity<ResponseDto> deleteCalendar(@RequestBody CalendarDto calendarDto) {
+		
+		calendarService.deleteCalendarByCalendarCode(calendarDto.getCalendarCode());
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "캘린더 삭제 성공"));
 	}
 }

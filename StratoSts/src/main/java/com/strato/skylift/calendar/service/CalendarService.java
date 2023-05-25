@@ -1,6 +1,5 @@
 package com.strato.skylift.calendar.service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,6 +76,15 @@ public class CalendarService {
 		calendarDto.setMemberCode(calendarDto.getMemberCode());
 		
 		Calendar calendar = calendarRepository.save(modelMapper.map(calendarDto, Calendar.class));
+		
+	}
+
+	@Transactional
+	public void deleteCalendarByCalendarCode(Long calendarCode) {
+		
+		log.info("calendarCode : {}",calendarCode);
+		
+	calendarRepository.deleteCalendarByCalendarCode(calendarCode);
 		
 	}
 
