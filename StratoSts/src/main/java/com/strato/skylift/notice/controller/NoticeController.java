@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +35,7 @@ public class NoticeController {
 	
 /* 1. 공지사항 전체 목록 조회(사용자) - 완성 */
 	@GetMapping
-	public ResponseEntity<ResponseDto> selectNoticeList(@RequestParam(name="page", defaultValue="1") int page){
+	public ResponseEntity<ResponseDto> selectNoticeList(@AuthenticationPrincipal MbMemberDto memberDto, @RequestParam(name="page", defaultValue="1") int page){
 		
 		log.info("[NoticeController] : selectNoticeList start ==================================== ");
 		log.info("[NoticeController] : page : {}", page);
@@ -52,10 +53,29 @@ public class NoticeController {
 		log.info("[NoticeController] : selectNoticeList end ==================================== ");
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
+//	@GetMapping("/noticesCount")
+//	public ResponseEntity<ResponseDto> countNotices(@AuthenticationPrincipal MbMemberDto memberDto){
+//		log.info("[NoticeController] : countNotices start ==================================== ");
+//		
+//		List<NoticeDto> noticeListDto = noticeService.countNotices();
+//		log.info("noticeListDto : {}", noticeListDto);
+//		
+//		Map<String, Object> noticesCount = new HashMap<>();
+//		noticesCount.put("noticesCount", noticeListDto);
+//		
+//		
+//		log.info("[NoticeController] : countNotices end ==================================== ");
+//		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "전체 공지글 조회 성공", noticesCount));
+//	}
 	
 /* 검색 - 제목 */
 /* 검색 - 내용 */
-	
+/* 공지사항 게시글 조회 */
+	@GetMapping("/detail/{noticeCode}")
+	public ResponseEntity<ResponseDto> selectNoticeDetail(@PathVariable Long noticeCdoe) {
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "게시글 상세페이지 조회 성공", noticeService.selectNoticeDetail(noticeCdoe)));
+	}
 	
 	
 	/* A.관리자 공지사항 전체 조회 - 포스트맨 테스트 완료!!!! 

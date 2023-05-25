@@ -69,17 +69,7 @@ public class ApprovalService {
    3. 결재문서 조회 - 결재 완료함
    4. 결재문서 조회 - 결재 반려함 */
 	// 테스트 중
-	// 1. 기안자 조회
-//	public MbMemberDto getWriterInfo(Long memberCode) {
-//		Member member = mbRepo.findById(memberCode)
-//				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 직원이 없습니다. memberCode : " + memberCode));
-//		
-//		MbMemberDto memberDto = mm.map(member, MbMemberDto.class);
-//		
-//		return memberDto;
-//	}
-	
-	// 2. 상태별 결재문서 목록 조회
+	// 상태별 결재문서 목록 조회
 	public Page<ApprovalDto> selectWaitingList(int page, String appStatus) {
 		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("appCode").ascending());
 		
@@ -190,11 +180,11 @@ public class ApprovalService {
 	public List<MbMemberDto> selectMemberList() {
 		List<Member> memberList = mbRepo.findAll();
 		
-		List<MbMemberDto> MemberDtoList = memberList.stream()
+		List<MbMemberDto> memberDtoList = memberList.stream()
 				.map(accessor -> mm.map(accessor, MbMemberDto.class))
 				.collect(Collectors.toList());
 		
-		return MemberDtoList;
+		return memberDtoList;
 	}
 
 	//부서 조회

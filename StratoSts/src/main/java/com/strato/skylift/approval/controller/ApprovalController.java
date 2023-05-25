@@ -24,6 +24,7 @@ import com.strato.skylift.common.ResponseDto;
 import com.strato.skylift.common.paging.Pagenation;
 import com.strato.skylift.common.paging.PagingButtonInfo;
 import com.strato.skylift.common.paging.ResponseDtoWithPaging;
+import com.strato.skylift.equipment.dto.EquipmentDTO;
 import com.strato.skylift.member.dto.MbDepartmentDto;
 import com.strato.skylift.member.dto.MbJobDto;
 import com.strato.skylift.member.dto.MbMemberDto;
@@ -47,18 +48,7 @@ public class ApprovalController {
    2. 결재문서 조회 - 결재 진행함 
    3. 결재문서 조회 - 결재 완료함 
    4. 결재문서 조회 - 결재 반려함
-   -포스트맨 테스트  */
-
-	// 기안자 정보 조회
-//	ㅠㅠㅠㅠㅠ
-//	@GetMapping("/writerInfo")
-//	public ResponseEntity<ResponseDto> getWriterInfo(ApprovalDto approvalDto, MbMemberDto memberDto) {
-//		approvalDto.getAppCode();		
-//		
-//		
-//		return ResponseEntity.ok()
-//				.body(new ResponseDto(HttpStatus.OK, "기안자 조회 성공", appServ.getWriterInfo(memberDto.getMemberCode())));
-//	}	
+   -포스트맨 테스트  */	
 	//결재문서 상태별 조회
 	@GetMapping("/list/{appStatus}")
 	public ResponseEntity<ResponseDto> selectWaitingList(ApprovalDto approval, @RequestParam(name="page", defaultValue="1") int page, @PathVariable String appStatus,
@@ -80,7 +70,7 @@ public class ApprovalController {
 	}
 
 	
-/* 5. 메인화면 결재 대기문서 조회 */
+/* 5. 메인화면 결재 요청문서 조회 */
 /* 6. 기안문 작성 - 진행중 */
 	//로그인한 직원의 정보 조회
 	@GetMapping("/memberInfo")
@@ -98,7 +88,7 @@ public class ApprovalController {
 			@AuthenticationPrincipal MbMemberDto memberDto
 			) {
 		
-		appDto.setMemberDto(memberDto);
+		appDto.setMember(memberDto);
 		log.info("memberDto : {}", memberDto);
 		appServ.registApp(appDto);
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재문서 등록 성공"));
