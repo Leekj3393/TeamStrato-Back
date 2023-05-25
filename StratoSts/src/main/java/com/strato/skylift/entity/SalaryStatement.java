@@ -25,13 +25,16 @@ public class SalaryStatement
     private String salaryClassification;
 
     @Column(name = "SALARY")
-    private String salary;
+    private Long salary;
+
+    @Column(name = "ALLOWANCE")
+    private Long allowance;
 
     @Column(name = "INCOME_TAX")
     private Long incomeTax;
 
-    @Column(name = "RESIDENCE_TAX")
-    private Long residenceTax;
+    @Column(name = "EMPLOYMENT_INSURANCE")
+    private Long employmentInsurance;
 
     @Column(name = "NATIONAL_PENSION")
     private Long nationalPesion;
