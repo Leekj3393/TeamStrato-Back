@@ -11,6 +11,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -78,13 +80,19 @@ public class SecurityConfig {
 		             .antMatchers("/api/v1/products-management/**").hasRole("ADMIN")
 		             .antMatchers(HttpMethod.GET, "/api/v1/reviews/**").permitAll()
 		             .antMatchers("/api/**").permitAll()
+			     .and()
+		             .logout()
+		             .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
+		             .logoutSuccessUrl("/login")
+		             .deleteCookies("JwtToken")
+		             .invalidateHttpSession(true)
 		         .and()
 		         	.cors()
 		         // 실제 요청에 대해서 적용할 JwtFilter 설정
 		         // 인증을 처리하는 기본 필터 UsernamePasswordAuthenticationFilter 대신 별도의 인증 로직을 가진
 		         // 커스텀 필터 사용
 		         .and()
-//		         	.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+		         	.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 		         .build();
 		 
 	}
