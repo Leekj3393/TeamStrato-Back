@@ -1,7 +1,5 @@
 package com.strato.skylift.member.service;
 
-import java.util.Optional;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,7 +31,7 @@ public class AuthService {
 	}
 	
 
-	/* 로그인 */
+	/* 2. 로그인 */
 	public MbTokenDto login(MbMemberDto memberDto) {
 		
 		log.info("[AuthService] login start ===================================================");
@@ -55,19 +53,6 @@ public class AuthService {
 //		}
 		
 		// 3. 토큰 발급
-		MbTokenDto tokenDto = tokenProvider.generateTokenDto(modelMapper.map(member, MbMemberDto.class));
-		log.info("[AuthService] tokenDto : {}", tokenDto);
-		
-		log.info("[AuthService] login end ====================================================");
-		
-		return tokenDto;
-	}
-	
-	/* 로그아웃 */
-	public MbTokenDto logout(MbMemberDto memberDto) {
-			
-		Optional<Member> member = memberRepository.findByMemberId(memberDto.getMemberId());
-		
 		MbTokenDto tokenDto = tokenProvider.generateTokenDto(modelMapper.map(member, MbMemberDto.class));
 		log.info("[AuthService] tokenDto : {}", tokenDto);
 		
