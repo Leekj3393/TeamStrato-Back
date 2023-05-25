@@ -62,27 +62,6 @@ public class TokenProvider {
 
 		return new MbTokenDto(BEARER_TYPE, member.getMemberName(), accessToken, accessTokenExpiresIn.getTime());
 	}
-	
-	public MbTokenDto deleteTokenDto(MbMemberDto member) {
-
-		log.info("[TokenProvider] generateTokenDto Start =======================================");
-
-		// Claims라고 불리우는 JWT body(payload)에 정보 담기
-		Claims claims = Jwts.claims().setSubject(member.getMemberId());
-		// 권한도 claim에 담기
-		List<String> roles = Collections.singletonList(member.getMemberRole().getRoleName());
-		claims.put(AUTHORITIES_KEY, roles);
-		// 토큰 만료 시간 설정
-		long now = new Date().getTime();
-		Date accessTokenExpiresIn = new Date(now + 0);
-		// AccessToken 생성
-		String accessToken = null;
-
-		log.info("[TokenProvider] generateTokenDto End =========================================");
-
-		return new MbTokenDto(BEARER_TYPE, member.getMemberName(), accessToken, accessTokenExpiresIn.getTime());
-	}
-	
 	public boolean validateToken(String jwt) {
 
 		Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);

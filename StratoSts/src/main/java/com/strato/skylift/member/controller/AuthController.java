@@ -3,15 +3,19 @@ package com.strato.skylift.member.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.strato.skylift.common.ResponseDto;
 import com.strato.skylift.entity.Member;
 import com.strato.skylift.mail.dto.MailDto;
 import com.strato.skylift.mail.service.MailService;
 import com.strato.skylift.member.dto.MbMemberDto;
+import com.strato.skylift.member.exception.LoginFailedException;
 import com.strato.skylift.member.service.AuthService;
 
 @Controller
@@ -31,13 +35,6 @@ public class AuthController {
 	public ResponseEntity<ResponseDto> login(@RequestBody MbMemberDto memberDto) {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "로그인 완료", authService.login(memberDto)));
-	}
-	
-	/* 로그아웃 */
-	@PostMapping("/logout")
-	public ResponseEntity<ResponseDto> logout(@RequestBody MbMemberDto memberDto){
-		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "로그아웃 완료"));
 	}
 	
 	/* Id찾기 */
