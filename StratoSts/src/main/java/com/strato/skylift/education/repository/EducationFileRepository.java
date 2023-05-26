@@ -12,8 +12,9 @@ public interface EducationFileRepository extends JpaRepository <EdFile, Long>{
 	/* 교육 동영상 조회 */
 	@Query("SELECT f " +
 		   "  FROM EdFile f " +
-		   " WHERE f.edCode = :edCode "
-				)
+		   " WHERE f.edCode = :edCode " + 
+		   "   AND f.fileType = '교육영상' ") 
+			
 	EdFile findByEdCode(@Param("edCode") Long edCode);
 
 }
