@@ -72,9 +72,9 @@ public class NoticeController {
 /* 검색 - 내용 */
 /* 공지사항 게시글 조회 */
 	@GetMapping("/detail/{noticeCode}")
-	public ResponseEntity<ResponseDto> selectNoticeDetail(@PathVariable Long noticeCdoe) {
+	public ResponseEntity<ResponseDto> selectNoticeDetail(@PathVariable Long noticeCode) {
 		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "게시글 상세페이지 조회 성공", noticeService.selectNoticeDetail(noticeCdoe)));
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "게시글 상세페이지 조회 성공", noticeService.selectNoticeDetail(noticeCode)));
 	}
 	
 	
