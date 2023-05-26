@@ -1,5 +1,7 @@
 package com.strato.skylift.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
@@ -10,7 +12,7 @@ import java.util.Date;
 @SequenceGenerator(name = "SALARY_SEQ_GENERATOR"
                   , sequenceName = "SEQ_SALARY_STATEMENT"
                   , initialValue = 1 , allocationSize = 0)
-@DynamicInsert
+@DynamicInsert @Getter @Setter
 public class SalaryStatement
 {
     @Id @Column(name = "SALARY_CODE")
