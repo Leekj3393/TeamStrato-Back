@@ -126,8 +126,6 @@ public class EquipmentController
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"완료"));
     }
 
-
-
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseDto> deleteEqu(@ModelAttribute EquipmentDTO equipmentDTO)
     {
@@ -135,11 +133,4 @@ public class EquipmentController
         return null;
     }
 
-    @GetMapping("/modifyList")
-    public ResponseEntity<ResponseDto> modifyList(@RequestParam(name = "page" , defaultValue = "1")int page)
-    {
-
-
-        return null;
-    }
 }

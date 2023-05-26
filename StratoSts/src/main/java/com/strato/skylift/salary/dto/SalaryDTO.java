@@ -25,6 +25,8 @@ public class SalaryDTO
     private Long totalAmount;
     private Long totalDeducted;
     private Long paymentAmount;
-    @JsonFormat(pattern = "yyyy-MM-dd-HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date salaleDate;
+    @JsonFormat(pattern = "yyyy-MM")
+    private Date salaryDay;
 }
