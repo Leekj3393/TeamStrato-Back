@@ -155,8 +155,7 @@ public class MemberService {
 				/* 새로 입력 된 이미지 저장 */
 				String imageName = UUID.randomUUID().toString().replace("-", "");
 				String replaceFileName = MbFileUploadUtils.saveFile(IMAGE_DIR + "/member", imageName, memberDto.getMemberImage());
-				
-				
+
 				/* 기존에 저장 된 이미지 삭제 */
 				MbFile memberFile = fileRepository.findByMemberCode(memberDto.getMemberCode());
 				
