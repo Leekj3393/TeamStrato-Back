@@ -135,12 +135,12 @@ public class NoticeService {
 	
 	}
 
-	public NoticeDto selectNoticeDetail(Long noticeCdoe) {
+	public NoticeDto selectNoticeDetail(Long noticeCode) {
 		log.info("[NoticeService] selectNoticeDetail start ============================== ");
-		log.info("[NoticeService] noticeCdoe : {}", noticeCdoe);
+		log.info("[NoticeService] noticeCode : {}", noticeCode);
 		
-		Notice notice = noticeRepository.findById(noticeCdoe)
-				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 게시글이 없습니다. noticeCdoe : " + noticeCdoe));
+		Notice notice = noticeRepository.findById(noticeCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 게시글이 없습니다. noticeCode : " + noticeCode));
 		log.info("[NoticeService] notice : {}", notice);
 		
 		NoticeDto noticeDto = modelMapper.map(notice, NoticeDto.class);
