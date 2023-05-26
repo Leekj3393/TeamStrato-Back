@@ -68,7 +68,7 @@ public class EducationService {
 		this.modelMapper = modelMapper;
 		this.memberRepository = memberRepository;
 		this.mbFileRepository = mbFileRepository;
-	}
+	}   
 
    @Value("${video.video-url}")
    private String VIDEO_URL;
