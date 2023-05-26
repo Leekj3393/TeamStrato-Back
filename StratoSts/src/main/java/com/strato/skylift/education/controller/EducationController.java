@@ -1,6 +1,7 @@
 package com.strato.skylift.education.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ import com.strato.skylift.education.dto.ClassDto;
 import com.strato.skylift.education.dto.EdFileDto;
 import com.strato.skylift.education.dto.EducationDto;
 import com.strato.skylift.education.service.EducationService;
+import com.strato.skylift.member.dto.MbFileDto;
 import com.strato.skylift.member.dto.MbMemberDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -163,12 +165,64 @@ public class EducationController {
 				.body(new ResponseDto(HttpStatus.OK,"수강 수정 성공"));
 	}
 	
-	/* 수강한 수강정보 조회 */
-	@GetMapping("/classView")
-	public ResponseEntity<ResponseDto> selectClassView(@AuthenticationPrincipal MbMemberDto memberDto) {
+	/* 수강한 수강정보 목록 조회 */
+	@GetMapping("/classViewList")
+	public ResponseEntity<ResponseDto> selectClassViewList(@AuthenticationPrincipal MbMemberDto memberDto) {
 		
-		ClassDto classDto = edService.selectClassView(memberDto);
+		List<ClassDto> classDto = edService.selectClassViewList(memberDto);
 				
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공", classDto));
+	}
+	
+	/* 수강한 수강정보 조회 */
+	@GetMapping("/classInfo")
+	public ResponseEntity<ResponseDto> selectClassView(@AuthenticationPrincipal MbMemberDto memberDto, @RequestParam(name="edCode") Long edCode) {
+		
+		ClassDto classDto = edService.selectClassView(memberDto, edCode);
+				
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공", classDto));
+	}
+	
+	
+	/* 수강한 수강교육목록 조회 */
+	@GetMapping("/classList")
+	public ResponseEntity<ResponseDto> selectClassList(@RequestParam(name="page", defaultValue="1") int page, @AuthenticationPrincipal MbMemberDto memberDto) {
+		
+		Long memberCode = memberDto.getMemberCode();
+		
+		Page<ClassDto> classDtoList = edService.selectClassList(page, memberCode);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(classDtoList);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(classDtoList.getContent());
+				
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공", responseDtoWithPaging));
+	}
+	
+	/* 교육 사진 등록 */
+	@PostMapping("/photoRegist")
+	public ResponseEntity<ResponseDto> insertEducationPhoto(@AuthenticationPrincipal MbMemberDto memberDto, @RequestParam(name="fileTitle") String fileTitle) {
+			
+		edService.insertEudcationPhoto(memberDto, fileTitle);
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDto(HttpStatus.OK, "수강 등록 성공"));
+	}
+	
+	/* 교육 사진 조회 */
+	@GetMapping("/photoList")
+	public ResponseEntity<ResponseDto> selectPhotoList(@RequestParam(name="page", defaultValue="1") int page) {
+		
+		Page<MbFileDto> eduFileDtoList = edService.selectEduFileList(page);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(eduFileDtoList);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(eduFileDtoList.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "교육 사진 조회에 성공했습니다.", responseDtoWithPaging));
 	}
 }
