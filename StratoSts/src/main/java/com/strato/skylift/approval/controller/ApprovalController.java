@@ -79,7 +79,7 @@ public class ApprovalController {
 //		memberDto = new MbMemberDto();
 //		memberDto.setMemberCode(1L);
 		return ResponseEntity.ok()
-				.body(new ResponseDto(HttpStatus.OK, "기안자 조회 성공", appServ.getMemberInfoForApproval(memberDto.getMemberCode())));
+				.body(new ResponseDto(HttpStatus.OK, "작성자 조회 성공", appServ.getMemberInfoForApproval(memberDto.getMemberCode())));
 	}
 	
 	// 기안문 작성하기
