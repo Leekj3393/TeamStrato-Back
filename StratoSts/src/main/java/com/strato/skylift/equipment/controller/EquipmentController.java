@@ -84,15 +84,29 @@ public class EquipmentController
     }
 
     @GetMapping("/modify")
-    public ResponseEntity<ResponseDto> selectModify(@RequestParam(name = "page", defaultValue = "1") int page ,
-                                                    @RequestParam(name = "category")Long category)
+    public ResponseEntity<ResponseDto> selectModify(@RequestParam(name = "page", defaultValue = "1") int page)
     {
-        Page<EquipmentDTO> equipment = equipmentService.findByCategory(category,page);
+        Page<EquipmentDTO> equipment = equipmentService.findEquipmentAll(page);
 
         PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(equipment);
         ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging(equipment.getContent(),pagingButtonInfo);
 
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"성공",responseDtoWithPaging));
+    }
+
+    @GetMapping("/modify/{categoryCode}")
+    public ResponseEntity<ResponseDto> findCategoryList(@PathVariable Long categoryCode)
+    {
+        List<EquiCategoryDTO> categoryList = equipmentService.findCategoryList(categoryCode);
+
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"ㅎㅇ",categoryList));
+    }
+
+    @PostMapping("/statusUpdate")
+    public ResponseEntity<ResponseDto> statusUpdate(@ModelAttribute ApprovalEquipmentDTO approvalEquipmentDTO)
+    {
+        equipmentService.statusUpdate(approvalEquipmentDTO);
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"완료"));
     }
 
     @PutMapping("/modify")

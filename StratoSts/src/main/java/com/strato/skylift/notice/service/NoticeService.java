@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -130,8 +131,11 @@ public class NoticeService {
 		}
 	
 	}
-	
-/* E. 관리자 공지 수정 */
+
+
+
+
+    /* E. 관리자 공지 수정 */
 /* F. 관리자 공지 삭제 */
 
 	

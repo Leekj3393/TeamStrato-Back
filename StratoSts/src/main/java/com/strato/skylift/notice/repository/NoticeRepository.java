@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.strato.skylift.entity.Department;
 import com.strato.skylift.entity.Notice;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +15,16 @@ import java.util.Optional;
 public interface NoticeRepository extends JpaRepository<Notice, Long> {
     //유정
     Page<Notice> findByDepartmentDeptCode(String deptCode, Pageable pageable);
+
+    List<Notice> findByNoticeTitleContaining(String keyword);
+
+
+    @Query("SELECT n FROM Notice n "
+            + "JOIN n.department d "
+            + "WHERE d.deptCode = :deptCode AND n.noticeTitle LIKE %:noticeTitle%")
+    Page<Notice> findByDeptCodeAndNoticeTitle(@Param("deptCode") String deptCode, @Param("noticeTitle") String noticeTitle, Pageable pageable);
+
+
 
     //여기까지 유정
 

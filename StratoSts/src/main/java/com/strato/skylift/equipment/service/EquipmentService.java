@@ -109,12 +109,29 @@ public class EquipmentService
         return null;
     };
 
-    public Page<EquipmentDTO> findByCategory(Long category, int page)
+    public Page<EquipmentDTO> findByCategory(Long categoryCode, int page)
+    {
+        log.info("image url" + IMAGE_URL  + "equipment/");
+        Pageable pageable = PageRequest.of(page - 1, 4 , Sort.by("equipmentCode").ascending());
+        Page<Equipment> equipment = equipmentRepositroy.findByCategoryCode(categoryCode,pageable);
+        log.info("A1");
+        Page<EquipmentDTO> equipmentDTO = equipment.map(equ -> modelMapper.map(equ , EquipmentDTO.class));
+        log.info("A2");
+        for(int i = 0 ; i < equipmentDTO.getContent().size(); i++)
+        {
+            equipmentDTO.getContent().get(i).getFile().setFilePath(IMAGE_URL + "equipment/" + equipmentDTO.getContent().get(i).getFile().getFilePath());
+            log.info("A3-" + i);
+        }
+        log.info("A4");
+        return equipmentDTO;
+    }
+
+    public Page<EquipmentDTO> findEquipmentAll(int page)
     {
         log.info("image url" + IMAGE_URL  + "equipment/");
         Pageable pageable = PageRequest.of(page - 1, 4 , Sort.by("equipmentCode").ascending());
 
-        Page<Equipment> equipment = equipmentRepositroy.findByCategoryCode(category,pageable);
+        Page<Equipment> equipment = equipmentRepositroy.findEquipmentAll(pageable);
 
         Page<EquipmentDTO> equipmentDTO = equipment.map(equ -> modelMapper.map(equ , EquipmentDTO.class));
 
@@ -163,31 +180,44 @@ public class EquipmentService
     }
 
     @Transactional
+    public void statusUpdate(ApprovalEquipmentDTO approvalEquipmentDTO)
+    {
+        EquipmentApproval approval = modelMapper.map(approvalEquipmentDTO, EquipmentApproval.class);
+        approval.setAppRegistDate(new Date());
+        eqApprovalRepositroy.save(approval);
+    }
+
+    @Transactional
     public void modifyEquipment(EquipmentDTO equipmentDTO)
     {
+        log.info("[modifyEquipment]equipmentDTO : {}",equipmentDTO);
         Equipment equipment = equipmentRepositroy.findById(equipmentDTO.getEquipmentCode()).orElseThrow(() ->
                 new IllegalArgumentException("코드의 해당 상품 없다. : " + equipmentDTO.getEquipmentCode()));
-        EquipmentFile file = fileRepositrory.findByEquipmentCode(equipmentDTO.getEquipmentCode());
+        EquCategory category = eqCategoryRepositroy.findById(equipmentDTO.getEquCategory().getCategoryCode())
+                .orElseThrow(() -> new IllegalArgumentException("코드의 해당 상품 없다. : " + equipmentDTO.getEquipmentCode()));
         try
         {
             if(equipmentDTO.getEquipmentImage() != null)
             {
+                log.info("[modifyEquipment] A1-1");
                 String imageName = UUID.randomUUID().toString().replace("-","");
                 String reFileName = FileUploadUtils.saveFile(IMAGE_DIR + "equipment", imageName, equipmentDTO.getEquipmentImage());
-
-                FileUploadUtils.deleteFile(IMAGE_DIR , file.getFilePath());
-
-                file.setFilePath(reFileName);
+                log.info("[modifyEquipment] A1-2");
+                log.info("[modifyEquipment]equipment.getFile().getFilePath() : {} " , equipment.getFile().getFilePath());
+                FileUploadUtils.deleteFile(IMAGE_DIR + "equipment" , equipment.getFile().getFilePath());
+                log.info("[modifyEquipment] A1-3");
+                equipment.getFile().setFileName(imageName);
+                equipment.getFile().setFilePath(reFileName);
             }
-            equipment.update(equipmentDTO.getEquCategory().getCategoryCode()
+            log.info("[modifyEquipment] A2");
+
+            equipment.update(category
                             ,equipmentDTO.getEquipmentName()
                             ,new Date()
                             ,equipmentDTO.getEquipmentStatus());
+            log.info("[modifyEquipment] A3");
         }
         catch (IOException e) { throw new RuntimeException(e); }
-
-
-
     }
 
     @Transactional
@@ -212,4 +242,14 @@ public class EquipmentService
                 .map(category -> modelMapper.map(category , EquiCategoryDTO.class)).collect(Collectors.toList());
         return equiCategoryDTO;
     }
+
+
+    public List<EquiCategoryDTO> findCategoryList(Long categoryCode)
+    {
+        List<EquCategory> categoryList = eqCategoryRepositroy.findByCategoryName(categoryCode);
+
+        return categoryList.stream().map(c -> modelMapper.map(c, EquiCategoryDTO.class)).collect(Collectors.toList());
+    }
+
+
 }

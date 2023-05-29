@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FileRepositrory extends JpaRepository<EquipmentFile , Long>
 {
-    EquipmentFile findByEquipmentCode(Long equipmentCode);
+
 }
