@@ -1,5 +1,7 @@
 package com.strato.skylift.approval.repository;
 
+import java.util.Date;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -14,7 +16,10 @@ public interface ApprovalLineRepository extends JpaRepository<ApprovalLine, Long
 //	@Query("SELECT a FROM ApprovalLine a WHERE a.memger.memberCode = :memberCode AND a.appPriorYn = :appPriorYn ")
 //	Page<ApprovalLine> findByMemberAndAppPriorYn(Pageable pageable, Long memberCode, String appPriorYn);
 
+//	Page<ApprovalLine> findByMemberAndAppPriorYn(Pageable pageable, Member member, String appPriorYn);
+
 	@EntityGraph(attributePaths= {"member", "approval"})
-	Page<ApprovalLine> findByMemberAndAppPriorYn(Pageable pageable, Member member, String appPriorYn);
+	Page<ApprovalLine> findByMemberAndAppPriorYnAndAppTime(Pageable pageable, Member member, String appPriorYn,
+			Date appTime);
 
 }
