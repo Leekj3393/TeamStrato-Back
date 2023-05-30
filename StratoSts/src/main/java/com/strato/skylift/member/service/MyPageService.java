@@ -324,16 +324,35 @@ public class MyPageService {
     //오늘 해당하는 출근만 조회하기
 
 
-    public List<Attendance> getTodayAttendances() {
+//    public List<Attendance> getTodayAttendances() {
+//        LocalDate localDate = LocalDate.now();
+//        Date startOfDay = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//        Date endOfDay = Date.from(localDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+//
+//        log.info("Finding attendance for date: {}", localDate);
+//        List<Attendance> attendances = attendanceRepository.findByAttendanceDateBetween(startOfDay, endOfDay);
+//        log.info("Found {} attendance records for today", attendances.size());
+//        return attendances;
+//    }
+
+    public Attendance getTodayAttendanceByMemberId(String memberId) {
         LocalDate localDate = LocalDate.now();
         Date startOfDay = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date endOfDay = Date.from(localDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-        log.info("Finding attendance for date: {}", localDate);
-        List<Attendance> attendances = attendanceRepository.findByAttendanceDateBetween(startOfDay, endOfDay);
-        log.info("Found {} attendance records for today", attendances.size());
-        return attendances;
+        log.info("Finding attendance for date: {} and member id: {}", localDate, memberId);
+        List<Attendance> attendanceList = attendanceRepository.findByAttendanceDateBetweenAndMemberMemberId(startOfDay, endOfDay, memberId);
+
+        if (attendanceList.isEmpty()) {
+            log.info("No attendance record found for today and member id: {}", memberId);
+            return null;
+        }
+
+        log.info("Found attendance record for today and member id: {}", memberId);
+        return attendanceList.get(0);
     }
+
+
 
     //
     @Transactional(readOnly = true)
