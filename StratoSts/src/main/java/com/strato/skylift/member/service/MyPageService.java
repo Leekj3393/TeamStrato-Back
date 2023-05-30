@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -131,6 +132,7 @@ public class MyPageService {
             List<Attendance> latestAttendanceList = attendanceRepository.findLatestAttendanceByMember(member);
             if (!latestAttendanceList.isEmpty()) {
                 Attendance latestAttendance = latestAttendanceList.get(0);
+
                 Date lastAttendanceDate = latestAttendance.getAttendanceDate();
                 if (lastAttendanceDate != null && lastAttendanceDate.compareTo(today) == 0) {
                     throw new IllegalStateException("오늘 이미 출근하셨습니다. 더 이상 출근이 불가능합니다.");
@@ -148,6 +150,10 @@ public class MyPageService {
                 newAttendance.setAttendanceDate(today);
                 newAttendance.setStartTime(new Date()); // The actual start time is now
                 attendanceRepository.save(newAttendance);
+                log.info("출근 기록: Member Id - {}, Attendance Date - {}, Start Time - {}",
+                        member.getMemberId(),
+                        newAttendance.getAttendanceDate(),
+                        newAttendance.getStartTime());
             } else {
                 throw new IllegalStateException("오늘 이미 출근하셨습니다. 더 이상 출근이 불가능합니다.");
             }
@@ -242,10 +248,12 @@ public class MyPageService {
         Optional<Member> memberOptional = myPageRepository.findByMemberCode(memberCode);
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
-            List<Attendance> attendanceList = attendanceRepository.findLatestAttendanceByMember(member);
 
-            if (!attendanceList.isEmpty()) {
-                Attendance attendance = attendanceList.get(0); // 가장 최근의 출석 기록을 가져옴
+            // 변경: 최신 출석 기록을 가져오는 로직 수정
+            Optional<Attendance> attendanceOptional = attendanceRepository.findTopByMemberOrderByAttendanceDateDesc(member);
+
+            if (attendanceOptional.isPresent()) {
+                Attendance attendance = attendanceOptional.get();
 
                 // 외출한 상태인지 체크
                 if (attendance.getStatus().equals("외출")) {
@@ -269,6 +277,7 @@ public class MyPageService {
             throw new RuntimeException("로그인을 다시 확인하세요.");
         }
     }
+
 
 
 
@@ -315,17 +324,45 @@ public class MyPageService {
     //오늘 해당하는 출근만 조회하기
 
 
-    public List<Attendance> getTodayAttendances() {
+//    public List<Attendance> getTodayAttendances() {
+//        LocalDate localDate = LocalDate.now();
+//        Date startOfDay = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//        Date endOfDay = Date.from(localDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+//
+//        log.info("Finding attendance for date: {}", localDate);
+//        List<Attendance> attendances = attendanceRepository.findByAttendanceDateBetween(startOfDay, endOfDay);
+//        log.info("Found {} attendance records for today", attendances.size());
+//        return attendances;
+//    }
+
+    public Attendance getTodayAttendanceByMemberId(String memberId) {
         LocalDate localDate = LocalDate.now();
         Date startOfDay = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date endOfDay = Date.from(localDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-        log.info("Finding attendance for date: {}", localDate);
-        List<Attendance> attendances = attendanceRepository.findByAttendanceDateBetween(startOfDay, endOfDay);
-        log.info("Found {} attendance records for today", attendances.size());
-        return attendances;
+        log.info("Finding attendance for date: {} and member id: {}", localDate, memberId);
+        List<Attendance> attendanceList = attendanceRepository.findByAttendanceDateBetweenAndMemberMemberId(startOfDay, endOfDay, memberId);
+
+        if (attendanceList.isEmpty()) {
+            log.info("No attendance record found for today and member id: {}", memberId);
+            return null;
+        }
+
+        log.info("Found attendance record for today and member id: {}", memberId);
+        return attendanceList.get(0);
     }
 
+
+
+    //
+    @Transactional(readOnly = true)
+    public String findEmailByName(String name) {
+        Member member = myPageRepository.findByMemberName(name);
+        if (member != null) {
+            return "Name: " + member.getMemberName() + ", Email: " + member.getMemberId();
+        }
+        throw new RuntimeException("Member not found");
+    }
 
 
 

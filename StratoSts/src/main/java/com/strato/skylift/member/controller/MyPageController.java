@@ -5,6 +5,7 @@ import com.strato.skylift.common.paging.Pagenation;
 import com.strato.skylift.common.paging.PagingButtonInfo;
 import com.strato.skylift.common.paging.ResponseDtoWithPaging;
 import com.strato.skylift.entity.Attendance;
+import com.strato.skylift.entity.Member;
 import com.strato.skylift.member.dto.MbAttendanceDto;
 import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.repository.AttendanceRepository;
@@ -17,7 +18,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 //이게 내가 작업하는거
@@ -53,11 +56,18 @@ public class MyPageController {
     @GetMapping("/members/{memberCode}/attendance")
     public ResponseEntity<ResponseDto> getAttendanceByMemberCode(@PathVariable("memberCode") Long memberCode) {
         List<MbAttendanceDto> attendanceList = myPageService.getAttendanceByMemberCode(memberCode);
+        log.info("출근 완료: {}",attendanceList);
         ResponseDto responseDto = new ResponseDto(HttpStatus.OK, "조회 성공", attendanceList);
         return ResponseEntity.ok().body(responseDto);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/member/{name}/email")
+    public String getMemberEmailByName(@PathVariable String name) {
+        return myPageService.findEmailByName(name);
+    }
 
+    //
 
 
     //전체 멤버 조회하기
@@ -98,15 +108,15 @@ public class MyPageController {
 
     @GetMapping("/workInfo")
     public List<Attendance> getAllAttendances(@AuthenticationPrincipal MbMemberDto member) {
-        // 여기서 member는 현재 로그인한 사용자의 세부 정보를 포함하고 있습니다.
-        // 이 정보를 사용하여 사용자에 따라 다른 로직을 수행하거나, 특정 사용자에게만 정보를 반환하도록 할 수 있습니다.
         return myPageService.getAllAttendances();
     }
 
-    @GetMapping("/workToday")
-    public List<Attendance> getAllTodayAttendances(@AuthenticationPrincipal MbMemberDto member) {
-        return myPageService.getTodayAttendances();
+    //오늘 출근 한 것만 조회되게
+    @GetMapping("/attendanceToday")
+    public Attendance getAttendance(@RequestParam String memberId) {
+        return myPageService.getTodayAttendanceByMemberId(memberId);
     }
+
 
 
 
