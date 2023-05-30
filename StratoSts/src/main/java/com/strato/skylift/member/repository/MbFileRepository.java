@@ -20,5 +20,9 @@ public interface MbFileRepository extends JpaRepository <MbFile, Long> {
 	MbFile findByMemberCode(@Param("memberCode") Long memberCode);
 	
 	/* 교육 사진 조회 */
-	Page<MbFile> findAll(Pageable pageable);
+	@Query("SELECT f " +
+			   "  FROM MbFile f " +
+			   " WHERE f.fileType = '교육사진'"
+				)
+	Page<MbFile> findByFileType(Pageable pageable);
 }

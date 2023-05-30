@@ -63,9 +63,6 @@ public class MbMemberDto implements UserDetails {
 	@JsonIgnore
 	private MultipartFile memberImage;
 	
-	@JsonIgnore
-	private MultipartFile educationImage;
-	
 	private Collection<? extends GrantedAuthority> authorities;
 	private MbAttendanceDto attendance;
 

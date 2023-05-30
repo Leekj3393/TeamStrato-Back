@@ -1,11 +1,12 @@
 package com.strato.skylift.member.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
-@Getter
-@Setter
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Data;
+
+@Data
 public class MbFileDto {
 	
 	private Long fileCode;
@@ -17,5 +18,10 @@ public class MbFileDto {
 	private String fileType;
 
 	private Long memberCode;
-
+	
+	@JsonIgnore
+	private MultipartFile educationImage;
+	
+	@JsonIgnore
+	private String fileTitle;
 }

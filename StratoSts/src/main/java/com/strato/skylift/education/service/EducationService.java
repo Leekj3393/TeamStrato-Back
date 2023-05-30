@@ -68,7 +68,7 @@ public class EducationService {
 		this.modelMapper = modelMapper;
 		this.memberRepository = memberRepository;
 		this.mbFileRepository = mbFileRepository;
-	}
+	}   
 
    @Value("${video.video-url}")
    private String VIDEO_URL;
@@ -312,15 +312,18 @@ public class EducationService {
 	}
 	
 	/* 교육 사진 등록 */
-	public void insertEudcationPhoto(MbMemberDto memberDto, String fileTitle) {
+	public void insertEudcationPhoto(MbMemberDto memberDto, MbFileDto fileDto) {
 		
-		String imageName = fileTitle + UUID.randomUUID().toString().replace("-", "");
+		System.out.println("fileDto : " + fileDto.getEducationImage());
+		System.out.println("fileDto : " + fileDto.getFileTitle());
 		
-		MbFileDto fileDto = new MbFileDto();
+		String imageName = fileDto.getFileTitle() + "^" + UUID.randomUUID().toString().replace("-", "");
+		
+//		MbFileDto fileDto = new MbFileDto();
 		
 		try {
 			
-			String replaceFilename = MbFileUploadUtils.saveFile(IMAGE_DIR + "/education", imageName, memberDto.getEducationImage());
+			String replaceFilename = MbFileUploadUtils.saveFile(IMAGE_DIR + "/education", imageName, fileDto.getEducationImage());
 			
 			fileDto.setFileName(imageName);
 			fileDto.setFilePath(replaceFilename);
@@ -339,7 +342,7 @@ public class EducationService {
 		
 		Pageable pageable = PageRequest.of(page - 1, 6, Sort.by("fileCode").descending());
 		
-		Page<MbFile> fileList = mbFileRepository.findAll(pageable);
+		Page<MbFile> fileList = mbFileRepository.findByFileType(pageable);
 		Page<MbFileDto> fileDtoList = fileList.map(photo -> modelMapper.map(photo, MbFileDto.class));
 		
 		return fileDtoList;

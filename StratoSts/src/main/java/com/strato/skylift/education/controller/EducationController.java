@@ -202,9 +202,10 @@ public class EducationController {
 	
 	/* 교육 사진 등록 */
 	@PostMapping("/photoRegist")
-	public ResponseEntity<ResponseDto> insertEducationPhoto(@AuthenticationPrincipal MbMemberDto memberDto, @RequestParam(name="fileTitle") String fileTitle) {
+	public ResponseEntity<ResponseDto> insertEducationPhoto(@AuthenticationPrincipal MbMemberDto memberDto, 
+			@ModelAttribute MbFileDto fileDto) {
 			
-		edService.insertEudcationPhoto(memberDto, fileTitle);
+		edService.insertEudcationPhoto(memberDto, fileDto);
 		
 		return ResponseEntity
 				.ok()
