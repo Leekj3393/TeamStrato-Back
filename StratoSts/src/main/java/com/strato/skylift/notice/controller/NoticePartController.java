@@ -42,7 +42,7 @@ public class NoticePartController {
 
         log.info("[NoticePartController] : page : {}", page);
 
-        Page<NoticeDto> noticeDtoList = noticeService.selectNoticeList(page);
+        Page<NoticeDto> noticeDtoList = noticeService.selectNoticeListDelN(page);
         PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(noticeDtoList);
 
         log.info("[ProductController] : pageInfo : {}", pageInfo);
