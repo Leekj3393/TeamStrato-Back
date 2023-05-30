@@ -29,4 +29,5 @@ public class SalaryDTO
     private Date salaleDate;
     @JsonFormat(pattern = "yyyy-MM")
     private Date salaryDay;
+
 }

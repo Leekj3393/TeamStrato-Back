@@ -1,9 +1,11 @@
 package com.strato.skylift.salary.service;
 
+import com.strato.skylift.entity.Attendance;
 import com.strato.skylift.entity.Member;
 import com.strato.skylift.entity.SalaryStatement;
 import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.salary.dto.SalaryDTO;
+import com.strato.skylift.salary.repository.SalAttendanceRepository;
 import com.strato.skylift.salary.repository.SLMemberRepository;
 import com.strato.skylift.salary.repository.SalaryRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -23,14 +25,17 @@ public class SalaryService
 {
     private SalaryRepository salaryRepository;
     private SLMemberRepository slMemberRepository;
+    private SalAttendanceRepository salAttendanceRepository;
     private ModelMapper modelMapper;
 
     public SalaryService(SalaryRepository salaryRepository,
                          SLMemberRepository slMemberRepository,
+                         SalAttendanceRepository salAttendanceRepository,
                          ModelMapper modelMapper)
     {
         this.salaryRepository = salaryRepository;
         this.slMemberRepository = slMemberRepository;
+        this.salAttendanceRepository = salAttendanceRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -54,5 +59,15 @@ public class SalaryService
        memberList.forEach(m -> log.info("member : {}", m));
 
         return memberList.stream().map(m -> modelMapper.map(m, MbMemberDto.class)).collect(Collectors.toList());
+    }
+
+    public SalaryDTO findByWork(Long memberCode, String day)
+    {
+       List<Attendance> attendance = salAttendanceRepository.findByMemeberCodeLikeDay(memberCode,day);
+
+       attendance.forEach(a -> log.info("attendance : {} ", a));
+
+       return null;
+
     }
 }

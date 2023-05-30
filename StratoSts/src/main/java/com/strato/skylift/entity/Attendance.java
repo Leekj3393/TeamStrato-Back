@@ -2,9 +2,11 @@ package com.strato.skylift.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -12,7 +14,7 @@ import java.util.Date;
 @SequenceGenerator(name = "ATTENDANCE_SEQ_GENERATOR",
                   sequenceName = "SEQ_ATTENDANCE",
                     initialValue = 1 , allocationSize = 0)
-@Getter @Setter @DynamicInsert
+@Getter @Setter @DynamicInsert @ToString
 public class Attendance
 {
     @Id @Column(name = "ATTENDANCE_CODE")
