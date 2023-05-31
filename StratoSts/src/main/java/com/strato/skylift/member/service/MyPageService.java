@@ -335,6 +335,23 @@ public class MyPageService {
 //        return attendances;
 //    }
 
+    public Attendance getTodayAttendanceByMemberId(String memberId) {
+        LocalDate localDate = LocalDate.now();
+        Date startOfDay = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date endOfDay = Date.from(localDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        log.info("Finding attendance for date: {} and member id: {}", localDate, memberId);
+        List<Attendance> attendanceList = attendanceRepository.findByAttendanceDateBetweenAndMemberMemberId(startOfDay, endOfDay, memberId);
+
+        if (attendanceList.isEmpty()) {
+            log.info("No attendance record found for today and member id: {}", memberId);
+            return null;
+        }
+
+        log.info("Found attendance record for today and member id: {}", memberId);
+        return attendanceList.get(0);
+    }
+
 
 
     //
@@ -348,14 +365,30 @@ public class MyPageService {
     }
 
 
-    public List<Attendance> getTodayAttendances() {
-        LocalDate localDate = LocalDate.now();
-        Date startOfDay = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Date endOfDay = Date.from(localDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-        log.info("Finding attendance for date: {}", localDate);
-        List<Attendance> attendances = attendanceRepository.findByAttendanceDateBetween(startOfDay, endOfDay);
-        log.info("Found {} attendance records for today", attendances.size());
-        return attendances;
+    //해당하는 멤버의 출근 기록만
+    public List<Attendance> getAttendancesByMemberCodey(Long memberCode) {
+        return attendanceRepository.findByMemberMemberCode(memberCode);
     }
+
+    //오늘 출근 기록만
+    public List<Attendance> getAttendancesByMemberCodei(Long memberCode) {
+        Date today = new Date();
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(today);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date startDate = cal.getTime();
+
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        Date endDate = cal.getTime();
+
+        return attendanceRepository.findByMemberMemberCodeAndAttendanceDateBetween(memberCode, startDate, endDate);
+    }
+
+
+
+
 }
