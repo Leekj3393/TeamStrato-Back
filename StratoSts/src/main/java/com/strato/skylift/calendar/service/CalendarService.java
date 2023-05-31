@@ -1,17 +1,23 @@
 package com.strato.skylift.calendar.service;
 
-import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.strato.skylift.calendar.dto.CalendarDto;
 import com.strato.skylift.calendar.repository.CalendarRepository;
 import com.strato.skylift.entity.Calendar;
+import com.strato.skylift.entity.EquCategory;
+import com.strato.skylift.equipment.dto.CSequipmentCatgoryDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -78,6 +84,26 @@ public class CalendarService {
 		
 		Calendar calendar = calendarRepository.save(modelMapper.map(calendarDto, Calendar.class));
 		
+	}
+
+	@Transactional
+	public void deleteCalendarByCalendarCode(Long calendarCode) {
+		
+		log.info("calendarCode : {}",calendarCode);
+		
+	calendarRepository.deleteCalendarByCalendarCode(calendarCode);
+		
+	}
+
+	public Page<CalendarDto> findCalendalAll(int page) {
+		
+		Pageable pageable = PageRequest.of(page - 1, 7 , Sort.by("calendarCode").ascending());
+		
+	        Page<Calendar> calendar = calendarRepository.findAll(pageable);
+
+	        Page<CalendarDto> calendarDto = calendar.map(calendar2 -> modelMapper.map(calendar2 , CalendarDto.class));
+
+	       return calendarDto;
 	}
 
 

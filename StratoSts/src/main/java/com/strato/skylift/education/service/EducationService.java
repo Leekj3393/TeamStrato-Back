@@ -5,9 +5,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -30,8 +31,13 @@ import com.strato.skylift.education.repository.EducationFileRepository;
 import com.strato.skylift.education.repository.EducationRepository;
 import com.strato.skylift.entity.EdFile;
 import com.strato.skylift.entity.Education;
+import com.strato.skylift.entity.MbFile;
+import com.strato.skylift.entity.Member;
+import com.strato.skylift.member.dto.MbFileDto;
 import com.strato.skylift.member.dto.MbMemberDto;
-import com.strato.skylift.member.service.MemberService;
+import com.strato.skylift.member.repository.MbFileRepository;
+import com.strato.skylift.member.repository.MemberRepository;
+import com.strato.skylift.member.util.MbFileUploadUtils;
 import com.strato.skylift.util.FileUploadUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -48,22 +54,33 @@ public class EducationService {
 	private final EducationRepository edRepository;
 	private final EducationFileRepository edFileRepository;
 	private final ClassRepository classRepository;
+	private final MemberRepository memberRepository;
+	private final MbFileRepository mbFileRepository;
 	private final ModelMapper modelMapper;
 
 	public EducationService(EducationRepository edRepository, ModelMapper modelMapper,
-			EducationFileRepository edFileRepository,ClassRepository classRepository
+			EducationFileRepository edFileRepository,ClassRepository classRepository,
+			MemberRepository memberRepository, MbFileRepository mbFileRepository
 	) {
 		this.edRepository = edRepository;
 		this.edFileRepository = edFileRepository;
 		this.classRepository = classRepository;
 		this.modelMapper = modelMapper;
-	}
+		this.memberRepository = memberRepository;
+		this.mbFileRepository = mbFileRepository;
+	}   
 
    @Value("${video.video-url}")
    private String VIDEO_URL;
 
    @Value("${video.video-dir}")
    private String VIDEO_DIR;
+   
+   @Value("${image.image-url}")
+	private String IMAGE_URL;
+	
+	@Value("${image.image-dir}")
+	private String IMAGE_DIR;
 
 	/* 교육 전체 조회 */
 	public Page<EducationDto> selectEducationList(int page) {
@@ -252,7 +269,7 @@ public class EducationService {
 		
 		if(percent > 90) {
 			classDto.setClassStatus("Y");
-		}
+		} 
 		
 		classInfo.update(
 				classDto.getClassTime(),
@@ -264,11 +281,70 @@ public class EducationService {
 	}
 
 	/* 수강한 수강 정보 조회 */
-	public ClassDto selectClassView(MbMemberDto memberDto) {
+	public List<ClassDto> selectClassViewList(MbMemberDto memberDto) {
 		
-		EdClass classView = classRepository.findByMemberCode(memberDto.getMemberCode());
+		List<EdClass> classViewList = classRepository.findByMemberCodeList(memberDto.getMemberCode());
+		
+		return classViewList.stream().map(edClass -> modelMapper.map(edClass, ClassDto.class))
+				.collect(Collectors.toList());
+	}
+	
+	/* 수강한 수강 정보 조회 */
+	public ClassDto selectClassView(MbMemberDto memberDto, Long edCode) {
+		
+		EdClass classView = classRepository.findByMemberCode(memberDto.getMemberCode(), edCode);
 		
 		return modelMapper.map(classView, ClassDto.class);
 	}
+	
+	/* 수강한 수강교육목록 조회 */
+	public Page<ClassDto> selectClassList(int page, Long memberCode) {
 		
+		Pageable pageable = PageRequest.of(page -1, 5, Sort.by("classCode").descending());
+		
+		Member findMember = memberRepository.findById(memberCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당 직원이 없습니다." + memberCode));
+		
+		Page<EdClass> classList = classRepository.findByMember(pageable, findMember);
+		Page<ClassDto> classDtoList = classList.map(data -> modelMapper.map(data, ClassDto.class));
+		
+		return classDtoList;
+	}
+	
+	/* 교육 사진 등록 */
+	public void insertEudcationPhoto(MbMemberDto memberDto, String fileTitle) {
+		
+		String imageName = fileTitle + UUID.randomUUID().toString().replace("-", "");
+		
+		MbFileDto fileDto = new MbFileDto();
+		
+		try {
+			
+			String replaceFilename = MbFileUploadUtils.saveFile(IMAGE_DIR + "/education", imageName, memberDto.getEducationImage());
+			
+			fileDto.setFileName(imageName);
+			fileDto.setFilePath(replaceFilename);
+			fileDto.setFileType("교육사진");
+			fileDto.setMemberCode(memberDto.getMemberCode());
+			
+			mbFileRepository.save(modelMapper.map(fileDto, MbFile.class));
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	/* 교육 사진 조회 */
+	public Page<MbFileDto> selectEduFileList(int page) {
+		
+		Pageable pageable = PageRequest.of(page - 1, 6, Sort.by("fileCode").descending());
+		
+		Page<MbFile> fileList = mbFileRepository.findAll(pageable);
+		Page<MbFileDto> fileDtoList = fileList.map(photo -> modelMapper.map(photo, MbFileDto.class));
+		
+		return fileDtoList;
+	}
+
+	
+	
 }

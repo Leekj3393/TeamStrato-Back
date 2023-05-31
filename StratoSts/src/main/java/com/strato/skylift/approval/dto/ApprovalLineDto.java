@@ -21,4 +21,5 @@ public class ApprovalLineDto {
 	
 	private MbMemberDto member;
 	
+	private Long appOrder;
 }

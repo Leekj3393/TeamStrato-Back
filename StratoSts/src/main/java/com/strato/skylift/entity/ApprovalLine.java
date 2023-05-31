@@ -42,6 +42,9 @@ public class ApprovalLine {
 	@Column(name = "APP_TIME")
 	private Date appTime;
 	
+	@Column(name = "APP_ORDER")
+	private Long appOrder;
+	
 	@ManyToOne
 	@JoinColumn(name = "MEMBER_CODE")
 	private Member member;
