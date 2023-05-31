@@ -2,10 +2,13 @@ package com.strato.skylift.salary.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.strato.skylift.entity.Member;
+import com.strato.skylift.member.dto.MbMemberDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,7 +17,7 @@ import java.util.Date;
 public class SalaryDTO
 {
     private Long salaryCode;
-    private Member member;
+    private MbMemberDto member;
     private String salaryClassification;
     private Long salary;
     private Long allowance;
@@ -30,4 +33,11 @@ public class SalaryDTO
     @JsonFormat(pattern = "yyyy-MM")
     private Date salaryDay;
 
+    private Long totalTime;
+    private Long overTime;
+    private Long late;
+    private Long out;
+    private Long earlyLeave;
+    private Long absence;
+    private List<AttendanceDTO> attendance;
 }

@@ -4,16 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b03e6050-5647-4e1a-83df-c14b780a1bb5" name="변경" comment="급여 맹세서 추가 디테일 만들고있음">
-      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/AttendanceDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/TotalAttendanceDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/repository/SalAttendanceRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/util/calculator.java" afterDir="false" />
+    <list default="true" id="b03e6050-5647-4e1a-83df-c14b780a1bb5" name="변경" comment="근태 조회 까지 완려">
+      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/SalMemberDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/Attendance.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/Attendance.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/controller/SalaryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/controller/SalaryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/AttendanceDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/AttendanceDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/SalaryDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/SalaryDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/TotalAttendanceDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/repository/SalAttendanceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/repository/SalAttendanceRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/repository/SalaryRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/repository/SalaryRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/service/SalaryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/service/SalaryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/util/calculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/util/Calculator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,7 +178,8 @@
       <workItem from="1684918087413" duration="5483000" />
       <workItem from="1684973396402" duration="15815000" />
       <workItem from="1685060271834" duration="10366000" />
-      <workItem from="1685422926746" duration="10297000" />
+      <workItem from="1685422926746" duration="21665000" />
+      <workItem from="1685499341592" duration="7641000" />
     </task>
     <task id="LOCAL-00001" summary="엔티티 추가 상세 연관관계는 애기해봐야됌">
       <created>1683776741405</created>
@@ -305,7 +307,14 @@
       <option name="project" value="LOCAL" />
       <updated>1685107317427</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="근태 조회 까지 완려">
+      <created>1685434584075</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1685434584075</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -420,6 +429,7 @@
     <MESSAGE value="장비 끝 급여 시작" />
     <MESSAGE value="급여 맹세서 추가 만들고있음" />
     <MESSAGE value="급여 맹세서 추가 디테일 만들고있음" />
-    <option name="LAST_COMMIT_MESSAGE" value="급여 맹세서 추가 디테일 만들고있음" />
+    <MESSAGE value="근태 조회 까지 완려" />
+    <option name="LAST_COMMIT_MESSAGE" value="근태 조회 까지 완려" />
   </component>
 </project>

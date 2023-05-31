@@ -10,4 +10,5 @@ public interface SalaryRepository extends JpaRepository<SalaryStatement , Long>
 {
     @Query(value = "SELECT s FROM SalaryStatement s WHERE s.member.memberCode = :memberCode ORDER BY s.salaryCode")
     Page<SalaryStatement> findByMemberMemberId(Long memberCode , Pageable pageable);
+
 }
