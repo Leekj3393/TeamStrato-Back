@@ -12,6 +12,7 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -52,7 +53,7 @@ public class SalMemberDTO
 
     private MbMemberRoleDto memberRole;
 
-    private MbFileDto memberFile;
+    private List<MbFileDto> files;
 
     private String updatePwd;
 
