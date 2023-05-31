@@ -93,7 +93,7 @@ public class EducationService {
 		return educationDtoList;
 	}
 
-	/* 교육 등록 */
+	/* 교육 등록 */   
 	@Transactional
 	public void insertMember(EducationDto educationDto) {
 
