@@ -88,9 +88,12 @@ public class Member {
 	@JoinColumn(name = "ROLE_CODE")
 	private MemberRole memberRole;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "MEMBER_CODE")
 	private List<File> files = new ArrayList<>();
+
+
+
 
 	/* 직원 정보 수정 */
 	public void update(String memberName, String residentNo, String gender,

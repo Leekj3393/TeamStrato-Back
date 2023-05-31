@@ -131,50 +131,37 @@ public class ApprovalController {
  * 	- 기안문 작성 -> 전자결재 페이지에서 함
  * 	- 휴가, 휴직, 퇴직 신청 -> 마이페이지에서 한 뒤 넘어옴
  * 	- 장비 구매, 장비 수리, 장비 폐기 신청 -> 장비관리 페이지에서 한 뒤 넘어옴  */
-	// 결재선 저장~~
-	@PostMapping("/appline-insert")
-	public ResponseEntity<ResponseDto> insertAppLine(@RequestBody ApprovalLineDto appLineDto,
-	        @AuthenticationPrincipal MbMemberDto memberDto) {
-	    log.info("[ApprovalController] insertAppLine start ----------------------------------------------------");
-
-	    // 서비스 메소드 호출하여 결재선 등록
-	    appServ.insertAppLine(appLineDto);
-	    log.info("[ApprovalController] insertAppLine end----------------------------------------------------");
-	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재선 등록 성공"));
+	// 제1 결재선
+	@PostMapping("/appline1")
+	public ResponseEntity<ResponseDto> insertAppLine1(@RequestBody ApprovalLineDto appLineDto,
+			@AuthenticationPrincipal MbMemberDto memberDto){
+		log.info("[ApprovalController] insertAppLine1 start ----------------------------------------------------");
+		
+	    // 서비스 메소드 호출하여 제1 결재선 등록
+	    appServ.insertAppLine1(appLineDto);
+	    log.info("[ApprovalController] insertAppLine1 end----------------------------------------------------");
+	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "제1 결재선 등록 성공"));
 	}
 	
+	// 제2 결재선
+	@PostMapping("/appline2")
+	public ResponseEntity<ResponseDto> insertAppLine2(@RequestBody Long memberCode, @AuthenticationPrincipal MbMemberDto memberDto){
+		log.info("[ApprovalController] insertAppLine2 start ----------------------------------------------------");
+	    // 서비스 메소드 호출하여 제1 결재선 등록
+	    appServ.insertAppLine2(memberCode);
+	    log.info("[ApprovalController] insertAppLine2 end----------------------------------------------------");
+	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "제2 결재선 등록 성공"));
+	}
 	
-//	// 제1 결재선
-//	@PostMapping("/appline1")
-//	public ResponseEntity<ResponseDto> insertAppLine1(@RequestBody ApprovalLineDto appLineDto,
-//			@AuthenticationPrincipal MbMemberDto memberDto){
-//		log.info("[ApprovalController] insertAppLine1 start ----------------------------------------------------");
-//		
-//	    // 서비스 메소드 호출하여 제1 결재선 등록
-//	    appServ.insertAppLine1(appLineDto);
-//	    log.info("[ApprovalController] insertAppLine1 end----------------------------------------------------");
-//	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "제1 결재선 등록 성공"));
-//	}
-//	
-//	// 제2 결재선
-//	@PostMapping("/appline2")
-//	public ResponseEntity<ResponseDto> insertAppLine2(@RequestBody Long memberCode, @AuthenticationPrincipal MbMemberDto memberDto){
-//		log.info("[ApprovalController] insertAppLine2 start ----------------------------------------------------");
-//	    // 서비스 메소드 호출하여 제1 결재선 등록
-//	    appServ.insertAppLine2(memberCode);
-//	    log.info("[ApprovalController] insertAppLine2 end----------------------------------------------------");
-//	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "제2 결재선 등록 성공"));
-//	}
-//	
-//	// 최종 결재선
-//	@PostMapping("/appline3")
-//	public ResponseEntity<ResponseDto> insertAppLine3(@RequestBody Long memberCode, @AuthenticationPrincipal MbMemberDto memberDto){
-//		log.info("[ApprovalController] insertAppLine3 start ----------------------------------------------------");
-//	    // 서비스 메소드 호출하여 제1 결재선 등록
-//	    appServ.insertAppLine3(memberCode);
-//	    log.info("[ApprovalController] insertAppLine3 end----------------------------------------------------");
-//	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "최종 결재선 등록 성공"));
-//	}
+	// 최종 결재선
+	@PostMapping("/appline3")
+	public ResponseEntity<ResponseDto> insertAppLine3(@RequestBody Long memberCode, @AuthenticationPrincipal MbMemberDto memberDto){
+		log.info("[ApprovalController] insertAppLine3 start ----------------------------------------------------");
+	    // 서비스 메소드 호출하여 제1 결재선 등록
+	    appServ.insertAppLine3(memberCode);
+	    log.info("[ApprovalController] insertAppLine3 end----------------------------------------------------");
+	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "최종 결재선 등록 성공"));
+	}
 	
 	// 직원 전체 목록 조회
 	@GetMapping("/memberList")

@@ -55,5 +55,5 @@ public interface MemberRepository extends JpaRepository <Member, Long> {
 	Optional<Member> findMemberIdByResidentNo(String residentNo);
 
 //	Optional<Member> updateMemberPwdByMemberId(String memberId, String memberPwd);
-  
+
 }

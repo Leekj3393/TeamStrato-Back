@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -111,10 +112,12 @@ public class MyPageController {
     }
 
     //오늘 출근 한 것만 조회되게
-    @GetMapping("/workToday")
-    public List<Attendance> getAllTodayAttendances(@AuthenticationPrincipal MbMemberDto member) {
-        return myPageService.getTodayAttendances();
+    @GetMapping("/attendanceToday")
+    public Attendance getAttendance(@RequestParam String memberId) {
+        return myPageService.getTodayAttendanceByMemberId(memberId);
     }
+
+
 
 
     @PutMapping("/members/modify")
@@ -194,6 +197,22 @@ public class MyPageController {
         return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                 cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) &&
                 cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH);
+    }
+
+
+    //해당하는 멤버의 근태조회
+    @GetMapping("/workInfofo")
+    public List<Attendance> getAttendancesByMemberCode(@AuthenticationPrincipal MbMemberDto member) {
+        Long memberCode = member.getMemberCode(); // 로그인한 멤버의 memberCode 추출
+
+        return myPageService.getAttendancesByMemberCodey(memberCode);
+    }
+// 해당하는 멤버의 오늘 근태만 조회
+    @GetMapping("/workToday")
+    public List<Attendance> getAttendancesByMemberCodee(@AuthenticationPrincipal MbMemberDto member) {
+        Long memberCode = member.getMemberCode(); // 로그인한 멤버의 memberCode 추출
+
+        return myPageService.getAttendancesByMemberCodei(memberCode);
     }
 
 
