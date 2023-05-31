@@ -29,7 +29,9 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
     Optional<Attendance> findByMemberMemberCodeAndAttendanceDate(Long memberCode, Date date);
 
-    List<Attendance> findByAttendanceDateBetweenAndMemberMemberId(Date startDate, Date endDate, String memberId);
+   // List<Attendance> findByAttendanceDateBetweenAndMemberMemberId(Date startDate, Date endDate, String memberId);
+
+    List<Attendance> findByAttendanceDateBetween(Date startOfDay, Date endOfDay);
 
     //List<Attendance> findByMemberIn(Long member);
 

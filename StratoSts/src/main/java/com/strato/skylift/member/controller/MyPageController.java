@@ -18,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -112,12 +111,10 @@ public class MyPageController {
     }
 
     //오늘 출근 한 것만 조회되게
-    @GetMapping("/attendanceToday")
-    public Attendance getAttendance(@RequestParam String memberId) {
-        return myPageService.getTodayAttendanceByMemberId(memberId);
+    @GetMapping("/workToday")
+    public List<Attendance> getAllTodayAttendances(@AuthenticationPrincipal MbMemberDto member) {
+        return myPageService.getTodayAttendances();
     }
-
-
 
 
     @PutMapping("/members/modify")
