@@ -80,7 +80,6 @@ public class SecurityConfig {
 		             .antMatchers("/api/v1/products-management/**").hasRole("ADMIN")
 		             .antMatchers(HttpMethod.GET, "/api/v1/reviews/**").permitAll()
 		             .antMatchers("/api/**").permitAll()
-		             .antMatchers("/member/regist/**").hasRole("HR")
 			     .and()
 		             .logout()
 		             .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))

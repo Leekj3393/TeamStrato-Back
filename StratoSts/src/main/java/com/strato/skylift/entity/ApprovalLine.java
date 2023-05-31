@@ -14,10 +14,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,8 +23,6 @@ import lombok.Setter;
                    sequenceName = "SEQ_APP_LINE",
                     initialValue = 1 , allocationSize = 0)
 @Getter @Setter @DynamicInsert
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "appLineCode")
 public class ApprovalLine {
 	
     @Id @Column(name = "APP_LINE_CODE")
@@ -39,8 +33,8 @@ public class ApprovalLine {
 	@JoinColumn(name = "APP_CODE")
 	private Approval approval;
 	
-	@Column(name = "APP_LINE_STATUS")
-	private String appLineStatus;
+	@Column(name = "APP_STATUS")
+	private String appStatus;
 	
 	@Column(name = "APP_PRIOR_YN")
 	private String appPriorYn;
@@ -56,9 +50,9 @@ public class ApprovalLine {
 	private Member member;
 
 	/*결재선 승인/반려 용도의 메소드를 별도로 정의함*/
-	public void update(String appPriorYn, String appLineStatus, Date appTime) {
+	public void update(String appPriorYn, String appStatus, Date appTime) {
 		this.appPriorYn = appPriorYn;
-		this.appLineStatus = appLineStatus;
+		this.appStatus = appStatus;
 		this.appTime = appTime;
 	}
 	
