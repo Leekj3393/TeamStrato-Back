@@ -1,5 +1,9 @@
 package com.strato.skylift.notice.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,14 +37,14 @@ public class NoticeController {
 		this.noticeService = noticeService;
 	}
 	
-/* 1. 공지사항 전체 목록 조회(사용자) - 완성 */
+/* 1. 공지사항 전체 목록 조회(사용자, 관리자) -삭제여부가 'N'인 것만  */
 	@GetMapping
-	public ResponseEntity<ResponseDto> selectNoticeList(@AuthenticationPrincipal MbMemberDto memberDto, @RequestParam(name="page", defaultValue="1") int page){
+	public ResponseEntity<ResponseDto> selectNoticeListDelN(@AuthenticationPrincipal MbMemberDto memberDto, @RequestParam(name="page", defaultValue="1") int page){
 		
 		log.info("[NoticeController] : selectNoticeList start ==================================== ");
 		log.info("[NoticeController] : page : {}", page);
 		
-		Page<NoticeDto> noticeDtoList = noticeService.selectNoticeList(page);
+		Page<NoticeDto> noticeDtoList = noticeService.selectNoticeListDelN(page);
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(noticeDtoList);
 		
 		log.info("[ProductController] : pageInfo : {}", pageInfo);
@@ -53,41 +57,62 @@ public class NoticeController {
 		log.info("[NoticeController] : selectNoticeList end ==================================== ");
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
-//	@GetMapping("/noticesCount")
-//	public ResponseEntity<ResponseDto> countNotices(@AuthenticationPrincipal MbMemberDto memberDto){
-//		log.info("[NoticeController] : countNotices start ==================================== ");
-//		
-//		List<NoticeDto> noticeListDto = noticeService.countNotices();
-//		log.info("noticeListDto : {}", noticeListDto);
-//		
-//		Map<String, Object> noticesCount = new HashMap<>();
-//		noticesCount.put("noticesCount", noticeListDto);
-//		
-//		
-//		log.info("[NoticeController] : countNotices end ==================================== ");
-//		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "전체 공지글 조회 성공", noticesCount));
-//	}
 	
 /* 검색 - 제목 */
-/* 검색 - 내용 */
-/* 공지사항 게시글 조회 */
-	@GetMapping("/detail/{noticeCode}")
-	public ResponseEntity<ResponseDto> selectNoticeDetail(@PathVariable Long noticeCode) {
+/*  공지사항 전체 목록 조회(사용자, 관리자) - 제목 기준/삭제상태 'n' */
+	@GetMapping("/search/title/{noticeTitle}")
+	public ResponseEntity<ResponseDto> selectNoticeListByNoticeTitle (
+		@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") String noticeTitle) {
+		log.info("[NoticeController] : selectNoticeListByNoticeTitle start ==================================== ");
+		log.info("[NoticeController] : page : {}", page);
+		log.info("[NoticeController] : noticeTitle : {}", noticeTitle);
 		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "게시글 상세페이지 조회 성공", noticeService.selectNoticeDetail(noticeCode)));
+		Page<NoticeDto> noticeDtoList = noticeService.selectNoticeListByNoticeTitle(page, noticeTitle);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(noticeDtoList);
+		
+		log.info("[NoticeController] : pageInfo : {}", pageInfo);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(noticeDtoList.getContent());
+		
+		log.info("[NoticeController] : selectNoticeListByNoticeTitle end ==================================== ");
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "제목 기준 공지사항 조회성공", responseDtoWithPaging));
 	}
 	
-	
-	/* A.관리자 공지사항 전체 조회 - 포스트맨 테스트 완료!!!! 
-	 * 굳이 따로 나눌 필요가 있나 싶다,,,,, 음,,,,, 걍 사용자랑 똑같음
-	 * 리액트 isAdmin 요거 사용하는게 좋을 것 같음 근데 아무것도 모르겠음,,, 졸리기 때문에 그냥 자고 내일 하기로,, 일단 보류*/
-	@GetMapping("/manage")
-	public ResponseEntity<ResponseDto> selectNoticeListForAdmin(@RequestParam(name="page", defaultValue="1") int page){
+/* 검색 - 내용 */
+/*  공지사항 전체 목록 조회(사용자, 관리자) - 내용 기준  */
+	@GetMapping("/search/content/{noticeContent}")
+	public ResponseEntity<ResponseDto> selectNoticeListByNoticeContent (
+			@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") String noticeContent) {
 		
-		log.info("[NoticeController] : selectNoticeListForAdmin start ==================================== ");
+		log.info("[NoticeController] : selectNoticeListByNoticeContent start ==================================== ");
+		log.info("[NoticeController] : page : {}", page);
+		log.info("[NoticeController] : noticeContent : {}", noticeContent);
+		
+		Page<NoticeDto> noticeDtoList = noticeService.selectNoticeListByNoticeContent(page, noticeContent);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(noticeDtoList);
+		
+		log.info("[NoticeController] : pageInfo : {}", pageInfo);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(noticeDtoList.getContent());
+		
+		log.info("[NoticeController] : selectNoticeListByNoticeTitle end ==================================== ");
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "내용 기준 공지사항 조회성공", responseDtoWithPaging));
+	}
+	
+// 관리자- 삭제된 공지사항 목록조회 - postman 테스트완료
+	@GetMapping("/deleted")
+	public ResponseEntity<ResponseDto> selectNoticeListDelY(@AuthenticationPrincipal MbMemberDto memberDto, @RequestParam(name="page", defaultValue="1") int page){
+
+		log.info("[NoticeController] : selectNoticeListDelY start ==================================== ");
 		log.info("[NoticeController] : page : {}", page);
 		
-		Page<NoticeDto> noticeDtoList = noticeService.selectNoticeListForAdmin(page);
+		Page<NoticeDto> noticeDtoList = noticeService.selectNoticeListDelY(page);
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(noticeDtoList);
 		
 		log.info("[ProductController] : pageInfo : {}", pageInfo);
@@ -96,20 +121,30 @@ public class NoticeController {
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(noticeDtoList.getContent());
 		
-		
-		log.info("[NoticeController] : selectNoticeListForAdmin end ==================================== ");
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+	
+		log.info("[NoticeController] : selectNoticeListDelY end ==================================== ");
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "삭제된 공지 조회 성공", responseDtoWithPaging));
 	}
+	
+
+/* 공지사항 게시글 조회 - 첨부파일 제외 테스트 완료 */
+	@GetMapping("/detail/{noticeCode}")
+	public ResponseEntity<ResponseDto> selectNoticeDetail(@PathVariable Long noticeCode) {
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "게시글 상세페이지 조회 성공", noticeService.selectNoticeDetail(noticeCode)));
+	}
+
 	
 	
 /* D. 관리자 공지 등록 */
 	@PostMapping("/regist")
-	public ResponseEntity<ResponseDto> insertNotice(@ModelAttribute NoticeDto noticeDto, @AuthenticationPrincipal MbMemberDto member) {
+	public ResponseEntity<ResponseDto> insertNotice(@ModelAttribute NoticeDto noticeDto, 
+											@AuthenticationPrincipal MbMemberDto memberDto) {
 		log.info("noticeDto : {}" + noticeDto);
-		log.info("member : {}" + member);
+		log.info("member : {}" + memberDto);
+
+		noticeDto.setMember(memberDto);
 		
-//		MbMemberDto member2 = new MbMemberDto();
-//		member2.setMemberCode(1L);
 		noticeService.insertNotice(noticeDto);
 		
 		

@@ -11,5 +11,5 @@ public interface MyPageRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByMemberCode(@Param("memberCode") Long memberCode);
 
-
+    Member findByMemberName(String name);
 }

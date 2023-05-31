@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.strato.skylift.approval.dto.ApprovalDto;
 import com.strato.skylift.entity.Approval;
+import com.strato.skylift.entity.Member;
 import com.strato.skylift.entity.Notice;
 import com.strato.skylift.entity.NoticeFile;
 import com.strato.skylift.member.dto.MbMemberDto;
@@ -53,44 +54,39 @@ public class NoticeService {
 //		this.departmentRepository = departmentRepository;
 	}
 
-//1. 공지사항 전체 목록 조회  - 완료!
-	public Page<NoticeDto> selectNoticeList(int page) {
-		log.info("[NoticeService] selectNoticeList start ============================== ");
+//1. 공지사항 전체 목록 조회(사용자, 관리자)  - 삭제되지 않은 것만 조회
+	public Page<NoticeDto> selectNoticeListDelN(int page) {
+		log.info("[NoticeService] selectNoticeListDelN start ============================== ");
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("noticeCode").descending());
 		
-		Page<Notice> noticeList = noticeRepository.findAll(pageable);
-		
+		Page<Notice> noticeList = noticeRepository.findByNoticeDelYn(pageable, "N");
 		Page<NoticeDto> noticeDtoList = noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
-		
+
+		/* 클라이언트 측에서 서버에 저장 된 이미지 요청 시 필요한 주소로 가공 */
+		noticeDtoList.forEach(notice -> notice.setNoticeImgUrl(IMAGE_URL + notice.getNoticeImgUrl()));
 		
 		log.info("[NoticeService] productDtoList.getContent() : {}", noticeDtoList.getContent());
 		
 		return noticeDtoList;
 	}
-
 	
-/* 검색 - 제목 */
-/* 검색 - 내용 */
-
-/* A.관리자 공지사항 전체 조회 */
-	public Page<NoticeDto> selectNoticeListForAdmin(int page) {
+//2. 공지사항 삭제된 목록 조회(관리자)
+	public Page<NoticeDto> selectNoticeListDelY(int page) {
+		log.info("[NoticeService] selectNoticeListDelY start ============================== ");
 		
-		log.info("[NoticeService] selectNoticeListForAdmin start ============================== ");
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("noticeCode").descending());
 		
-		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("noticeCode").descending());
-		
-		Page<Notice> noticeList = noticeRepository.findAll(pageable);
+		Page<Notice> noticeList = noticeRepository.findByNoticeDelYn(pageable, "Y");
 		Page<NoticeDto> noticeDtoList = noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
-		
 
-		
-		log.info("[NoticeService] noticeDtoList.getContent() : {}", noticeDtoList.getContent());
-		
-		log.info("[NoticeService] selectProductListForAdmin end ============================== ");
+		log.info("[NoticeService] productDtoList.getContent() : {}", noticeDtoList.getContent());
 		
 		return noticeDtoList;
 	}
+	
+
+
 
 
 	//유정
@@ -106,20 +102,23 @@ public class NoticeService {
 		return noticeRepository.save(notice);
 	}
 
-	/* D. 관리자 공지 등록 */
+/* D. 관리자 공지 등록 */
 	public void insertNotice(NoticeDto noticeDto) {
-		String imageName = UUID.randomUUID().toString().replace("-", "");
+		log.info("[NoticeService] : noticeDto : {} " , noticeDto);
 		
-		NoticeFileDto fileDto = new NoticeFileDto();
-		
-		try {
-//			Member member = 
-			
-			String replaceFilename = NoticeFileUploadUtils.saveFile(IMAGE_DIR + "/notice", imageName, noticeDto.getNoticeImage());
-			
-			fileDto.setFileName(imageName);
-			fileDto.setFilePath(replaceFilename);
-			fileDto.setFileType("공지사항 첨부이미지");
+		if(noticeDto.getNoticeImage() != null) {
+			String imageName = UUID.randomUUID().toString().replace("-", "");
+			NoticeFileDto fileDto = new NoticeFileDto();
+			try {
+				String replaceFilename = NoticeFileUploadUtils.saveFile(IMAGE_DIR + "/notice", imageName, noticeDto.getNoticeImage());
+				fileDto.setFileName(imageName);
+				fileDto.setFilePath(replaceFilename);
+				fileDto.setFileType("공지사항 첨부이미지");
+				Notice newNotice = noticeRepository.save(modelMapper.map(noticeDto, Notice.class));
+				fileDto.setNoticeCode(newNotice.getNoticeCode());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
 			Notice newNotice = noticeRepository.save(modelMapper.map(noticeDto, Notice.class));
 			
@@ -127,10 +126,8 @@ public class NoticeService {
 				
 			noticeFileRepository.save(modelMapper.map(fileDto, NoticeFile.class));
 			
-			
-		} catch (IOException e) {
-			
-			e.printStackTrace();
+		} else {
+			Notice newNotice = noticeRepository.save(modelMapper.map(noticeDto, Notice.class));
 		}
 	
 	}
@@ -150,19 +147,30 @@ public class NoticeService {
 		return noticeDto;	
 	}
 
-//	public List<NoticeDto> countNotices() {
-//		List<Notice> noticeList = noticeRepository.findAll();
-//		
-//		List<NoticeDto> noticeListDto = noticeList.stream()
-//				.map(notice -> modelMapper.map(notice, NoticeDto.class))
-//				.collect(Collectors.toList());
-//		return noticeListDto;
-//	}
+/* 검색 - 제목 */
+	public Page<NoticeDto> selectNoticeListByNoticeTitle(int page, String noticeTitle) {
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("noticeCode").ascending());
+		
+		Page<Notice> noticeList = noticeRepository.findByNoticeTitleContainsAndNoticeDelYn(pageable, noticeTitle, "N");
+		Page<NoticeDto> noticeDtoList = noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
+		
+		
+		log.info("noticeList : {}", noticeList);
+		return noticeDtoList;
+	}
+/* 검색 - 내용 */
+	public Page<NoticeDto> selectNoticeListByNoticeContent(int page, String noticeContent) {
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("noticeCode").ascending());
+		
+		Page<Notice> noticeList = noticeRepository.findByNoticeTitleContainsAndNoticeDelYn(pageable, noticeContent, "N");
+		Page<NoticeDto> noticeDtoList = noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
+		
+		log.info("noticeList : {}", noticeList);
+		return noticeDtoList;
+	}
 
 
-
-
-    /* E. 관리자 공지 수정 */
+/* E. 관리자 공지 수정 */
 /* F. 관리자 공지 삭제 */
 
 	

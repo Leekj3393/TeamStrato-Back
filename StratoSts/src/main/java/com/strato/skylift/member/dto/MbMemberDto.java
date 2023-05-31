@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.strato.skylift.entity.Attendance;
 import com.strato.skylift.entity.MemberRole;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,7 +19,7 @@ import com.strato.skylift.entity.MemberRole;
 
 import lombok.Data;
 
-@Data
+@Data @ToString
 public class MbMemberDto implements UserDetails {
 
 	private Long memberCode;
@@ -61,9 +62,6 @@ public class MbMemberDto implements UserDetails {
 	
 	@JsonIgnore
 	private MultipartFile memberImage;
-	
-	@JsonIgnore
-	private MultipartFile educationImage;
 	
 	private Collection<? extends GrantedAuthority> authorities;
 	private MbAttendanceDto attendance;

@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 
 import lombok.Getter;

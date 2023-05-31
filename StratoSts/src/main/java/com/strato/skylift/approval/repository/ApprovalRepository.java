@@ -1,12 +1,16 @@
 package com.strato.skylift.approval.repository;
 
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.strato.skylift.entity.Approval;
+import com.strato.skylift.entity.Member;
 import com.strato.skylift.member.dto.MbMemberDto;
 
 public interface ApprovalRepository extends JpaRepository<Approval, Long> {
@@ -18,13 +22,11 @@ public interface ApprovalRepository extends JpaRepository<Approval, Long> {
    4. 결재문서 조회 - 결재 반려함 */
 //	@EntityGraph(attributePaths= {"member"})
 //	Page<Approval> findByMemberAndAppStatus(Pageable pageable, String appStatus, Member findMember);
+	//
 	
-	//일단...	
-	@EntityGraph(attributePaths= {"member"})
-	Page<Approval> findByAppStatus(Pageable pageable, String appStatus);
+	@Query("SELECT a FROM Approval a WHERE a.member.memberCode = :memberCode AND a.appStatus = :appStatus")
+	Page<Approval> findByMemberCodeAndAppStatus(Pageable pageable, Long memberCode, String appStatus);
 
-	@EntityGraph(attributePaths= {"member"})
-	Page<Approval> findByAppStatusAndMember(Pageable pageable, String appStatus, MbMemberDto approvalWriter);
 
 	//
 
@@ -37,7 +39,16 @@ public interface ApprovalRepository extends JpaRepository<Approval, Long> {
 
 
 	
-/* 7. 결재선, 열람인 선정 save 메소드로 정의함 */
+/* 7. 결재선 선정  */
+	// 7-1. 결재 문서 조회
+	@EntityGraph(attributePaths= {"member"})
+	Optional<Approval> findFirstByOrderByAppRegistDateDesc();
+
+
+
+
+
+
 	
 /* 8. 결재 승인 
  *  결재문서 상세 조회 - 결재자 */
