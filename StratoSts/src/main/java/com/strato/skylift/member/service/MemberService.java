@@ -69,10 +69,12 @@ public class MemberService {
 	/* 직원 전체목록 조회(공통) */
 	public Page<MbMemberDto> selectMemberList(int page) {
 		
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("memberCode").ascending());
+		Pageable pageable = PageRequest.of(page - 1, 14, Sort.by("memberCode").ascending());
 		
 		Page<Member> memberList = memberRepository.findAll(pageable);
 		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
+		
+		log.info("memberDtoList : {}", memberDtoList.getContent());
 		
 		return memberDtoList;
 	}
@@ -250,7 +252,7 @@ public class MemberService {
 	public Page<MbMemberDto> selectMemberListByMemberName(int page, String memberName) {
 		
 		
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("memberCode").ascending());
+		Pageable pageable = PageRequest.of(page - 1, 14, Sort.by("memberCode").ascending());
 		
 		Page<Member> memberList = memberRepository.findByMemberName(pageable, memberName);
 		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
@@ -262,7 +264,7 @@ public class MemberService {
 	/* 직원 사번으로 검색 */
 	public Page<MbMemberDto> selectMemberListByMemberCode(int page, Long memberCode) {
 		
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("memberCode").ascending());
+		Pageable pageable = PageRequest.of(page - 1, 14, Sort.by("memberCode").ascending());
 		
 		Page<Member> memberList = memberRepository.findByMemberCode(pageable, memberCode);
 		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
@@ -273,7 +275,7 @@ public class MemberService {
 	/* 부서명으로 검색 */
 	public Page<MbMemberDto> selectMemberListByDeptName(int page, String deptName) {
 		
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("memberCode").ascending());
+		Pageable pageable = PageRequest.of(page - 1, 14, Sort.by("memberCode").ascending());
 		
 		Page<Member> memberList = memberRepository.findByDeptName(pageable, deptName);
 		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
@@ -284,7 +286,7 @@ public class MemberService {
 	/* 직급으로 검색 */
 	public Page<MbMemberDto> selectMemberListByJobName(int page, String jobName) {
 		
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("memberCode").ascending());
+		Pageable pageable = PageRequest.of(page - 1, 14, Sort.by("memberCode").ascending());
 		
 		Page<Member> memberList = memberRepository.findByJobName(pageable, jobName);
 		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
