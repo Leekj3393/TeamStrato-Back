@@ -1,9 +1,11 @@
 package com.strato.skylift.salary.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.strato.skylift.common.paging.PagingButtonInfo;
 import com.strato.skylift.entity.Member;
 import com.strato.skylift.member.dto.MbMemberDto;
 import lombok.*;
+import org.springframework.data.domain.Page;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -40,4 +42,5 @@ public class SalaryDTO
     private Long earlyLeave;
     private Long absence;
     private List<AttendanceDTO> attendance;
+    private PagingButtonInfo pageInfo;
 }

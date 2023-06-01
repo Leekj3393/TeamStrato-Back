@@ -46,9 +46,10 @@ public class SalaryController
 
     @GetMapping("attendance/{memberCode}")
     public ResponseEntity<ResponseDto> findByAttendance(@PathVariable Long memberCode ,
-                                                        @RequestParam(name = "day")String day)
+                                                        @RequestParam(name = "day")String day,
+                                                        @RequestParam(name = "page")int page)
     {
-        SalaryDTO salary = salaryService.findByWork(memberCode , day);
+        SalaryDTO salary = salaryService.findByWork(memberCode , day ,page);
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"완료" , salary));
     }
 

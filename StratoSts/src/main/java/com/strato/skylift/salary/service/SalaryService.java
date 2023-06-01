@@ -1,5 +1,6 @@
 package com.strato.skylift.salary.service;
 
+import com.strato.skylift.common.paging.Pagenation;
 import com.strato.skylift.entity.Attendance;
 import com.strato.skylift.entity.Member;
 import com.strato.skylift.entity.SalaryStatement;
@@ -14,6 +15,7 @@ import com.strato.skylift.salary.util.Calculator;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.units.qual.C;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +36,12 @@ public class SalaryService
     private SalAttendanceRepository salAttendanceRepository;
     private ModelMapper modelMapper;
     private Calculator calculator = new Calculator();
+
+    @Value("${image.image-url}")
+    private String IMAGE_URL;
+
+    @Value("${image.image-dir}")
+    private String IMAGE_DIR;
 
     public SalaryService(SalaryRepository salaryRepository,
                          SLMemberRepository slMemberRepository,
@@ -64,16 +72,18 @@ public class SalaryService
         List<Member> memberList = slMemberRepository.findByMemberNameLike(value);
 
        memberList.forEach(m -> log.info("member : {}", m));
-
+        for(int i = 0 ; i < memberList.size(); i++)
+            memberList.get(i).getFiles().get(i).setFilePath(IMAGE_URL + "member/" + memberList.get(i).getFiles().get(i).getFilePath());
         return memberList.stream().map(m -> modelMapper.map(m, MbMemberDto.class)).collect(Collectors.toList());
     }
 
-    public SalaryDTO findByWork(Long memberCode, String day)
+    public SalaryDTO findByWork(Long memberCode, String day , int page)
     {
-       List<Attendance> attendance = salAttendanceRepository.findByMemeberCodeLikeDay(memberCode,day);
-       Member member = slMemberRepository.findById(memberCode).orElseThrow(() -> new IllegalArgumentException("코드의 해당 상품 없다. : " + memberCode));
-       List<AttendanceDTO> attendanceDTO = attendance.stream()
-               .map(a -> modelMapper.map(a, AttendanceDTO.class)).collect(Collectors.toList());
+        String newDay = day.substring(0,7) + "-02";
+        Pageable pageable = PageRequest.of(page - 1, 10 , Sort.by("attendanceCode").ascending());
+        Page<Attendance> attendance = salAttendanceRepository.findByMemeberCodeLikeDay(memberCode,newDay, pageable);
+        Member member = slMemberRepository.findById(memberCode).orElseThrow(() -> new IllegalArgumentException("코드의 해당 상품 없다. : " + memberCode));
+        Page<AttendanceDTO> attendanceDTO = attendance.map(m -> modelMapper.map(m , AttendanceDTO.class));
 
        attendanceDTO.forEach(a -> log.info("attendanceDTO : {}" , a));
 
@@ -82,16 +92,17 @@ public class SalaryService
 
        attendanceDTO.forEach(a -> log.info("attendanceDTO : {} ", a));
        SalaryDTO salaryDTO = new SalaryDTO();
-       salaryDTO.setAttendance(attendanceDTO);
-       salaryDTO.setTotalTime(calculator.totalTime(attendanceDTO));
-       salaryDTO.setOverTime(calculator.totalOverTime(attendanceDTO));
+       salaryDTO.setAttendance(attendanceDTO.getContent());
+       salaryDTO.setPageInfo(Pagenation.getPagingButtonInfo(attendanceDTO));
+       salaryDTO.setTotalTime(calculator.totalTime(attendanceDTO.getContent()));
+       salaryDTO.setOverTime(calculator.totalOverTime(attendanceDTO.getContent()));
 
        salaryDTO.setMember(modelMapper.map(member,MbMemberDto.class));
 
-       Long late = salAttendanceRepository.countByLate(memberCode,day);
-       Long out = salAttendanceRepository.countByOut(memberCode,day);
-       Long earlyLeave = salAttendanceRepository.countByearlyLeave(memberCode,day);
-       Long absence = salAttendanceRepository.countByabsence(memberCode,day);
+       Long late = salAttendanceRepository.countByLate(memberCode,newDay);
+       Long out = salAttendanceRepository.countByOut(memberCode,newDay);
+       Long earlyLeave = salAttendanceRepository.countByearlyLeave(memberCode,newDay);
+       Long absence = salAttendanceRepository.countByabsence(memberCode,newDay);
        
        salaryDTO.setLate(late == null ? 0L : late);
        salaryDTO.setOut(out == null ? 0L : out);

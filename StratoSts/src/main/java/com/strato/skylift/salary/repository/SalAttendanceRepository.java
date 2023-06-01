@@ -1,6 +1,8 @@
 package com.strato.skylift.salary.repository;
 
 import com.strato.skylift.entity.Attendance;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +14,7 @@ public interface SalAttendanceRepository extends JpaRepository<Attendance , Long
     @Query(value = "SELECT a FROM Attendance a WHERE a.attendanceDate BETWEEN to_date(:day , 'yyyy-MM-dd') AND last_day(to_date(:day , 'yyyy-MM-dd')) " +
             "AND a.member.memberCode = :memberCode " +
             "ORDER BY a.attendanceDate")
-    List<Attendance> findByMemeberCodeLikeDay(Long memberCode,String day);
+    Page<Attendance> findByMemeberCodeLikeDay(Long memberCode, String day , Pageable pageable);
 
     @Query(value = "SELECT COUNT(a.startTime) FROM Attendance a WHERE a.attendanceDate " +
             "BETWEEN to_date(:day, 'yyyy-MM-dd') AND last_day(to_date(:day,'yyyy-MM-dd')) " +
