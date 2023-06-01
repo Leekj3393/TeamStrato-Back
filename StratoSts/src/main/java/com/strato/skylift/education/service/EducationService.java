@@ -93,8 +93,8 @@ public class EducationService {
 		return educationDtoList;
 	}
 
-	/* 교육 등록 */
-	@Transactional
+	/* 교육 등록 */   
+	@Transactional   
 	public void insertMember(EducationDto educationDto) {
 
 		String videoName = UUID.randomUUID().toString().replace("-", "");
