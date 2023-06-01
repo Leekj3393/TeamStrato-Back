@@ -195,6 +195,10 @@ public class ApprovalController {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재문서 상세페이지 조회 성공", appServ.selectApprovalDetail(appCode)));
 	}
+	@GetMapping("/{appCode}/appLineInfo")
+	public ResponseEntity<ResponseDto> selectAppLineDetail(@PathVariable Long appCode) {
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재선 정보 조회 성공", appServ.selectAppLineDetail(appCode)));
+	}
 /*  */
 /*  */
 

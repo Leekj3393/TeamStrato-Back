@@ -219,6 +219,33 @@ public class ApprovalService {
 		return approvalDto;		
 	}
 
+	public List<ApprovalLineDto> selectAppLineDetail(Long appCode) {
+		log.info("[ApprovalService] selectAppLineDetail start ============================== ");
+		log.info("[ApprovalService] appCode : {}", appCode);
+		Approval approval = appRepo.findById(appCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당 결재 문서가 없습니다. appCode : " + appCode));
+		log.info("[ApprovalService] approval : {}", approval);
+		ApprovalDto approvalDto = mm.map(approval, ApprovalDto.class);
+		log.info("[ApprovalService] approvalDto : {}", approvalDto);
+		
+		List<ApprovalLine> appLineList = appLineRepo.findAllByApproval(appCode);
+		log.info("[ApprovalService] appLine : {}", appLineList);
+		
+		List<ApprovalLineDto> appLineListDto = appLineList.stream()
+				.map(appLine -> mm.map(appLine, ApprovalLineDto.class)).collect(Collectors.toList());
+		log.info("[ApprovalService] appLineDto : {}", appLineListDto);
+		
+		log.info("[ApprovalService] selectAppLineDetail end ============================== ");
+		return appLineListDto;		
+		
+//		List<Department> deptList = deptRepo.findAll();
+//		List<MbDepartmentDto> deptDtoList = deptList.stream()
+//				.map(dept -> mm.map(dept, MbDepartmentDto.class))
+//				.collect(Collectors.toList());
+//		return deptDtoList;
+	}
+	
+
 
 // 결재 승인/반려
 	@Transactional
@@ -240,6 +267,9 @@ public class ApprovalService {
 		
 		log.info("[ApprovalService] putApprovalAccess end ============================== ");
 	}
+
+
+
 
 
 
