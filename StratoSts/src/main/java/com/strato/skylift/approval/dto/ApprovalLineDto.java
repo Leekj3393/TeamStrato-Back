@@ -13,7 +13,7 @@ public class ApprovalLineDto {
 	
 	private ApprovalDto approval;
 	
-	private String appStatus;
+	private String appLineStatus;
 	
 	private String appPriorYn;
 

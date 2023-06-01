@@ -182,98 +182,25 @@ public class ApprovalService {
 		return approvalDto;
 	}
 	
-	// 제1 결재선 등록 
+	//결재선 등록
 	@Transactional
-	public void insertAppLine1(ApprovalLineDto appLineDto) {
-		log.info("[ApprovalService] insertAppLine1 start---------------------------------------------------------------- ");
+	public void insertAppLine(ApprovalLineDto appLineDto) {
+		log.info("[ApprovalService] insertAppLine start---------------------------------------------------------------- ");
 		// 가장 최근에 저장된 기안코드 불러오기
 		Approval approval = appRepo.findFirstByOrderByAppRegistDateDesc().orElseThrow(()-> new IllegalArgumentException("결재문서 조회 실패"));
 	    log.info("[ApprovalService] approval: {} ", approval);
 	    ApprovalDto approvalDto = mm.map(approval, ApprovalDto.class);
 	    log.info("[ApprovalService] approvalDto: {} ", approvalDto);
 		
-	    appLineDto.setApproval(approvalDto);;
+	    appLineDto.setApproval(approvalDto);
 	    log.info("[ApprovalService] appLineDto: {} ", appLineDto);
 	    
 		//applneDto에 조회한 정보 넣고 저장
-	    appLineRepo.save(mm.map(approvalDto, ApprovalLine.class));
-		
-	    log.info("[ApprovalService] insertAppLine1 end---------------------------------------------------------------- ");
+	    appLineRepo.save(mm.map(appLineDto, ApprovalLine.class));
+	    
+	    log.info("[ApprovalService] appLineRepo : {}" + appLineRepo);
+	    log.info("[ApprovalService] insertAppLine end---------------------------------------------------------------- ");
 	}
-	
-	@Transactional
-	public void insertAppLine2(Long memberCode) {
-		log.info("[ApprovalService] insertAppLine2 start---------------------------------------------------------------- ");
-		// 가장 최근에 저장된 기안코드 불러오기
-		Approval approval = appRepo.findFirstByOrderByAppRegistDateDesc().orElseThrow(()-> new IllegalArgumentException("결재문서 조회 실패"));
-	    log.info("[ApprovalService] approval: {} ", approval);
-	    ApprovalDto approvalDto = mm.map(approval, ApprovalDto.class);
-	    log.info("[ApprovalService] approvalDto: {} ", approvalDto);
-		
-	    ApprovalLineDto appLineDto = new ApprovalLineDto();
-	    appLineDto.setApproval(approvalDto);;
-	    log.info("[ApprovalService] appLineDto: {} ", appLineDto);
-	    
-	    //흠..... 결재선으로 선택한 직원의 정보 가져오기
-	    Member accessor = mm.map(memberCode, Member.class);
-	    
-		// 직원 정보 가져오기
-		Member findMember = appMbRepo.findById(accessor.getMemberCode())		//수정하기!!!
-				.orElseThrow(()-> new IllegalArgumentException("해당 직원이 없습니다. memberCode : "+ accessor.getMemberCode()));
-		log.info("[ApprovalService] findMember : {}", findMember);
-		MbMemberDto findMemberDto = mm.map(findMember, MbMemberDto.class);
-		
-		//applneDto에 조회한 정보 넣고 저장
-		appLineDto.setApproval(approvalDto);
-		appLineDto.setMember(findMemberDto);
-		appLineDto.setAppOrder(2L);
-		appLineDto.setAppPriorYn("N");
-		appLineDto.setAppStatus("appWait");;
-		ApprovalLine newAppLine2 = mm.map(appLineDto, ApprovalLine.class);
-		
-		
-		appLineRepo.save(newAppLine2);
-		log.info("[ApprovalService] appLineRepo : {}", appLineRepo);
-	    log.info("[ApprovalService] insertAppLine2 end---------------------------------------------------------------- ");
-	}
-			
-	@Transactional
-	public void insertAppLine3(Long memberCode) {
-		log.info("[ApprovalService] insertAppLine3 start---------------------------------------------------------------- ");
-		// 가장 최근에 저장된 기안코드 불러오기
-		Approval approval = appRepo.findFirstByOrderByAppRegistDateDesc().orElseThrow(()-> new IllegalArgumentException("결재문서 조회 실패"));
-	    log.info("[ApprovalService] approval: {} ", approval);
-	    ApprovalDto approvalDto = mm.map(approval, ApprovalDto.class);
-	    log.info("[ApprovalService] approvalDto: {} ", approvalDto);
-		
-	    ApprovalLineDto appLineDto = new ApprovalLineDto();
-	    appLineDto.setApproval(approvalDto);;
-	    log.info("[ApprovalService] appLineDto: {} ", appLineDto);
-	    
-	    //흠..... 결재선으로 선택한 직원의 정보 가져오기
-	    Member accessor = mm.map(memberCode, Member.class);
-	    
-		// 직원 정보 가져오기
-		Member findMember = appMbRepo.findById(accessor.getMemberCode())		//수정하기!!!
-				.orElseThrow(()-> new IllegalArgumentException("해당 직원이 없습니다. memberCode : "+ accessor.getMemberCode()));
-		log.info("[ApprovalService] findMember : {}", findMember);
-		MbMemberDto findMemberDto = mm.map(findMember, MbMemberDto.class);
-		
-		//applneDto에 조회한 정보 넣고 저장
-		appLineDto.setApproval(approvalDto);
-		appLineDto.setMember(findMemberDto);
-		appLineDto.setAppOrder(3L);
-		appLineDto.setAppPriorYn("N");
-		appLineDto.setAppStatus("appWait");;
-		ApprovalLine newAppLine3 = mm.map(appLineDto, ApprovalLine.class);
-		
-		
-		appLineRepo.save(newAppLine3);
-		log.info("[ApprovalService] appLineRepo : {}", appLineRepo);
-	    log.info("[ApprovalService] insertAppLine3 end---------------------------------------------------------------- ");
-	}
-	
-
 
 	
 // 10. 결재문서 상세 조회
@@ -305,7 +232,7 @@ public class ApprovalService {
 		// 조회했던 기존 엔티티의 내용을 수정 -> 별조의 수정 메소드를 정의해서 사용하면 다른 방식의 수정을 막을 수 있다.
 		beforeAppLine.update(
 				appLineDto.getAppPriorYn(),
-				appLineDto.getAppStatus(),
+				appLineDto.getAppLineStatus(),
 				appLineDto.getAppTime()
 		);
 				

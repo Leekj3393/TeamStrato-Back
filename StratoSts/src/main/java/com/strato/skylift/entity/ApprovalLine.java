@@ -33,8 +33,8 @@ public class ApprovalLine {
 	@JoinColumn(name = "APP_CODE")
 	private Approval approval;
 	
-	@Column(name = "APP_STATUS")
-	private String appStatus;
+	@Column(name = "APP_LINE_STATUS")
+	private String appLineStatus;
 	
 	@Column(name = "APP_PRIOR_YN")
 	private String appPriorYn;
@@ -50,9 +50,9 @@ public class ApprovalLine {
 	private Member member;
 
 	/*결재선 승인/반려 용도의 메소드를 별도로 정의함*/
-	public void update(String appPriorYn, String appStatus, Date appTime) {
+	public void update(String appPriorYn, String appLineStatus, Date appTime) {
 		this.appPriorYn = appPriorYn;
-		this.appStatus = appStatus;
+		this.appLineStatus = appLineStatus;
 		this.appTime = appTime;
 	}
 	
