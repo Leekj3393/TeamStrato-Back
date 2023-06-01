@@ -16,29 +16,18 @@ import com.strato.skylift.entity.Member;
 
 public interface ApprovalLineRepository extends JpaRepository<ApprovalLine, Long>  {
 
-//	@Query("SELECT a FROM ApprovalLine a WHERE a.memger.memberCode = :memberCode AND a.appPriorYn = :appPriorYn ")
-//	Page<ApprovalLine> findByMemberAndAppPriorYn(Pageable pageable, Long memberCode, String appPriorYn);
-
-//	Page<ApprovalLine> findByMemberAndAppPriorYn(Pageable pageable, Member member, String appPriorYn);
-
-	@EntityGraph(attributePaths= {"member", "approval"})
-	Page<ApprovalLine> findByMemberAndAppPriorYnAndAppTime(Pageable pageable, Member member, String appPriorYn,
+	@EntityGraph(attributePaths= {"accessor", "approval"})
+	Page<ApprovalLine> findByAccessorAndAppPriorYnAndAppTime(Pageable pageable, Member accessor, String appPriorYn,
 			Date appTime);
 
-//	@EntityGraph(attributePaths= {"member", "approval"})
-//	@Query("SELECT a FROM ApprovalLine a WHERE a.Approval.appCode = :appCode")
-//	Optional<ApprovalLine> findByApproval(Long appCode);
 
-	@EntityGraph(attributePaths= {"member", "approval"})
-	@Query("SELECT a FROM ApprovalLine a WHERE a.approval.appCode = :appCode")
-	List<ApprovalLine> findByApproval(Long appCode);
-
-	@EntityGraph(attributePaths= {"member", "approval"})
+	@EntityGraph(attributePaths= {"accessor", "approval"})
 	@Query("SELECT a FROM ApprovalLine a WHERE a.approval.appCode = :appCode")
 	List<ApprovalLine> findAllByApproval(Long appCode);
 
-
-//	@EntityGraph(attributePaths= {"member", "approval"})
-//	Optional<ApprovalLine> findAllByAppCode(Long appCode);
+	
+	@EntityGraph(attributePaths= {"accessor", "approval"})
+	@Query("SELECT a FROM ApprovalLine a WHERE a.appOrder = :appOrder AND a.appPriorYn = :appPriorYn")
+	Optional<ApprovalLine> findByAppOrderAndAppPriorYn(Long appOrder, String appPriorYn);
 
 }

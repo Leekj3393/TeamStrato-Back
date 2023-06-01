@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 @Slf4j
 @Service
 public class NoticeService {
@@ -103,6 +105,7 @@ public class NoticeService {
 	}
 
 /* D. 관리자 공지 등록 */
+	@Transactional
 	public void insertNotice(NoticeDto noticeDto) {
 		log.info("[NoticeService] : noticeDto : {} " , noticeDto);
 		
@@ -127,6 +130,7 @@ public class NoticeService {
 			noticeFileRepository.save(modelMapper.map(fileDto, NoticeFile.class));
 			
 		} else {
+			
 			Notice newNotice = noticeRepository.save(modelMapper.map(noticeDto, Notice.class));
 		}
 	

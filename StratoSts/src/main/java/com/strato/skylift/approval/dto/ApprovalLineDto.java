@@ -19,7 +19,7 @@ public class ApprovalLineDto {
 
 	private Date appTime;
 	
-	private MbMemberDto member;
+	private MbMemberDto accessor;
 	
 	private Long appOrder;
 }

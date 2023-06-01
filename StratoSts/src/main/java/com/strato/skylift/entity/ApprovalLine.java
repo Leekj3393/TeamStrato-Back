@@ -47,7 +47,7 @@ public class ApprovalLine {
 	
 	@ManyToOne
 	@JoinColumn(name = "MEMBER_CODE")
-	private Member member;
+	private Member accessor;
 
 	/*결재선 승인/반려 용도의 메소드를 별도로 정의함*/
 	public void update(String appPriorYn, String appLineStatus, Date appTime) {
