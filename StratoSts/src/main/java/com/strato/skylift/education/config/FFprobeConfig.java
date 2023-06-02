@@ -26,16 +26,11 @@ public class FFprobeConfig {
 
     @Bean(name = "ffmpeg")
     public FFmpeg ffmpeg() throws IOException{
-//        ResourceLoader resourceLoader = new DefaultResourceLoader();
-//        Resource resource = resourceLoader.getResource(ffmpegLocation);
-//        return new FFmpeg(resource.getURL().getPath());
     	 return new FFmpeg(ffmpegLocation);
     }
 
     @Bean( name = "ffprobe")
     public FFprobe ffprobe() throws IOException{
-//        ResourceLoader resourceLoader = new DefaultResourceLoader();
-//        Resource resource = resourceLoader.getResource(ffprobeLocation);
         return new FFprobe(ffprobeLocation);
     }
 

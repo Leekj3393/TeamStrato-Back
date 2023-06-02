@@ -51,17 +51,11 @@ public class EducationController {
 		Page<EducationDto> educationDtoList = edService.selectEducationList(page);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(educationDtoList);
-		
-//		log.info("[ProductController] : pageInfo : {}", pageInfo);
-		
+			
 		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(educationDtoList.getContent());
-		
-		
-		
-//		log.info("[ProductController] : selectProductList end =================================");
-		
+				
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공", responseDtoWithPaging));
 	}
 	
@@ -117,9 +111,7 @@ public class EducationController {
 		log.info("educationDto : {}", educationDto); 
 		
 		edService.insertMember(educationDto);
-		
-//		log.info("memberDto : {}", educationDto);
-		
+			
 		return ResponseEntity
 				.ok()
 				.body(new ResponseDto(HttpStatus.OK, "교육 등록 성공"));
