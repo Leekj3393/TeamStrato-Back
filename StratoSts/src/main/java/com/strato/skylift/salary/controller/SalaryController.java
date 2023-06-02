@@ -3,6 +3,7 @@ package com.strato.skylift.salary.controller;
 import com.strato.skylift.common.ResponseDto;
 import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.salary.dto.SalaryDTO;
+import com.strato.skylift.salary.dto.SalaryStatementDTO;
 import com.strato.skylift.salary.service.SalaryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -46,10 +47,19 @@ public class SalaryController
 
     @GetMapping("attendance/{memberCode}")
     public ResponseEntity<ResponseDto> findByAttendance(@PathVariable Long memberCode ,
-                                                        @RequestParam(name = "sDay")String day)
+                                                        @RequestParam(name = "day")String day,
+                                                        @RequestParam(name = "page")int page)
     {
-        SalaryDTO salary = salaryService.findByWork(memberCode , day);
-        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"완료"));
+        SalaryDTO salary = salaryService.findByWork(memberCode , day ,page);
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"완료" , salary));
+    }
+
+    @PostMapping("/regist")
+    public ResponseEntity<ResponseDto> saveSalSch(@ModelAttribute SalaryStatementDTO salaryDTO)
+    {
+        log.info("salaryDTO : {} ", salaryDTO);
+        //salaryService.registSal(salaryDTO);
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"넹"));
     }
 
 

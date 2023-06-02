@@ -6,15 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="b03e6050-5647-4e1a-83df-c14b780a1bb5" name="변경" comment="근태 조회 까지 완려">
       <change afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/SalMemberDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/SalaryStatementDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/controller/SalaryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/controller/SalaryController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/AttendanceDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/AttendanceDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/SalaryDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/SalaryDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/TotalAttendanceDTO.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/repository/SalAttendanceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/repository/SalAttendanceRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/repository/SalaryRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/repository/SalaryRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/service/SalaryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/service/SalaryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/util/calculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/util/Calculator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/util/calculator.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,6 +91,9 @@
     </option>
   </component>
   <component name="ProjectId" id="2Pcu4ZaWZX5Zczk4P1VfXxVJdXX" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
@@ -336,7 +338,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/changgyu" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
         <entry key="ac2c47b5-d97a-475e-a5f3-dd18e0994976">

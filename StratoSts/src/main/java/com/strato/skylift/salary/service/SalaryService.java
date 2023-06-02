@@ -1,21 +1,30 @@
 package com.strato.skylift.salary.service;
 
+import com.strato.skylift.common.paging.Pagenation;
 import com.strato.skylift.entity.Attendance;
 import com.strato.skylift.entity.Member;
 import com.strato.skylift.entity.SalaryStatement;
 import com.strato.skylift.member.dto.MbMemberDto;
+import com.strato.skylift.salary.dto.AttendanceDTO;
+import com.strato.skylift.salary.dto.SalMemberDTO;
 import com.strato.skylift.salary.dto.SalaryDTO;
+import com.strato.skylift.salary.dto.SalaryStatementDTO;
 import com.strato.skylift.salary.repository.SalAttendanceRepository;
 import com.strato.skylift.salary.repository.SLMemberRepository;
 import com.strato.skylift.salary.repository.SalaryRepository;
+import com.strato.skylift.salary.util.Calculator;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.C;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +36,13 @@ public class SalaryService
     private SLMemberRepository slMemberRepository;
     private SalAttendanceRepository salAttendanceRepository;
     private ModelMapper modelMapper;
+    private Calculator calculator = new Calculator();
+
+    @Value("${image.image-url}")
+    private String IMAGE_URL;
+
+    @Value("${image.image-dir}")
+    private String IMAGE_DIR;
 
     public SalaryService(SalaryRepository salaryRepository,
                          SLMemberRepository slMemberRepository,
@@ -57,17 +73,79 @@ public class SalaryService
         List<Member> memberList = slMemberRepository.findByMemberNameLike(value);
 
        memberList.forEach(m -> log.info("member : {}", m));
-
+        for(int i = 0 ; i < memberList.size(); i++)
+            memberList.get(i).getFiles().get(i).setFilePath(IMAGE_URL + "member/" + memberList.get(i).getFiles().get(i).getFilePath());
         return memberList.stream().map(m -> modelMapper.map(m, MbMemberDto.class)).collect(Collectors.toList());
     }
 
-    public SalaryDTO findByWork(Long memberCode, String day)
+    public SalaryDTO findByWork(Long memberCode, String day , int page)
     {
-       List<Attendance> attendance = salAttendanceRepository.findByMemeberCodeLikeDay(memberCode,day);
+        String newDay = day.substring(0,7) + "-01";
+        log.info("newDay : {}", newDay);
+        Pageable pageable = PageRequest.of(page - 1, 10 , Sort.by("attendanceCode").ascending());
+        Page<Attendance> attendance = salAttendanceRepository.findByMemeberCodeLikeDay(memberCode,newDay, pageable);
+        List<Attendance> attDay = salAttendanceRepository.findByDay(memberCode,newDay);
+        Member member = slMemberRepository.findById(memberCode).orElseThrow(() -> new IllegalArgumentException("코드의 해당 직원 없다. : " + memberCode));
+        Page<AttendanceDTO> attendanceDTO = attendance.map(m -> modelMapper.map(m , AttendanceDTO.class));
+        List<AttendanceDTO> attDayDTO = attDay.stream().map(m -> modelMapper.map(m, AttendanceDTO.class)).collect(Collectors.toList());
 
-       attendance.forEach(a -> log.info("attendance : {} ", a));
+        attDayDTO.forEach(a -> a.setWorkTime(calculator.Conversion(a)));
+        attDayDTO.forEach(a -> a.setOverWorkTime(calculator.overTime(a.getWorkTime())));
+        attendanceDTO.forEach(a -> a.setWorkTime(calculator.Conversion(a)));
+        attendanceDTO.forEach(a -> a.setOverWorkTime(calculator.overTime(a.getWorkTime())));
 
-       return null;
+       attendanceDTO.forEach(a -> log.info("attendanceDTO : {} ", a));
+        attDayDTO.forEach(a -> log.info("attDTO : {} " , a));
 
+       SalaryDTO salaryDTO = new SalaryDTO();
+       salaryDTO.setAttendance(attendanceDTO.getContent());
+       salaryDTO.setPageInfo(Pagenation.getPagingButtonInfo(attendanceDTO));
+       salaryDTO.setTotalTime(calculator.totalTime(attDayDTO));
+       salaryDTO.setOverTime(calculator.totalOverTime(attDayDTO));
+
+       salaryDTO.setMember(modelMapper.map(member,MbMemberDto.class));
+
+       Long late = salAttendanceRepository.countByLate(memberCode,newDay);
+       Long out = salAttendanceRepository.countByOut(memberCode,newDay);
+       Long earlyLeave = salAttendanceRepository.countByearlyLeave(memberCode,newDay);
+       Long absence = salAttendanceRepository.countByabsence(memberCode,newDay);
+
+       salaryDTO.setLate(late == null ? 0L : late);
+       salaryDTO.setOut(out == null ? 0L : out);
+       salaryDTO.setEarlyLeave(earlyLeave == null ? 0L : earlyLeave);
+       salaryDTO.setAbsence(absence == null ? 0L : absence);
+
+       // 계산기 클래스에서 급여부분 부터 하면 됌 그러면 내일 프론트 랑 연결해서 쓰면 됄듯함
+        Long allowance = calculator.allowance(salaryDTO.getMember().getMemberSalary() , salaryDTO.getOverTime());
+        Long totalAmount = salaryDTO.getMember().getMemberSalary() + allowance;
+        Long income = calculator.income(totalAmount);
+        Long nationalPesion = calculator.nationalPension(totalAmount);
+        Long medicalInsurance = calculator.medicalInsurance(totalAmount);
+        Long employmentInsurance = calculator.empInsurance(totalAmount);
+        Long totalDeducted = income + nationalPesion + medicalInsurance + employmentInsurance;
+        Long paymentAmount = totalAmount - totalDeducted;
+
+        salaryDTO.setAllowance(allowance);
+        salaryDTO.setIncomeTax(income);
+        salaryDTO.setNationalPesion(nationalPesion);
+        salaryDTO.setMedicalInsurance(medicalInsurance);
+        salaryDTO.setEmploymentInsurance(employmentInsurance);
+        salaryDTO.setTotalAmount(totalAmount);
+        salaryDTO.setTotalDeducted(totalDeducted);
+        salaryDTO.setPaymentAmount(paymentAmount);
+        salaryDTO.setSalaleDate(new Date());
+
+        log.info("salaryDTO : {}" , salaryDTO);
+       return salaryDTO;
+
+    }
+
+    public void registSal(SalaryStatementDTO salaryDTO)
+    {
+        SalaryStatement salaryStatement = modelMapper.map(salaryDTO , SalaryStatement.class);
+        salaryStatement.setMember(slMemberRepository.findById(salaryDTO.getMemberCode())
+                .orElseThrow(() -> new IllegalArgumentException("코드의 해당 직원 없다. : ")));
+
+        log.info("salaryStatement : {} ", salaryStatement);
     }
 }
