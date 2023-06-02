@@ -138,7 +138,7 @@ public class NoticeController {
 											@AuthenticationPrincipal MbMemberDto memberDto) {
 		log.info("noticeDto : {}" + noticeDto);
 		log.info("member : {}" + memberDto);
-		noticeDto.setMember(memberDto);
+//		noticeDto.setMember(memberDto);
 		noticeService.insertNotice(noticeDto);
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "공지사항 등록 성공"));
