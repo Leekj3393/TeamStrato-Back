@@ -55,9 +55,9 @@ public class MbMemberDto implements UserDetails {
 	private MbDepartmentDto department;
 	
 	private MbMemberRoleDto memberRole;
-		
-	private List<MbFileDto> files;
 	
+	private List<MbFileDto> files;
+		
 	private String updatePwd;
 	
 	@JsonIgnore
