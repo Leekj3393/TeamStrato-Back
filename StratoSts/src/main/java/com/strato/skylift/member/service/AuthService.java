@@ -43,14 +43,14 @@ public class AuthService {
 		
 		// 2. 비밀번호 매칭 확인 
 		// 가데이터 사용할 때 사용 할 구문
-		if((!memberDto.getMemberPwd().matches(member.getMemberPwd()))) {
-			throw new LoginFailedException("잘못 된 아이디 또는 비밀번호입니다.");}
-		log.info("loginMemberDto : {}", memberDto.getMemberPwd());
-		log.info("loginMember : {}", member.getMemberPwd());
+//		if((!memberDto.getMemberPwd().matches(member.getMemberPwd()))) {
+//			throw new LoginFailedException("잘못 된 아이디 또는 비밀번호입니다.");}
+//		log.info("loginMemberDto : {}", memberDto.getMemberPwd());
+//		log.info("loginMember : {}", member.getMemberPwd());
 		// 솔팅 처리 후 사용 할 구문
-//		if(!passwordEncoder.matches(memberDto.getMemberPwd(), member.getMemberPwd())) {
-//			throw new LoginFailedException("잘못 된 아이디 또는 비밀번호입니다.");
-//		}
+		if(!passwordEncoder.matches(memberDto.getMemberPwd(), member.getMemberPwd())) {
+			throw new LoginFailedException("잘못 된 아이디 또는 비밀번호입니다.");
+		}
 		
 		// 3. 토큰 발급
 		MbTokenDto tokenDto = tokenProvider.generateTokenDto(modelMapper.map(member, MbMemberDto.class));
