@@ -63,12 +63,9 @@ public class MyPageController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/member/{name}/email")
-    public String getMemberEmailByName(@PathVariable String name) {
-        return myPageService.findEmailByName(name);
+    public List<Map<String, String>> getMemberEmailsByName(@PathVariable String name) {
+        return myPageService.findEmailsByName(name);
     }
-
-    //
-
 
     //전체 멤버 조회하기
         @GetMapping("/members")

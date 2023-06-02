@@ -48,6 +48,7 @@ public class AuthService {
 //		log.info("loginMemberDto : {}", memberDto.getMemberPwd());
 //		log.info("loginMember : {}", member.getMemberPwd());
 		// 솔팅 처리 후 사용 할 구문
+		 //솔팅 처리 후 사용 할 구문
 		if(!passwordEncoder.matches(memberDto.getMemberPwd(), member.getMemberPwd())) {
 			throw new LoginFailedException("잘못 된 아이디 또는 비밀번호입니다.");
 		}

@@ -16,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
@@ -354,16 +356,6 @@ public class MyPageService {
 
 
 
-    //
-    @Transactional(readOnly = true)
-    public String findEmailByName(String name) {
-        Member member = myPageRepository.findByMemberName(name);
-        if (member != null) {
-            return "Name: " + member.getMemberName() + ", Email: " + member.getMemberId();
-        }
-        throw new RuntimeException("Member not found");
-    }
-
 
     //해당하는 멤버의 출근 기록만
     public List<Attendance> getAttendancesByMemberCodey(Long memberCode) {
@@ -389,6 +381,20 @@ public class MyPageService {
     }
 
 
+    @Transactional(readOnly = true)
+    public List<Map<String, String>> findEmailsByName(String name) {
+        List<Member> members = myPageRepository.findAllByMemberName(name);
+        List<Map<String, String>> results = new ArrayList<>();
+        if (!members.isEmpty()) {
+            for (Member member : members) {
+                Map<String, String> memberInfo = new HashMap<>();
+                memberInfo.put("name", member.getMemberName());
+                memberInfo.put("email", member.getMemberId());
+                results.add(memberInfo);
+            }
+        }
+        return results;
+    }
 
 
 }
