@@ -56,7 +56,7 @@ public class MbMemberDto implements UserDetails {
 	
 	private MbMemberRoleDto memberRole;
 		
-	private MbFileDto memberFile;
+	private List<MbFileDto> files;
 	
 	private String updatePwd;
 	
@@ -119,4 +119,3 @@ public class MbMemberDto implements UserDetails {
 
 
 }
-
