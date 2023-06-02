@@ -73,7 +73,7 @@ public class MyPageRequestService {
         newApproval.setAppTitle(requestDto.getRequsetType());
         newApproval.setAppContent(requestDto.getRequestReason());
         newApproval.setAppType(requestDto.getRequsetType());
-        newApproval.setAppStatus("대기");
+        newApproval.setAppStatus("wait");
         newApproval.setAppRegistDate(new Date());
         newApproval.setApprovedDate(new Date());
         newApproval.setAppWdlDate(new Date());
@@ -91,9 +91,9 @@ public class MyPageRequestService {
         Approval approval = (Approval) approvalRepository.findByRequest(request)
                 .orElseThrow(() -> new IllegalArgumentException("승인 요청을 찾을 수 없습니다 : " + requestCode));
 
-        // Check if the request's status is '대기'
-        if (!"대기".equals(approval.getAppStatus())) {
-            throw new IllegalStateException("이 요청은 '대기' 상태가 아니므로 삭제할 수 없습니다.");
+        // Check if the request's status is 'wait'
+        if (!"wait".equals(approval.getAppStatus())) {
+            throw new IllegalStateException("이 요청은 'wait' 상태가 아니므로 삭제할 수 없습니다.");
         }
 
         requestRepository.delete(request);

@@ -13,13 +13,13 @@ public class ApprovalLineDto {
 	
 	private ApprovalDto approval;
 	
-	private String appStatus;
+	private String appLineStatus;
 	
 	private String appPriorYn;
 
 	private Date appTime;
 	
-	private MbMemberDto member;
+	private MbMemberDto accessor;
 	
 	private Long appOrder;
 }

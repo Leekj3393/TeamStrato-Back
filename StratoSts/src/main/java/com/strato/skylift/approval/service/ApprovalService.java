@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.strato.skylift.approval.dto.ApprovalDto;
@@ -27,9 +28,13 @@ import com.strato.skylift.entity.Department;
 import com.strato.skylift.entity.Job;
 import com.strato.skylift.entity.Member;
 import com.strato.skylift.exception.UserNotFoundException;
+import com.strato.skylift.jwt.TokenProvider;
 import com.strato.skylift.member.dto.MbDepartmentDto;
 import com.strato.skylift.member.dto.MbJobDto;
 import com.strato.skylift.member.dto.MbMemberDto;
+import com.strato.skylift.member.dto.MbTokenDto;
+import com.strato.skylift.member.exception.LoginFailedException;
+import com.strato.skylift.member.dto.MbTokenDto;
 import com.strato.skylift.member.repository.MemberRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +49,8 @@ public class ApprovalService {
 	private final AppDeptRepository deptRepo;
 	private final AppJobRepository jobRepo;
 	private final ApprovalLineRepository appLineRepo;
+	private final PasswordEncoder passwordEncoder;
+	private final TokenProvider tokenProvider;
 	private final ModelMapper mm;
 	
 	public ApprovalService(ApprovalRepository appRepo, 
@@ -52,6 +59,8 @@ public class ApprovalService {
 						   MemberRepository mbRepo,
 						   AppDeptRepository deptRepo,
 						   AppJobRepository jobRepo,
+						   PasswordEncoder passwordEncoder,
+						   TokenProvider tokenProvider,
 						   ModelMapper mm) {
 		this.appRepo = appRepo;
 		this.mbRepo = mbRepo;
@@ -59,6 +68,8 @@ public class ApprovalService {
 		this.jobRepo = jobRepo;
 		this.appLineRepo = appLineRepo;
 		this.appMbRepo = appMbRepo;
+		this.passwordEncoder = passwordEncoder;
+		this.tokenProvider = tokenProvider;
 		this.mm = mm;
 	}
 
@@ -88,14 +99,15 @@ public class ApprovalService {
 	}
 	
 /* 5. 결재요청문서 조회 - 본인이 결재선으로 설정된 결재문서 목록 조회 (전결 여부가 "Y"이고, 최종승인일이 null인 경우에만 조회) */
-	public Page<ApprovalLineDto> getdemandList(int page, Long memberCode) {
+	public Page<ApprovalLineDto> getDemandList(int page, Long memberCode) {
 		log.info("[ApprovalService] selectApprovalList start ============================== ");
 		log.info("[ApprovalService] memberCode : {}", memberCode);
 		Member member = appMbRepo.findById(memberCode)
 				.orElseThrow(() -> new IllegalArgumentException("직원코드를 다시 확인해주세요 :  " + memberCode));
-		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("appLineCode").ascending());
+		log.info("[ApprovalService] member : {}", member);
 		
-		Page<ApprovalLine> appLineList = appLineRepo.findByMemberAndAppPriorYnAndAppTime(pageable, member, "Y", null);
+		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("appLineCode").ascending());
+		Page<ApprovalLine> appLineList = appLineRepo.findByAccessorAndAppPriorYnAndAppTime(pageable, member, "Y", null);
 		Page<ApprovalLineDto> apprLineDtoList = appLineList.map(appLine -> mm.map(appLine, ApprovalLineDto.class));
 		log.info("[ApprovalService] approvalList : {}", appLineList);
 		log.info("[ApprovalService] approvalDtoList : {}", apprLineDtoList);
@@ -182,98 +194,25 @@ public class ApprovalService {
 		return approvalDto;
 	}
 	
-	// 제1 결재선 등록 
+	//결재선 등록
 	@Transactional
-	public void insertAppLine1(ApprovalLineDto appLineDto) {
-		log.info("[ApprovalService] insertAppLine1 start---------------------------------------------------------------- ");
+	public void insertAppLine(ApprovalLineDto appLineDto) {
+		log.info("[ApprovalService] insertAppLine start---------------------------------------------------------------- ");
 		// 가장 최근에 저장된 기안코드 불러오기
 		Approval approval = appRepo.findFirstByOrderByAppRegistDateDesc().orElseThrow(()-> new IllegalArgumentException("결재문서 조회 실패"));
 	    log.info("[ApprovalService] approval: {} ", approval);
 	    ApprovalDto approvalDto = mm.map(approval, ApprovalDto.class);
 	    log.info("[ApprovalService] approvalDto: {} ", approvalDto);
 		
-	    appLineDto.setApproval(approvalDto);;
+	    appLineDto.setApproval(approvalDto);
 	    log.info("[ApprovalService] appLineDto: {} ", appLineDto);
 	    
 		//applneDto에 조회한 정보 넣고 저장
-	    appLineRepo.save(mm.map(approvalDto, ApprovalLine.class));
-		
-	    log.info("[ApprovalService] insertAppLine1 end---------------------------------------------------------------- ");
+	    appLineRepo.save(mm.map(appLineDto, ApprovalLine.class));
+	    
+	    log.info("[ApprovalService] appLineRepo : {}" + appLineRepo);
+	    log.info("[ApprovalService] insertAppLine end---------------------------------------------------------------- ");
 	}
-	
-	@Transactional
-	public void insertAppLine2(Long memberCode) {
-		log.info("[ApprovalService] insertAppLine2 start---------------------------------------------------------------- ");
-		// 가장 최근에 저장된 기안코드 불러오기
-		Approval approval = appRepo.findFirstByOrderByAppRegistDateDesc().orElseThrow(()-> new IllegalArgumentException("결재문서 조회 실패"));
-	    log.info("[ApprovalService] approval: {} ", approval);
-	    ApprovalDto approvalDto = mm.map(approval, ApprovalDto.class);
-	    log.info("[ApprovalService] approvalDto: {} ", approvalDto);
-		
-	    ApprovalLineDto appLineDto = new ApprovalLineDto();
-	    appLineDto.setApproval(approvalDto);;
-	    log.info("[ApprovalService] appLineDto: {} ", appLineDto);
-	    
-	    //흠..... 결재선으로 선택한 직원의 정보 가져오기
-	    Member accessor = mm.map(memberCode, Member.class);
-	    
-		// 직원 정보 가져오기
-		Member findMember = appMbRepo.findById(accessor.getMemberCode())		//수정하기!!!
-				.orElseThrow(()-> new IllegalArgumentException("해당 직원이 없습니다. memberCode : "+ accessor.getMemberCode()));
-		log.info("[ApprovalService] findMember : {}", findMember);
-		MbMemberDto findMemberDto = mm.map(findMember, MbMemberDto.class);
-		
-		//applneDto에 조회한 정보 넣고 저장
-		appLineDto.setApproval(approvalDto);
-		appLineDto.setMember(findMemberDto);
-		appLineDto.setAppOrder(2L);
-		appLineDto.setAppPriorYn("N");
-		appLineDto.setAppStatus("appWait");;
-		ApprovalLine newAppLine2 = mm.map(appLineDto, ApprovalLine.class);
-		
-		
-		appLineRepo.save(newAppLine2);
-		log.info("[ApprovalService] appLineRepo : {}", appLineRepo);
-	    log.info("[ApprovalService] insertAppLine2 end---------------------------------------------------------------- ");
-	}
-			
-	@Transactional
-	public void insertAppLine3(Long memberCode) {
-		log.info("[ApprovalService] insertAppLine3 start---------------------------------------------------------------- ");
-		// 가장 최근에 저장된 기안코드 불러오기
-		Approval approval = appRepo.findFirstByOrderByAppRegistDateDesc().orElseThrow(()-> new IllegalArgumentException("결재문서 조회 실패"));
-	    log.info("[ApprovalService] approval: {} ", approval);
-	    ApprovalDto approvalDto = mm.map(approval, ApprovalDto.class);
-	    log.info("[ApprovalService] approvalDto: {} ", approvalDto);
-		
-	    ApprovalLineDto appLineDto = new ApprovalLineDto();
-	    appLineDto.setApproval(approvalDto);;
-	    log.info("[ApprovalService] appLineDto: {} ", appLineDto);
-	    
-	    //흠..... 결재선으로 선택한 직원의 정보 가져오기
-	    Member accessor = mm.map(memberCode, Member.class);
-	    
-		// 직원 정보 가져오기
-		Member findMember = appMbRepo.findById(accessor.getMemberCode())		//수정하기!!!
-				.orElseThrow(()-> new IllegalArgumentException("해당 직원이 없습니다. memberCode : "+ accessor.getMemberCode()));
-		log.info("[ApprovalService] findMember : {}", findMember);
-		MbMemberDto findMemberDto = mm.map(findMember, MbMemberDto.class);
-		
-		//applneDto에 조회한 정보 넣고 저장
-		appLineDto.setApproval(approvalDto);
-		appLineDto.setMember(findMemberDto);
-		appLineDto.setAppOrder(3L);
-		appLineDto.setAppPriorYn("N");
-		appLineDto.setAppStatus("appWait");;
-		ApprovalLine newAppLine3 = mm.map(appLineDto, ApprovalLine.class);
-		
-		
-		appLineRepo.save(newAppLine3);
-		log.info("[ApprovalService] appLineRepo : {}", appLineRepo);
-	    log.info("[ApprovalService] insertAppLine3 end---------------------------------------------------------------- ");
-	}
-	
-
 
 	
 // 10. 결재문서 상세 조회
@@ -292,6 +231,33 @@ public class ApprovalService {
 		return approvalDto;		
 	}
 
+	public List<ApprovalLineDto> selectAppLineDetail(Long appCode) {
+		log.info("[ApprovalService] selectAppLineDetail start ============================== ");
+		log.info("[ApprovalService] appCode : {}", appCode);
+		Approval approval = appRepo.findById(appCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당 결재 문서가 없습니다. appCode : " + appCode));
+		log.info("[ApprovalService] approval : {}", approval);
+		ApprovalDto approvalDto = mm.map(approval, ApprovalDto.class);
+		log.info("[ApprovalService] approvalDto : {}", approvalDto);
+		
+		List<ApprovalLine> appLineList = appLineRepo.findAllByApproval(appCode);
+		log.info("[ApprovalService] appLine : {}", appLineList);
+		
+		List<ApprovalLineDto> appLineListDto = appLineList.stream()
+				.map(appLine -> mm.map(appLine, ApprovalLineDto.class)).collect(Collectors.toList());
+		log.info("[ApprovalService] appLineDto : {}", appLineListDto);
+		
+		log.info("[ApprovalService] selectAppLineDetail end ============================== ");
+		return appLineListDto;		
+		
+//		List<Department> deptList = deptRepo.findAll();
+//		List<MbDepartmentDto> deptDtoList = deptList.stream()
+//				.map(dept -> mm.map(dept, MbDepartmentDto.class))
+//				.collect(Collectors.toList());
+//		return deptDtoList;
+	}
+	
+
 
 // 결재 승인/반려
 	@Transactional
@@ -299,13 +265,13 @@ public class ApprovalService {
 		log.info("[ApprovalService] putApprovalAccess start ============================== ");
 		log.info("[ApprovalService] appLineDto : {}", appLineDto);
 		
-		ApprovalLine beforeAppLine = appLineRepo.findById(appLineDto.getAppLineCode())
-				.orElseThrow(()-> new IllegalArgumentException("해당 코드의 결재선 정보가 없습니다. appLineCode=" + appLineDto.getAppLineCode()));
+		ApprovalLine orginAppLine = appLineRepo.findByAppOrderAndAppPriorYn(appLineDto.getAppOrder(), "Y")
+				.orElseThrow(()-> new IllegalArgumentException("해당 결재는 아직 전결되지 않았습니다."));
 		
 		// 조회했던 기존 엔티티의 내용을 수정 -> 별조의 수정 메소드를 정의해서 사용하면 다른 방식의 수정을 막을 수 있다.
-		beforeAppLine.update(
+		orginAppLine.update(
 				appLineDto.getAppPriorYn(),
-				appLineDto.getAppStatus(),
+				appLineDto.getAppLineStatus(),
 				appLineDto.getAppTime()
 		);
 				
@@ -313,6 +279,27 @@ public class ApprovalService {
 		
 		log.info("[ApprovalService] putApprovalAccess end ============================== ");
 	}
+
+
+
+	public MbTokenDto identifyAccessor(MbMemberDto memberDto) {
+		Member member = appMbRepo.findByMemberId(memberDto.getMemberId())
+				.orElseThrow(() -> new LoginFailedException("회원아이디 조회 실패"));
+		if(!passwordEncoder.matches(memberDto.getMemberPwd(), member.getMemberPwd())) {
+			throw new LoginFailedException("비밀번호 번호가 틀렸습니다.");
+		}
+		// 3. 토큰 가져오기?? 흠.....
+		MbTokenDto tokenDto = tokenProvider
+				.generateTokenDto(mm.map(member, MbMemberDto.class));
+		log.info("[AuthService] tokenDto : {}", tokenDto);
+		
+		log.info("[AuthService] login end ====================================================");
+		
+		return tokenDto;
+	}
+
+
+
 
 
 
