@@ -41,6 +41,7 @@ public class SalaryDTO
     private Long out;
     private Long earlyLeave;
     private Long absence;
+
     private List<AttendanceDTO> attendance;
     private PagingButtonInfo pageInfo;
 }

@@ -4,13 +4,69 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b03e6050-5647-4e1a-83df-c14b780a1bb5" name="변경" comment="로그인 고침">
-      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/resources/static/images/member/77ebe0eb476d48c68ce4d439add5a9da.png" afterDir="false" />
+    <list default="true" id="b03e6050-5647-4e1a-83df-c14b780a1bb5" name="변경" comment="급여 거의다함">
+      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/controller/MyPageAttendanceController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/service/AttendanceService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/TotalAttendanceDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/util/calculator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/resources/static/images/education/구름 1차 교육^f59e25c128f540159139a25a355ae42b.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/resources/static/images/education/구름 교육^ed6c7e5bd829405a9bf8f17a8896536d.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/resources/static/images/member/5d12354545c84166b9e9cdc353851484.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/resources/static/images/member/8a16e471e0b244e59e6f084d15a1f07f.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/resources/static/images/member/a28089d6149b4b7fb0e8e0c252e4a1b4.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/resources/static/images/member/b640d63c50ff4fcebc4907051d789a85.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/resources/static/images/member/f2889244894144888361c0cd47c591d2.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/calendar/controller/CalendarController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/calendar/dto/CalendarDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/calendar/repository/CalendarRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/calendar/service/CalendarService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/education/controller/EducationController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/education/entity/EdClass.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/education/repository/ClassRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/education/repository/EducationFileRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/education/repository/EducationRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/education/service/EducationService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/notice/util/NoticeFileUploadUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/salary/controller/SalaryController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/salary/dto/AttendanceDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/salary/dto/SalaryDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/salary/dto/TotalAttendanceDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/salary/repository/SLMemberRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/salary/repository/SalAttendanceRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/salary/repository/SalaryRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/salary/service/SalaryService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/bin/src/main/java/com/strato/skylift/salary/util/calculator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/approval/controller/ApprovalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/approval/controller/ApprovalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/approval/dto/ApprovalLineDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/approval/dto/ApprovalLineDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/approval/repository/AppMemberRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/approval/repository/AppMemberRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/approval/repository/ApprovalLineRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/approval/repository/ApprovalLineRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/approval/service/ApprovalService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/approval/service/ApprovalService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/configuration/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/configuration/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/education/service/EducationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/education/service/EducationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/ApprovalLine.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/ApprovalLine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/SalaryStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/SalaryStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/dto/EQFileDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/dto/EQFileDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/controller/MyPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/controller/MyPageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/dto/MbMemberDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/dto/MbMemberDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/repository/AttendanceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/repository/AttendanceRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/repository/MemberRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/repository/MemberRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/repository/MyPageRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/repository/MyPageRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/service/MemberService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/service/MyPageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/service/MyPageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/controller/NoticeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/controller/NoticeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/service/MyPageRequestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/service/MyPageRequestService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/service/NoticeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/service/NoticeService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/controller/SalaryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/controller/SalaryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/AttendanceDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/AttendanceDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/SalMemberDTO.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/SalaryDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/SalaryDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/repository/SalAttendanceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/repository/SalAttendanceRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/repository/SalaryRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/repository/SalaryRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/service/SalaryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/service/SalaryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/util/Calculator.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,49 +153,49 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/gangc/OneDrive/바탕 화면/Project/FinalProject/server/StratoSts/src/main/java/com/strato/skylift/salary",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "advanced.settings",
-    "spring.configuration.checksum": "108d254df1110ce5716b49eac273ceed",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/gangc/OneDrive/바탕 화면/Project/FinalProject/server/StratoSts/src/main/java/com/strato/skylift/salary&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;108d254df1110ce5716b49eac273ceed&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "oracle"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;oracle&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.strato.skylift.salary.dto" />
       <recent name="com.strato.skylift.salary.service" />
       <recent name="com.strato.skylift.entity" />
       <recent name="com.strato.skylift.equipment.service" />
       <recent name="com.strato.skylift.equipment.repository" />
-      <recent name="com.strato.skylift.equipment.dto" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\gangc\OneDrive\바탕 화면\Project\FinalProject\server\StratoSts\src\main\java\com\strato\skylift\salary" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\gangc\OneDrive\바탕 화면\Project\FinalProject\server\StratoSts\src\main\java\com\strato\skylift\salary\dto" />
       <recent name="C:\Users\gangc\OneDrive\바탕 화면\Project\FinalProject\server\StratoSts\src\main\resources\static\images\equipment" />
       <recent name="C:\Users\gangc\OneDrive\바탕 화면\Project\FinalProject\server\StratoSts\src\main\resources\static" />
       <recent name="C:\Users\gangc\OneDrive\바탕 화면\Project\FinalProject\server\StratoSts\src\main\resources\image" />
       <recent name="C:\Users\gangc\OneDrive\바탕 화면\Project\FinalProject\server\StratoSts\src\main\resources" />
-      <recent name="C:\Users\gangc\OneDrive\바탕 화면\Project\FinalProject\server\StratoSts\src\main\resources\image\equipment" />
     </key>
   </component>
   <component name="RunManager">
@@ -184,7 +240,9 @@
       <workItem from="1685422926746" duration="21665000" />
       <workItem from="1685499341592" duration="15036000" />
       <workItem from="1685586293571" duration="7000" />
-      <workItem from="1685596409952" duration="7477000" />
+      <workItem from="1685596409952" duration="20072000" />
+      <workItem from="1685664609180" duration="98000" />
+      <workItem from="1685665219027" duration="1893000" />
     </task>
     <task id="LOCAL-00001" summary="엔티티 추가 상세 연관관계는 애기해봐야됌">
       <created>1683776741405</created>
@@ -333,7 +391,14 @@
       <option name="project" value="LOCAL" />
       <updated>1685530716396</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="급여추가 백작업중~">
+      <created>1685607219026</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1685607219026</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -452,7 +517,9 @@
     <MESSAGE value="근태 조회 까지 완려" />
     <MESSAGE value="급여명세서 추가 프론트랑 연결중" />
     <MESSAGE value="로그인 고침" />
-    <option name="LAST_COMMIT_MESSAGE" value="로그인 고침" />
+    <MESSAGE value="급여추가 백작업중~" />
+    <MESSAGE value="급여 거의다함" />
+    <option name="LAST_COMMIT_MESSAGE" value="급여 거의다함" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

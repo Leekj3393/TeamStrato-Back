@@ -17,7 +17,7 @@ public class AttendanceDTO
     private Long attendanceCode;
     private SalMemberDTO member;
     private String status;
-    @JsonFormat(pattern = "yy-MM-dd")
+    @JsonFormat(pattern = "yy-MM-dd",timezone = "Asia/Seoul")
     private Date attendanceDate;
     @JsonFormat(pattern = "HH:mm" , timezone = "Asia/Seoul")
     private Date startTime;
