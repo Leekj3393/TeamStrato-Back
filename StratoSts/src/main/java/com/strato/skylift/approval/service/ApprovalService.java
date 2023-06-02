@@ -257,25 +257,44 @@ public class ApprovalService {
 	
 
 
-// 결재 승인/반려
+// 결재 승인 시
 	@Transactional
-	public void putApprovalAccess(ApprovalLineDto appLineDto) {
+	public void putApprovalAccess(ApprovalDto appDto, MbMemberDto memberDto) {
 		log.info("[ApprovalService] putApprovalAccess start ============================== ");
-		log.info("[ApprovalService] appLineDto : {}", appLineDto);
 		
-		ApprovalLine orginAppLine = appLineRepo.findByAppOrderAndAppPriorYn(appLineDto.getAppOrder(), "Y")
+		Approval app = mm.map(appDto, Approval.class);
+		Member mem = mm.map(memberDto, Member.class);
+		
+		ApprovalLine originAppLine = appLineRepo.findByApprovalAndAccessorAndAppPriorYn(app, mem, "Y")
 				.orElseThrow(()-> new IllegalArgumentException("해당 결재는 아직 전결되지 않았습니다."));
+		log.info("[ApprovalService] originAppLine : {}", originAppLine);
 		
-		// 조회했던 기존 엔티티의 내용을 수정 -> 별조의 수정 메소드를 정의해서 사용하면 다른 방식의 수정을 막을 수 있다.
-		orginAppLine.update(
-				appLineDto.getAppPriorYn(),
-				appLineDto.getAppLineStatus(),
-				appLineDto.getAppTime()
+		ApprovalLineDto originAppLineDto = mm.map(originAppLine, ApprovalLineDto.class);
+		
+//		Long nextOrder = originAppLine.getAppOrder() + 1;
+		
+//		ApprovalLine nextAppLine = appLineRepo.findByAppOrderAndAppLineStatus(nextOrder, "appAccessed");
+//		log.info("[ApprovalService] nextAppLine : {}", nextAppLine);
+		
+//		ApprovalLineDto nextAppLineDto = mm.map(nextAppLine, ApprovalLineDto.class);
+		
+		
+		// 조회했던 기존 엔티티의 내용을 수정 -> 별도의 수정 메소드를 정의해서 사용하면 다른 방식의 수정을 막을 수 있다.
+		originAppLine.update(
+			originAppLineDto.getAppPriorYn(),
+			originAppLineDto.getAppLineStatus(),
+			originAppLineDto.getAppTime()
 		);
-				
 		
+//		nextAppLineDto.setAppPriorYn("Y");
+//		ApprovalLine nextAppLine2 = mm.map(nextAppLineDto, ApprovalLine.class);
+//		appLineRepo.save(nextAppLine2);
 		
+//		log.info("[ApprovalService] nextAppLine : {}", nextAppLine2);
+			
+			
 		log.info("[ApprovalService] putApprovalAccess end ============================== ");
+		
 	}
 
 

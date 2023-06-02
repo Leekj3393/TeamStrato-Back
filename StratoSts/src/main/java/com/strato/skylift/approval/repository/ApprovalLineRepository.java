@@ -10,8 +10,10 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.strato.skylift.entity.Approval;
 import com.strato.skylift.entity.ApprovalLine;
 import com.strato.skylift.entity.Member;
+import com.strato.skylift.member.dto.MbMemberDto;
 
 
 public interface ApprovalLineRepository extends JpaRepository<ApprovalLine, Long>  {
@@ -29,5 +31,30 @@ public interface ApprovalLineRepository extends JpaRepository<ApprovalLine, Long
 	@EntityGraph(attributePaths= {"accessor", "approval"})
 	@Query("SELECT a FROM ApprovalLine a WHERE a.appOrder = :appOrder AND a.appPriorYn = :appPriorYn")
 	Optional<ApprovalLine> findByAppOrderAndAppPriorYn(Long appOrder, String appPriorYn);
+
+
+	@EntityGraph(attributePaths= {"accessor", "approval"})
+	ApprovalLine findByAppOrderAndAppLineStatus(Long nextOrder, String appLineStatus);
+
+
+//	@Query("SELECT a FROM ApprovalLine a WHERE a.accessor.memberCode = :memberCode AND a.appPriorYn = :appPriorYn")
+//	@EntityGraph(attributePaths= {"accessor", "approval"})
+//	Optional<ApprovalLine> findByAccessorAndAppPriorYn(Member accessor, String appPriorYn);
+
+//	@EntityGraph(attributePaths= {"accessor", "approval"})
+//	Optional<ApprovalLine> findByIdAndAppPriorYn(Long appLineCode, String appPriorYn);
+
+
+//	@EntityGraph(attributePaths= {"accessor", "approval"})
+//	Optional<ApprovalLine> findByAccessorAndAppPriorYn(Member accessor, String appPriorYn);
+
+
+//	@EntityGraph(attributePaths= {"accessor", "approval"})
+//	Optional<ApprovalLine> findByApprovalAndAppPriorYn(Approval app, String appPriorYn);
+
+
+	@EntityGraph(attributePaths= {"accessor", "approval"})
+	Optional<ApprovalLine> findByApprovalAndAccessorAndAppPriorYn(Approval app, Member mem, String appPriorYn);
+	
 
 }
