@@ -48,7 +48,6 @@ public class AuthService {
 //		log.info("loginMemberDto : {}", memberDto.getMemberPwd());
 //		log.info("loginMember : {}", member.getMemberPwd());
 		// 솔팅 처리 후 사용 할 구문
-		 //솔팅 처리 후 사용 할 구문
 		if(!passwordEncoder.matches(memberDto.getMemberPwd(), member.getMemberPwd())) {
 			throw new LoginFailedException("잘못 된 아이디 또는 비밀번호입니다.");
 		}
@@ -66,10 +65,12 @@ public class AuthService {
 	@Transactional
 	public void updateMemberPwdByMemberId(String memberId, String pass) {
 		
+		log.info(pass);
+
 		Member member = memberRepository.findByMemberId(memberId)
 				.orElseThrow(() -> new IllegalArgumentException("해당 아이디의 직원이 없습니다. memberId : " + memberId));
 		
-		member.setMemberPwd(pass);
+		member.setMemberPwd(passwordEncoder.encode(pass));
 		
 	}
 
@@ -110,15 +111,16 @@ public class AuthService {
 	
 	/* 비밀번호 변경용 */
 	public Member findByMemberIdAndmemberPwd(String memberId, String memberPwd) {
-		
-		Member member = memberRepository.findByMemberIdAndMemberPwd(memberId, memberPwd)
-				.orElseThrow(() -> new IllegalArgumentException("해당 이메일의 직원이 없습니다. memberId : " + memberId));
-		
-		MbMemberDto updatePwd = modelMapper.map(member, MbMemberDto.class);
-		
-		return member;
-	
-	
+	    Member member = memberRepository.findByMemberId(memberId)
+	            .orElseThrow(() -> new IllegalArgumentException("해당 이메일의 직원이 없습니다. member : " + memberId));
+
+	    if (!passwordEncoder.matches(memberPwd, member.getMemberPwd())) {
+	        throw new LoginFailedException("잘못된 아이디 또는 비밀번호입니다.");
+	    }
+
+	    MbMemberDto updatePwd = modelMapper.map(member, MbMemberDto.class);
+
+	    return member;
 	}
 
 

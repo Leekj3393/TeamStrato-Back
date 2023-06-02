@@ -31,7 +31,7 @@ public class Notice
     private String noticeDelYn;
 
     @Column(name = "NOTICE_REGIST_DATE")
-    private Date noticeRegistDate;
+    private String noticeRegistDate;
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_CODE")

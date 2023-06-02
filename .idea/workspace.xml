@@ -4,16 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b03e6050-5647-4e1a-83df-c14b780a1bb5" name="변경" comment="근태 조회 까지 완려">
-      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/SalMemberDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/SalaryStatementDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/controller/SalaryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/controller/SalaryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/AttendanceDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/AttendanceDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/SalaryDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/SalaryDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/dto/TotalAttendanceDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/repository/SalAttendanceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/repository/SalAttendanceRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/service/SalaryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/service/SalaryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/util/calculator.java" beforeDir="false" />
+    <list default="true" id="b03e6050-5647-4e1a-83df-c14b780a1bb5" name="변경" comment="급여 거의다함">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/service/AuthService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -316,7 +309,14 @@
       <option name="project" value="LOCAL" />
       <updated>1685434584075</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="급여 거의다함">
+      <created>1685670721529</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1685670721529</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -444,6 +444,7 @@
     <MESSAGE value="급여 맹세서 추가 만들고있음" />
     <MESSAGE value="급여 맹세서 추가 디테일 만들고있음" />
     <MESSAGE value="근태 조회 까지 완려" />
-    <option name="LAST_COMMIT_MESSAGE" value="근태 조회 까지 완려" />
+    <MESSAGE value="급여 거의다함" />
+    <option name="LAST_COMMIT_MESSAGE" value="급여 거의다함" />
   </component>
 </project>

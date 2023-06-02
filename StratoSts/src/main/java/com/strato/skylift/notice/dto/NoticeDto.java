@@ -18,7 +18,7 @@ public class NoticeDto {
 	private String noticeContent; // 추가된 필드
 	private String noticeType;
 	private String noticeDelYn;
-	private Date noticeRegistDate;
+	private String noticeRegistDate;
 	private MbMemberDto member;
 	private MbDepartmentDto department;
 	
