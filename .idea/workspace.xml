@@ -4,9 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b03e6050-5647-4e1a-83df-c14b780a1bb5" name="변경" comment="급여 거의다함">
+    <list default="true" id="b03e6050-5647-4e1a-83df-c14b780a1bb5" name="변경" comment="일딴 어느정도 복구">
+      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/resources/static/images/member/25538f14ce3c4e108bfdfa9a1ec41256.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/Notice.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/Notice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/SalaryStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/SalaryStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/repository/MbDeptRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/repository/MbDeptRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/controller/NoticeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/controller/NoticeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/dto/NoticeDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/dto/NoticeDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/repository/NoticeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/repository/NoticeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/service/NoticeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/service/NoticeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/controller/SalaryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/controller/SalaryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/service/SalaryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/service/SalaryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/util/Calculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/util/Calculator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,31 +100,32 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/gangc/OneDrive/바탕 화면/Project/FinalProject/server/StratoSts/src/main/java/com/strato/skylift/salary&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;108d254df1110ce5716b49eac273ceed&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/gangc/OneDrive/바탕 화면/Project/FinalProject/server/StratoSts/src/main/java/com/strato/skylift/salary",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "spring.configuration.checksum": "108d254df1110ce5716b49eac273ceed",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;oracle&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "oracle"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.strato.skylift.salary.service" />
@@ -175,6 +186,8 @@
       <workItem from="1685060271834" duration="10366000" />
       <workItem from="1685422926746" duration="21665000" />
       <workItem from="1685499341592" duration="7641000" />
+      <workItem from="1685673075506" duration="479000" />
+      <workItem from="1685673796384" duration="17692000" />
     </task>
     <task id="LOCAL-00001" summary="엔티티 추가 상세 연관관계는 애기해봐야됌">
       <created>1683776741405</created>
@@ -316,7 +329,14 @@
       <option name="project" value="LOCAL" />
       <updated>1685670721529</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="일딴 어느정도 복구">
+      <created>1685673548144</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1685673548144</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -428,6 +448,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="엔티티 추가 상세 연관관계는 애기해봐야됌" />
     <MESSAGE value="장비 리스트 조회 까지는 완료 파일 엔티티 수정 사항 있습니다 확인해주세요" />
     <MESSAGE value="장비 첫페이지 원하는 데이터 끌어오고 쿼리문 최적화 중" />
@@ -445,6 +466,7 @@
     <MESSAGE value="급여 맹세서 추가 디테일 만들고있음" />
     <MESSAGE value="근태 조회 까지 완려" />
     <MESSAGE value="급여 거의다함" />
-    <option name="LAST_COMMIT_MESSAGE" value="급여 거의다함" />
+    <MESSAGE value="일딴 어느정도 복구" />
+    <option name="LAST_COMMIT_MESSAGE" value="일딴 어느정도 복구" />
   </component>
 </project>
