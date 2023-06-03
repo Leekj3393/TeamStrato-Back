@@ -57,7 +57,7 @@ public class MbMemberDto implements UserDetails {
 	private MbMemberRoleDto memberRole;
 		
 	private List<MbFileDto> files;
-	
+		
 	private String updatePwd;
 	
 	@JsonIgnore
@@ -119,4 +119,3 @@ public class MbMemberDto implements UserDetails {
 
 
 }
-
