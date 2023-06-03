@@ -291,6 +291,19 @@ public class MemberService {
 		
 		return memberDtoList;		
 	}
-	
-	
+
+
+	/* 직원 사진조회 */
+	public MbFileDto selectMemberImageyu(Long memberCode) {
+
+		List<MbFile> memberImages = fileRepository.findByMemberCodeAndFileType(memberCode, "직원사진");
+
+		if (!memberImages.isEmpty()) {
+			return modelMapper.map(memberImages.get(0), MbFileDto.class);
+		}
+
+		return null; // or throw an exception
+	}
+
+
 }

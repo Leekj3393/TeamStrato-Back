@@ -10,6 +10,7 @@ import com.strato.skylift.member.dto.MbAttendanceDto;
 import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.member.repository.AttendanceRepository;
 import com.strato.skylift.member.repository.MyPageRepository;
+import com.strato.skylift.member.service.MemberService;
 import com.strato.skylift.member.service.MyPageService;
 import com.strato.skylift.notice.service.NoticeService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class MyPageController {
         private final AttendanceRepository attendanceRepository;
         private final MyPageRepository myPageRepository;
         private final NoticeService noticeService;
-
+        private final MemberService memberService;
         //전체 사원수
     @GetMapping("/membersAll")
     public ResponseEntity<ResponseDto> getTotalMemberCount() {
@@ -210,6 +211,14 @@ public class MyPageController {
         Long memberCode = member.getMemberCode(); // 로그인한 멤버의 memberCode 추출
 
         return myPageService.getAttendancesByMemberCodei(memberCode);
+    }
+
+
+    //로그인 한 해당하는 회원의 이미지 조회
+    @GetMapping("/memberImage")
+    public ResponseEntity<ResponseDto> selectMemberImage(@AuthenticationPrincipal MbMemberDto mbMemberDto) {
+
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 사진조회에 성공했습니다.", memberService.selectMemberImageyu(mbMemberDto.getMemberCode())));
     }
 
 
