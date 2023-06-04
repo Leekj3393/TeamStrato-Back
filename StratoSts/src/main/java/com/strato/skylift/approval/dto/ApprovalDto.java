@@ -29,5 +29,5 @@ public class ApprovalDto {
 	private Date approvedDate;
 	
 	private Date appWdlDate;
-
+	
 }

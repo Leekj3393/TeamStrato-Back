@@ -1,7 +1,9 @@
 package com.strato.skylift.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,7 +31,7 @@ public class ApprovalLine {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "APPLINE_SEQ_GENERATOR")
 	private Long appLineCode;
     
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "APP_CODE")
 	private Approval approval;
 	
@@ -40,7 +42,7 @@ public class ApprovalLine {
 	private String appPriorYn;
 
 	@Column(name = "APP_TIME")
-	private String appTime;
+	private Date appTime;
 	
 	@Column(name = "APP_ORDER")
 	private Long appOrder;
@@ -49,8 +51,14 @@ public class ApprovalLine {
 	@JoinColumn(name = "MEMBER_CODE")
 	private Member accessor;
 
-	/*결재선 승인/반려 용도의 메소드를 별도로 정의함*/
-	public void update(String appPriorYn, String appLineStatus, String appTime) {
+	
+//	public void update(String appLineStatus, Date appTime) {
+//		this.appLineStatus = appLineStatus;
+//		this.appTime = appTime;
+//	}
+
+//	/*결재선 승인/반려 용도의 메소드를 별도로 정의함*/
+	public void update(String appPriorYn, String appLineStatus, Date appTime) {
 		this.appPriorYn = appPriorYn;
 		this.appLineStatus = appLineStatus;
 		this.appTime = appTime;

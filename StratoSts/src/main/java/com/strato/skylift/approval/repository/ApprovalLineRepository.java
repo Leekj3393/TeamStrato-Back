@@ -36,29 +36,20 @@ public interface ApprovalLineRepository extends JpaRepository<ApprovalLine, Long
 	ApprovalLine findByAppOrderAndAppLineStatus(Long nextOrder, String appLineStatus);
 
 
-//	@Query("SELECT a FROM ApprovalLine a WHERE a.accessor.memberCode = :memberCode AND a.appPriorYn = :appPriorYn")
-//	@EntityGraph(attributePaths= {"accessor", "approval"})
-//	Optional<ApprovalLine> findByAccessorAndAppPriorYn(Member accessor, String appPriorYn);
-
-//	@EntityGraph(attributePaths= {"accessor", "approval"})
-//	Optional<ApprovalLine> findByIdAndAppPriorYn(Long appLineCode, String appPriorYn);
-
-
-//	@EntityGraph(attributePaths= {"accessor", "approval"})
-//	Optional<ApprovalLine> findByAccessorAndAppPriorYn(Member accessor, String appPriorYn);
-
-
-//	@EntityGraph(attributePaths= {"accessor", "approval"})
-//	Optional<ApprovalLine> findByApprovalAndAppPriorYn(Approval app, String appPriorYn);
-
-
 	@EntityGraph(attributePaths= {"accessor", "approval"})
-	Optional<ApprovalLine> findByApprovalAndAccessorAndAppPriorYn(Approval app, Member mem, String appPriorYn);
-	
-    default ApprovalLine saveAndFlush(ApprovalLine approvalLine, ApprovalRepository approvalRepository) {
-        Approval approval = approvalLine.getApproval();
-        Approval savedApproval = approvalRepository.saveAndFlush(approval);
-        approvalLine.setApproval(savedApproval);
-        return save(approvalLine);
-    }
+	@Query("SELECT a FROM ApprovalLine a WHERE a.approval.appCode = :appCode AND a.accessor.memberCode = :memberCode")
+	ApprovalLine findAppLineByAppCodeAndAccessorMemberCode(Long appCode, Long memberCode);
+
+// 결재코드와 결재선으로 지정된 직원 코드로 결재선 조회
+	@Query("SELECT al FROM ApprovalLine al JOIN fetch al.accessor JOIN fetch al.approval "
+			+ "WHERE al.accessor.memberCode = :memberCode "
+			+ "AND al.approval.appCode = :appCode")
+	ApprovalLine findbyAccessorAndApproval(Long memberCode, Long appCode);
+
+
+	// 다음 결재자 찾기
+	@Query("SELECT al FROM ApprovalLine al JOIN fetch al.approval "
+			+ "WHERE al.appOrder = :nextOrder "
+			+ "AND al.approval.appCode = :appCode")
+	ApprovalLine findByApprovalAndAppOrder(Long appCode, Long nextOrder);
 }

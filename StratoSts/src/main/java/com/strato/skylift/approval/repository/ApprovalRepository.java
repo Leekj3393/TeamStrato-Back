@@ -56,7 +56,8 @@ public interface ApprovalRepository extends JpaRepository<Approval, Long> {
 /* 9. 결재 반려 
  *  결재문서 상세 조회 - 결재자 */
 	
-    default Approval saveAndFlush(Approval approval) {
+    @SuppressWarnings("unchecked")
+	default Approval saveAndFlush(Approval approval) {
         Approval savedApproval = save(approval);
         flush();
         return savedApproval;
