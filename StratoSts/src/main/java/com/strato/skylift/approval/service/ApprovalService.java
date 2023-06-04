@@ -271,13 +271,6 @@ public class ApprovalService {
 		
 		ApprovalLineDto originAppLineDto = mm.map(originAppLine, ApprovalLineDto.class);
 		
-//		Long nextOrder = originAppLine.getAppOrder() + 1;
-		
-//		ApprovalLine nextAppLine = appLineRepo.findByAppOrderAndAppLineStatus(nextOrder, "appAccessed");
-//		log.info("[ApprovalService] nextAppLine : {}", nextAppLine);
-		
-//		ApprovalLineDto nextAppLineDto = mm.map(nextAppLine, ApprovalLineDto.class);
-		
 		
 		// 조회했던 기존 엔티티의 내용을 수정 -> 별도의 수정 메소드를 정의해서 사용하면 다른 방식의 수정을 막을 수 있다.
 		originAppLine.update(
@@ -285,16 +278,7 @@ public class ApprovalService {
 			originAppLineDto.getAppLineStatus(),
 			originAppLineDto.getAppTime()
 		);
-		
-//		nextAppLineDto.setAppPriorYn("Y");
-//		ApprovalLine nextAppLine2 = mm.map(nextAppLineDto, ApprovalLine.class);
-//		appLineRepo.save(nextAppLine2);
-		
-//		log.info("[ApprovalService] nextAppLine : {}", nextAppLine2);
-			
-			
 		log.info("[ApprovalService] putApprovalAccess end ============================== ");
-		
 	}
 
 
