@@ -72,9 +72,9 @@ public class Calculator
     public Long income(Long s)
     {
         if(s < 2000000)
-            return 0L;
-        else if(s < 3000000)
             return Math.round(s * 0.01);
+        else if(s < 3000000)
+            return Math.round(s * 0.02);
         else if(s < 4000000)
             return Math.round(s * 0.03);
         else if(s < 5000000)

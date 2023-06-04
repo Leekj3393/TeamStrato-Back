@@ -1,6 +1,7 @@
 package com.strato.skylift.approval.service;
 
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -244,39 +245,39 @@ public class ApprovalService {
 		log.info("[ApprovalService] appLine : {}", appLineList);
 		
 		List<ApprovalLineDto> appLineListDto = appLineList.stream()
-				.map(appLine -> mm.map(appLine, ApprovalLineDto.class)).collect(Collectors.toList());
+				.map(appLine -> mm.map(appLine, ApprovalLineDto.class))
+				.sorted(Comparator.comparing(ApprovalLineDto::getAppOrder)) // 여기에 정렬 로직 추가
+				.collect(Collectors.toList());
 		log.info("[ApprovalService] appLineDto : {}", appLineListDto);
 		
 		log.info("[ApprovalService] selectAppLineDetail end ============================== ");
-		return appLineListDto;		
 		
-//		List<Department> deptList = deptRepo.findAll();
-//		List<MbDepartmentDto> deptDtoList = deptList.stream()
-//				.map(dept -> mm.map(dept, MbDepartmentDto.class))
-//				.collect(Collectors.toList());
-//		return deptDtoList;
+		return appLineListDto;		
 	}
 	
 
 
-// 결재 승인/반려
+// 결재 승인 시
 	@Transactional
-	public void putApprovalAccess(ApprovalLineDto appLineDto) {
+	public void putApprovalAccess(ApprovalDto appDto, MbMemberDto memberDto) {
 		log.info("[ApprovalService] putApprovalAccess start ============================== ");
-		log.info("[ApprovalService] appLineDto : {}", appLineDto);
 		
-		ApprovalLine orginAppLine = appLineRepo.findByAppOrderAndAppPriorYn(appLineDto.getAppOrder(), "Y")
+		Approval app = mm.map(appDto, Approval.class);
+		Member mem = mm.map(memberDto, Member.class);
+		
+		ApprovalLine originAppLine = appLineRepo.findByApprovalAndAccessorAndAppPriorYn(app, mem, "Y")
 				.orElseThrow(()-> new IllegalArgumentException("해당 결재는 아직 전결되지 않았습니다."));
+		log.info("[ApprovalService] originAppLine : {}", originAppLine);
 		
-		// 조회했던 기존 엔티티의 내용을 수정 -> 별조의 수정 메소드를 정의해서 사용하면 다른 방식의 수정을 막을 수 있다.
-		orginAppLine.update(
-				appLineDto.getAppPriorYn(),
-				appLineDto.getAppLineStatus(),
-				appLineDto.getAppTime()
+		ApprovalLineDto originAppLineDto = mm.map(originAppLine, ApprovalLineDto.class);
+		
+		
+		// 조회했던 기존 엔티티의 내용을 수정 -> 별도의 수정 메소드를 정의해서 사용하면 다른 방식의 수정을 막을 수 있다.
+		originAppLine.update(
+			originAppLineDto.getAppPriorYn(),
+			originAppLineDto.getAppLineStatus(),
+			originAppLineDto.getAppTime()
 		);
-				
-		
-		
 		log.info("[ApprovalService] putApprovalAccess end ============================== ");
 	}
 

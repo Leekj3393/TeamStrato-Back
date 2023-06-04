@@ -40,7 +40,7 @@ public class ApprovalLine {
 	private String appPriorYn;
 
 	@Column(name = "APP_TIME")
-	private Date appTime;
+	private String appTime;
 	
 	@Column(name = "APP_ORDER")
 	private Long appOrder;
@@ -50,7 +50,7 @@ public class ApprovalLine {
 	private Member accessor;
 
 	/*결재선 승인/반려 용도의 메소드를 별도로 정의함*/
-	public void update(String appPriorYn, String appLineStatus, Date appTime) {
+	public void update(String appPriorYn, String appLineStatus, String appTime) {
 		this.appPriorYn = appPriorYn;
 		this.appLineStatus = appLineStatus;
 		this.appTime = appTime;

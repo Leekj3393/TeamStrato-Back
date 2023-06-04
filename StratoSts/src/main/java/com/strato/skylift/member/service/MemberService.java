@@ -116,14 +116,11 @@ public class MemberService {
 			fileDto.setFileType("직원사진");
 			
 			/* 직원 등록시 기본값으로 권한코드 5번 부여 */
-//			MbMemberRoleDto memberRoleDto = new MbMemberRoleDto();
-//			memberRoleDto.setRoleCode((long) 5);
 			MbMemberRoleDto memberRoleDto = new MbMemberRoleDto();
 			memberRoleDto.setRoleCode(5L);
 			memberDto.setMemberRole(memberRoleDto);
 			
 			memberDto.setMemberPwd(passwordEncoder.encode(memberDto.getMemberPwd()));
-//			memberDto.setMemberRole(memberRoleDto);
 			memberDto.setMemberStatus("재직");
 			
 			System.out.println("memberDto의 memberRole 값 : " + memberDto.getMemberRole());
@@ -306,4 +303,29 @@ public class MemberService {
 	}
 
 
+	
+	/* 직원 정보 삭제 */
+	@Transactional
+	public void deleteMember(Long memberCode) {
+		
+		MbFileDto originFile = modelMapper.map(fileRepository.findByMemberCode(memberCode), MbFileDto.class);
+		
+		log.info("originFile : {}", originFile);
+		
+		Long fileCode = originFile.getFileCode();
+		
+		memberRepository.deleteById(memberCode);
+//		fileRepository.deleteById(fileCode);
+		
+		try {
+			
+			MbFileUploadUtils.deleteFile(IMAGE_DIR + "/member", originFile.getFilePath());
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 }

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -185,13 +186,16 @@ public class ApprovalController {
 	
 	
 	//2
-	@PutMapping("/access/{appOrder}")
-	public ResponseEntity<ResponseDto> putApprovalAccess(@RequestBody ApprovalLineDto appLineDto, @RequestParam Long appOrder,
+	@PutMapping("/access")
+	public ResponseEntity<ResponseDto> putApprovalAccess(@RequestBody ApprovalDto appDto,
 			  @AuthenticationPrincipal MbMemberDto memberDto) {
-		appLineDto.setAccessor(memberDto);
-		appServ.putApprovalAccess(appLineDto);
+		log.info("[ApprovalController] putApprovalAccess start -----------------------------------------");
+		appServ.putApprovalAccess(appDto, memberDto);
+		log.info("[ApprovalController] putApprovalAccess end -----------------------------------------");
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 요청 승인/반려 처리 성공"));
 	}
+	
+	// 다음 결재선 변경
 	
 	
 /* 10. 결재 문서 상세페이지 - 포스트맨 테스트 완료!! */

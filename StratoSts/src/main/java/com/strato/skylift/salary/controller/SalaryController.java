@@ -55,11 +55,21 @@ public class SalaryController
     }
 
     @PostMapping("/regist")
-    public ResponseEntity<ResponseDto> saveSalSch(@ModelAttribute SalaryStatementDTO salaryDTO)
+    public ResponseEntity<ResponseDto> saveSalSch(@RequestBody SalaryStatementDTO salaryDTO)
     {
         log.info("salaryDTO : {} ", salaryDTO);
-        //salaryService.registSal(salaryDTO);
+        salaryService.registSal(salaryDTO);
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"넹"));
+    }
+
+    @GetMapping("/reIncom/{salary}")
+    public ResponseEntity<ResponseDto> ReIncome(@PathVariable Long salary ,
+                                                @RequestParam(name = "overTime") Long overTime)
+    {
+        log.info("SalaryDTO : {} ", salary , overTime);
+        SalaryDTO salaryDTO = salaryService.reIncome(salary , overTime);
+
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"넹", salaryDTO));
     }
 
 
