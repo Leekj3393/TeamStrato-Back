@@ -17,7 +17,7 @@ public class ApprovalLineDto {
 	
 	private String appPriorYn;
 
-	private Date appTime;
+	private String appTime;
 	
 	private MbMemberDto accessor;
 	

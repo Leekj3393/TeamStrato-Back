@@ -1,13 +1,17 @@
 package com.strato.skylift.notice.service;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.UUID;
+
+import javax.transaction.Transactional;
+
 import java.util.*;
 
 import com.strato.skylift.entity.*;
 import com.strato.skylift.member.repository.MbDeptRepository;
 import com.strato.skylift.util.FileUploadUtils;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.strato.skylift.entity.Notice;
+import com.strato.skylift.entity.NoticeFile;
 import com.strato.skylift.approval.dto.ApprovalDto;
 import com.strato.skylift.member.dto.MbMemberDto;
 import com.strato.skylift.notice.dto.NoticeDto;
