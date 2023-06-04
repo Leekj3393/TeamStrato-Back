@@ -11,6 +11,8 @@ import com.strato.skylift.entity.File;
 import com.strato.skylift.entity.MbFile;
 import com.strato.skylift.entity.Member;
 
+import java.util.List;
+
 public interface MbFileRepository extends JpaRepository <MbFile, Long> {
 	
 	@Query("SELECT f " +
@@ -25,4 +27,7 @@ public interface MbFileRepository extends JpaRepository <MbFile, Long> {
 			   " WHERE f.fileType = '교육사진'"
 				)
 	Page<MbFile> findByFileType(Pageable pageable);
+
+	//유정
+	List<MbFile> findByMemberCodeAndFileType(Long memberCode, String 직원사진);
 }
