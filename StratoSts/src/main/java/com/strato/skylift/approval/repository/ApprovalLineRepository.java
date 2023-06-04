@@ -13,7 +13,6 @@ import org.springframework.data.jpa.repository.Query;
 import com.strato.skylift.entity.Approval;
 import com.strato.skylift.entity.ApprovalLine;
 import com.strato.skylift.entity.Member;
-import com.strato.skylift.member.dto.MbMemberDto;
 
 
 public interface ApprovalLineRepository extends JpaRepository<ApprovalLine, Long>  {
@@ -56,5 +55,10 @@ public interface ApprovalLineRepository extends JpaRepository<ApprovalLine, Long
 	@EntityGraph(attributePaths= {"accessor", "approval"})
 	Optional<ApprovalLine> findByApprovalAndAccessorAndAppPriorYn(Approval app, Member mem, String appPriorYn);
 	
-
+    default ApprovalLine saveAndFlush(ApprovalLine approvalLine, ApprovalRepository approvalRepository) {
+        Approval approval = approvalLine.getApproval();
+        Approval savedApproval = approvalRepository.saveAndFlush(approval);
+        approvalLine.setApproval(savedApproval);
+        return save(approvalLine);
+    }
 }
