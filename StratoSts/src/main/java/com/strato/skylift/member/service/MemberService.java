@@ -158,7 +158,7 @@ public class MemberService {
 				
 				MbFileUploadUtils.deleteFile(IMAGE_DIR + "/member", memberFile.getFilePath());
 				
-				/* DB에 저장될 imageUrl 값을 수정 */
+				/* DB에 저장될 imageUrl 값을 수정 */    
 				memberFile.setFilePath(replaceFileName);
 			} 
 		
