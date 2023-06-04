@@ -11,7 +11,8 @@ import org.springframework.data.repository.query.Param;
 
 import com.strato.skylift.entity.Notice;
 
-public interface NoticeRepository extends JpaRepository<Notice, Long> {
+public interface NoticeRepository extends JpaRepository<Notice, Long>
+{
 //유정--------------------------------------------------------------------------------------------------------------------------------------------
     Page<Notice> findByDepartmentDeptCode(String deptCode, Pageable pageable);
 
@@ -37,9 +38,11 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
 /* 검색 - 내용 */
     @EntityGraph(attributePaths= {"department", "member"})
     Page<Notice> findByNoticeContentContainsAndNoticeDelYn(Pageable pageable, String noticeTitle, String noticeDelYn);
-    
-	
-/* D. 관리자 공지 등록 */
+
+    List<Notice> findByNoticeCodeIn(List<Long> c);
+
+
+    /* D. 관리자 공지 등록 */
 /* E. 관리자 공지 수정 */
 /* F. 관리자 공지 삭제 */
 

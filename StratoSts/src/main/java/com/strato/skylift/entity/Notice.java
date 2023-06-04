@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "TBL_NOTICE")
@@ -40,6 +42,13 @@ public class Notice
     @ManyToOne
     @JoinColumn(name = "DEPT_CODE")
     private Department department;
+
+    public void update(String noticeTitle , String noticeContent , String noticeType)
+    {
+        this.noticeTitle = noticeTitle;
+        this.noticeContent = noticeContent;
+        this.noticeType = noticeType;
+    }
 
 
 }

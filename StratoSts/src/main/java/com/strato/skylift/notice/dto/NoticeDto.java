@@ -1,6 +1,7 @@
 package com.strato.skylift.notice.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ public class NoticeDto {
 	private String noticeRegistDate;
 	private MbMemberDto member;
 	private MbDepartmentDto department;
+	private List<NoticeFileDto> noticefiles;
 	
 	/* DB 컬럼으로 존재하지는 않지만(entity의 필드로 선언하지 않는다) 
 	 * 클라이언트에서 넘겨주는 이미지 파일을 저장할 수 있는 필드 선언 */

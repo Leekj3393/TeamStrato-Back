@@ -22,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -71,11 +72,15 @@ public class SalaryService
     public List<MbMemberDto> findByMemberNameLike(String value)
     {
         List<Member> memberList = slMemberRepository.findByMemberNameLike(value);
+        List<MbMemberDto> memberDTO =  memberList.stream().map(m -> modelMapper.map(m, MbMemberDto.class)).collect(Collectors.toList());
+        memberDTO.forEach(m -> log.info("member : {}", m.getFiles()));
+       log.info("size : {}" , memberDTO.size());
 
-       memberList.forEach(m -> log.info("member : {}", m));
-        for(int i = 0 ; i < memberList.size(); i++)
-            memberList.get(i).getFiles().get(i).setFilePath(IMAGE_URL + "member/" + memberList.get(i).getFiles().get(i).getFilePath());
-        return memberList.stream().map(m -> modelMapper.map(m, MbMemberDto.class)).collect(Collectors.toList());
+        for(int i = 0 ; i < memberDTO.size(); i++)
+        {
+            memberDTO.get(i).getFiles().get(0).setFilePath(IMAGE_URL + "member/" + memberDTO.get(i).getFiles().get(0).getFilePath());
+        }
+        return memberDTO;
     }
 
     public SalaryDTO findByWork(Long memberCode, String day , int page)
@@ -140,12 +145,39 @@ public class SalaryService
 
     }
 
+    @Transactional
     public void registSal(SalaryStatementDTO salaryDTO)
     {
         SalaryStatement salaryStatement = modelMapper.map(salaryDTO , SalaryStatement.class);
+        salaryStatement.setSalaleDate(new Date());
         salaryStatement.setMember(slMemberRepository.findById(salaryDTO.getMemberCode())
                 .orElseThrow(() -> new IllegalArgumentException("코드의 해당 직원 없다. : ")));
 
-        log.info("salaryStatement : {} ", salaryStatement);
+        salaryRepository.save(salaryStatement);
+    }
+
+    public SalaryDTO reIncome(Long salary ,Long overTime)
+    {
+        SalaryDTO salaryDTO = new SalaryDTO();
+        Long allowance = calculator.allowance(salary , overTime);
+        Long totalAmount = salary + allowance;
+        Long income = calculator.income(totalAmount);
+        Long nationalPesion = calculator.nationalPension(totalAmount);
+        Long medicalInsurance = calculator.medicalInsurance(totalAmount);
+        Long employmentInsurance = calculator.empInsurance(totalAmount);
+        Long totalDeducted = income + nationalPesion + medicalInsurance + employmentInsurance;
+        Long paymentAmount = totalAmount - totalDeducted;
+
+        salaryDTO.setSalary(salary);
+        salaryDTO.setAllowance(allowance);
+        salaryDTO.setIncomeTax(income);
+        salaryDTO.setNationalPesion(nationalPesion);
+        salaryDTO.setMedicalInsurance(medicalInsurance);
+        salaryDTO.setEmploymentInsurance(employmentInsurance);
+        salaryDTO.setTotalAmount(totalAmount);
+        salaryDTO.setTotalDeducted(totalDeducted);
+        salaryDTO.setPaymentAmount(paymentAmount);
+
+        return salaryDTO;
     }
 }
