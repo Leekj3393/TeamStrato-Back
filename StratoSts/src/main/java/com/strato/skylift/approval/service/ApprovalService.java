@@ -263,11 +263,11 @@ public class ApprovalService {
 
 // 결재 승인 시 결재문서 정보 업데이트
 	@Transactional
-	public void updateApproval(MbMemberDto memberDto, Long appLineCode, Long appCode) {
+	public void updateApproval(MbMemberDto memberDto, Long memberCode, Long appCode) {
 		Approval findApproval = appRepo.findById(appCode).orElseThrow(()->new IllegalArgumentException("해당 코드의 결재문서가 존재하지 않습니다."));
 		ApprovalDto approvalDto = mm.map(findApproval, ApprovalDto.class);
 		
-		ApprovalLine findAppLine = appLineRepo.findbyAccessorAndApproval(memberDto.getMemberCode(), appCode);
+		ApprovalLine findAppLine = appLineRepo.findbyAccessorAndApproval(memberCode, appCode);
 		ApprovalLineDto appLineDto = mm.map(findAppLine, ApprovalLineDto.class);
 		
 		
@@ -312,11 +312,12 @@ public class ApprovalService {
 
 
 // 결재 반려 시
-	public void updateApprovalReturn(MbMemberDto memberDto, Long appLineCode, Long appCode) {
+	@Transactional
+	public void updateApprovalReturn(MbMemberDto memberDto, Long memberCode, Long appCode) {
 		Approval findApproval = appRepo.findById(appCode).orElseThrow(()->new IllegalArgumentException("해당 코드의 결재문서가 존재하지 않습니다."));
 		ApprovalDto approvalDto = mm.map(findApproval, ApprovalDto.class);
 		
-		ApprovalLine findAppLine = appLineRepo.findbyAccessorAndApproval(memberDto.getMemberCode(), appCode);
+		ApprovalLine findAppLine = appLineRepo.findbyAccessorAndApproval(memberCode, appCode);
 		ApprovalLineDto appLineDto = mm.map(findAppLine, ApprovalLineDto.class);
 		
 		
@@ -369,69 +370,23 @@ public class ApprovalService {
 		} else {
 			log.info("음?");
 		}
-		
 	}
+
+
+
+	public ApprovalLineDto getAppLineCode(MbMemberDto memberDto, Long memberCode, Long appCode) {
+		Approval findApproval = appRepo.findById(appCode).orElseThrow(()->new IllegalArgumentException("해당 코드의 결재문서가 존재하지 않습니다."));
+
+		Member member= mm.map(memberDto, Member.class);
+		appCode = findApproval.getAppCode();
+		memberCode = member.getMemberCode();
 	
+		
+		ApprovalLine findAppLine = appLineRepo.findbyAccessorAndApproval(memberCode, appCode);
+		ApprovalLineDto appLineDto = mm.map(findAppLine, ApprovalLineDto.class);
+		
+		log.info("appLineDto : {}", appLineDto);
+		return appLineDto;
+	}
 
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-//	public List<MbMemberDto> getMemberList() {
-//		
-//		List<Member> memberList = mbRepo.findAll();
-//		List<MbMemberDto> memberDtoList = memberList.stream()
-//				.map(member -> mm.map(member, MbMemberDto.class))
-//				.collect(Collectors.toList());
-//		
-//		return memberDtoList;
-//	}
-//
-//
-//
-//	public List<MbDepartmentDto> getDeptList() {
-//		List<Department> deptList = deptRepo.findAll();
-//		List<MbDepartmentDto> deptDtoList = deptList.stream()
-//				.map(dept -> mm.map(dept, MbDepartmentDto.class))
-//				.collect(Collectors.toList());
-//		
-//		
-//		return deptDtoList;
-//	}
-	
-/* 8. 결재 승인  */
-/* 9. 결재 반려  */
-	
 }
-
-//// 결재 승인시 결재선 정보 업데이트
-//	@Transactional
-//	public void updateAppLine(ApprovalLineDto appLineDto, Long appLineCode) {
-//		ApprovalLine findAppLine = appLineRepo.findById(appLineCode).orElseThrow(()->new IllegalArgumentException("해당 코드의 결재선 정보가 존재하지 않습니다."));
-////		String appPriorYn = appLineDto.getAppPriorYn();
-////		Long appOrder = appLineDto.getAppOrder();
-////		String appLineStatus = appLineDto.getAppLineStatus();
-//		
-//		LocalDateTime localDateTime = LocalDateTime.now();
-//		Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-//		findAppLine.setAppTime(date);
-//		findAppLine.setAppLineStatus("appAccessed");
-//		appLineRepo.save(findAppLine);
-//	}
