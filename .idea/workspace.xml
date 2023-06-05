@@ -4,19 +4,37 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b03e6050-5647-4e1a-83df-c14b780a1bb5" name="변경" comment="일딴 어느정도 복구">
-      <change afterPath="$PROJECT_DIR$/StratoSts/src/main/resources/static/images/member/25538f14ce3c4e108bfdfa9a1ec41256.png" afterDir="false" />
+    <list default="true" id="b03e6050-5647-4e1a-83df-c14b780a1bb5" name="변경" comment="급여 , 공지사항 기능끝">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/04f6e3a5b60f4e96951174ae4718ee90.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/0a4a81045e894937b9bb3180668f9e65.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/0c5b7643ad9849abb216ca17dcf749fe.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/0fb94c208de844a895cb23ccfbd1613d.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/190008a9c8a24d8fa7dc0e1bd168a1f3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/3ffa2523f2fc419396b1c6c0a0bad678.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/424a2cf9d2b4497d89d42da131bafffc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/4789197ee4fe47e2bb3c254999417153.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/4a8f70f807134b8da8751dffbab3b19d.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/4c5e9445c34e41408b381ac972c0b254.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/4ff8bbda42c0424c92d243e32e7b5b0a.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/59ef68b585e0467db8df5021e0fd20f7.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/60e8cc7f88704b8fb5015a374cec65dc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/664b91ff98ae4c94a96a61679dd5bc65.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/7b48616b75a0442c867fdaf1db359195.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/8667cbf8053a4fa392bd52e25bc96222.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/892bfdd5c3a2458ab18ba23e2318f7b7.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/a50089e798dd4da898afb2593d88387c.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/cb820c86480744bbb545bd54a975f4a6.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/ea6bf0b376db4f0d85198f15dec9039b.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/f093d767053f40e3a74955f8fc0bb87c.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/f131947d48d14b3886653605578978e8.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/imagesnotice/fbdd192d9acb4995ae4cc1289f9da118.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/Notice.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/Notice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/SalaryStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/entity/SalaryStatement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/repository/MbDeptRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/member/repository/MbDeptRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/service/EquipmentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/equipment/service/EquipmentService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/controller/NoticeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/controller/NoticeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/dto/NoticeDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/dto/NoticeDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/repository/NoticeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/repository/NoticeRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/service/NoticeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/notice/service/NoticeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/controller/SalaryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/controller/SalaryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/service/SalaryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/service/SalaryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/util/Calculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/StratoSts/src/main/java/com/strato/skylift/salary/util/Calculator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +52,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="창규" />
+        <entry key="$PROJECT_DIR$" value="chf" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -54,6 +72,10 @@
             <RecentBranchesForRepo>
               <option name="branches">
                 <list>
+                  <RecentBranch>
+                    <option name="branchName" value="final_back" />
+                    <option name="lastUsedInstant" value="1685926728" />
+                  </RecentBranch>
                   <RecentBranch>
                     <option name="branchName" value="changgyu" />
                     <option name="lastUsedInstant" value="1684403933" />
@@ -111,11 +133,15 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/gangc/OneDrive/바탕 화면/Project/FinalProject/server/StratoSts/src/main/java/com/strato/skylift/salary",
+    "last_opened_file_path": "C:/Users/gangc/OneDrive/바탕 화면/Project/FinalProject/server",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "모듈",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
     "settings.editor.selected.configurable": "preferences.lookFeel",
     "spring.configuration.checksum": "108d254df1110ce5716b49eac273ceed",
     "vue.rearranger.settings.migration": "true"
@@ -135,6 +161,7 @@
       <recent name="com.strato.skylift.equipment.dto" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\gangc\OneDrive\바탕 화면\Project\FinalProject\server\StratoSts\src\main\resources\static" />
       <recent name="C:\Users\gangc\OneDrive\바탕 화면\Project\FinalProject\server\StratoSts\src\main\java\com\strato\skylift\salary" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -188,6 +215,11 @@
       <workItem from="1685499341592" duration="7641000" />
       <workItem from="1685673075506" duration="479000" />
       <workItem from="1685673796384" duration="17692000" />
+      <workItem from="1685765901007" duration="573000" />
+      <workItem from="1685862387174" duration="134000" />
+      <workItem from="1685862566324" duration="1426000" />
+      <workItem from="1685925846341" duration="37000" />
+      <workItem from="1685925908177" duration="9082000" />
     </task>
     <task id="LOCAL-00001" summary="엔티티 추가 상세 연관관계는 애기해봐야됌">
       <created>1683776741405</created>
@@ -336,7 +368,14 @@
       <option name="project" value="LOCAL" />
       <updated>1685673548144</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="급여 , 공지사항 기능끝">
+      <created>1685765952531</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1685765952531</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -467,6 +506,7 @@
     <MESSAGE value="근태 조회 까지 완려" />
     <MESSAGE value="급여 거의다함" />
     <MESSAGE value="일딴 어느정도 복구" />
-    <option name="LAST_COMMIT_MESSAGE" value="일딴 어느정도 복구" />
+    <MESSAGE value="급여 , 공지사항 기능끝" />
+    <option name="LAST_COMMIT_MESSAGE" value="급여 , 공지사항 기능끝" />
   </component>
 </project>

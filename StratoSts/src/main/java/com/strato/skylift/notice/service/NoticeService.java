@@ -119,7 +119,7 @@ public class NoticeService {
 			String imageName = UUID.randomUUID().toString().replace("-", "");
 			NoticeFileDto fileDto = new NoticeFileDto();
 			try {
-				String replaceFilename = NoticeFileUploadUtils.saveFile(IMAGE_DIR + "/notice", imageName, noticeDto.getNoticeImage());
+				String replaceFilename = NoticeFileUploadUtils.saveFile(IMAGE_DIR + "notice/", imageName, noticeDto.getNoticeImage());
 				fileDto.setFileName(imageName);
 				fileDto.setFilePath(replaceFilename);
 				fileDto.setFileType("공지사항 첨부이미지");
@@ -200,16 +200,31 @@ public class NoticeService {
 			{
 				log.info("[modifyNotice] A1-1");
 				String imageName = UUID.randomUUID().toString().replace("-","");
-				String reFileName = FileUploadUtils.saveFile(IMAGE_DIR + "notice", imageName, noticeDto.getNoticeImage());
+				String reFileName = FileUploadUtils.saveFile(IMAGE_DIR + "notice/", imageName, noticeDto.getNoticeImage());
+				log.info("imageName : {}",imageName);
+				log.info("reFileName : {} " , reFileName);
 				log.info("[modifyNotice] A1-2");
-				log.info("[modifyNotice]noticeDto.getNoticefiles().get(0).getFilePath()" , files.get(0).getFilePath());
-				FileUploadUtils.deleteFile(IMAGE_DIR + "notice" , files.get(0).getFilePath());
+				if(!files.isEmpty())
+				{
+					FileUploadUtils.deleteFile(IMAGE_DIR + "notice", files.get(0).getFilePath());
+				}
+				else
+				{
+					NoticeFileDto fileDto = new NoticeFileDto();
+					fileDto.setNoticeCode(notice.getNoticeCode());
+					fileDto.setFileName(imageName);
+					fileDto.setFilePath(reFileName);
+					fileDto.setFileType("공지사항 첨부이미지");
+					files.add(modelMapper.map(fileDto , NoticeFile.class));
+				}
 				log.info("[modifyNotice] A1-3");
 				for(int i = 0 ; i < files.size(); i++)
 				{
 					files.get(i).setFileName(imageName);
 					files.get(i).setFilePath(reFileName);
 				}
+
+				noticeFileRepository.saveAll(files);
 			}
 			log.info("[modifyNotice] A2");
 			notice.update(noticeDto.getNoticeTitle(),noticeDto.getNoticeContent(),noticeDto.getNoticeType());
@@ -236,7 +251,7 @@ public class NoticeService {
 		try
 		{
 			for (NoticeFile f : files)
-				FileUploadUtils.deleteFile(IMAGE_DIR + "notice" , f.getFilePath());
+				FileUploadUtils.deleteFile(IMAGE_DIR + "notice/" , f.getFilePath());
 		}
 		catch (IOException e)
 		{
