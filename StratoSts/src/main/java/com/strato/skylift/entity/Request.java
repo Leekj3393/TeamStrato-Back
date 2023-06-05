@@ -34,6 +34,6 @@ public class Request
     private Date requestEnd;
 
 
-    @OneToMany(mappedBy = "request", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "request", cascade = CascadeType.MERGE)
     private List<Approval> approvals = new ArrayList<>();
 }
