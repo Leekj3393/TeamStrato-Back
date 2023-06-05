@@ -294,6 +294,8 @@ public class EducationService {
 		
 		EdClass classView = classRepository.findByMemberCode(memberDto.getMemberCode(), edCode);
 		
+		log.info("classView : {}", classView);
+		
 		return modelMapper.map(classView, ClassDto.class);
 	}
 	

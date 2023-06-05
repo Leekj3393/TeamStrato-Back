@@ -162,7 +162,9 @@ public class EducationController {
 	public ResponseEntity<ResponseDto> selectClassViewList(@AuthenticationPrincipal MbMemberDto memberDto) {
 		
 		List<ClassDto> classDto = edService.selectClassViewList(memberDto);
-				
+		
+		log.info("memberDto : {}", memberDto);   
+		 
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공", classDto));
 	}
 	
