@@ -171,14 +171,14 @@ public class EquipmentService
             try
             {
                 String imageName = UUID.randomUUID().toString().replace("-", "");
-                String reFileName = FileUploadUtils.saveFile(IMAGE_DIR + "equipment", imageName, equipmentRegistDTO.getImage());
+                String reFileName = FileUploadUtils.saveFile(IMAGE_DIR + "equipment/", imageName, equipmentRegistDTO.getImage());
                 EQFileDTO file = new EQFileDTO(imageName , reFileName , "장비");
-                log.info("file : {} " , file);
+                log.info("regist : file : {} " , file);
                 equipmentRegistDTO.setFile(file);
 
                 Equipment equipment = modelMapper.map(equipmentRegistDTO , Equipment.class);
                 equipment.setEquipmentCreateDate(date);
-                equipment.setEquipmentStatus("결제 대기중");
+                equipment.setEquipmentStatus("wait");
 
                 equipmentRepositroy.save(equipment);
 
@@ -220,10 +220,10 @@ public class EquipmentService
             {
                 log.info("[modifyEquipment] A1-1");
                 String imageName = UUID.randomUUID().toString().replace("-","");
-                String reFileName = FileUploadUtils.saveFile(IMAGE_DIR + "equipment", imageName, equipmentDTO.getEquipmentImage());
+                String reFileName = FileUploadUtils.saveFile(IMAGE_DIR + "equipment/", imageName, equipmentDTO.getEquipmentImage());
                 log.info("[modifyEquipment] A1-2");
                 log.info("[modifyEquipment]equipment.getFile().getFilePath() : {} " , equipment.getFile().getFilePath());
-                FileUploadUtils.deleteFile(IMAGE_DIR + "equipment" , equipment.getFile().getFilePath());
+                FileUploadUtils.deleteFile(IMAGE_DIR + "equipment/" , equipment.getFile().getFilePath());
                 log.info("[modifyEquipment] A1-3");
                 equipment.getFile().setFileName(imageName);
                 equipment.getFile().setFilePath(reFileName);
