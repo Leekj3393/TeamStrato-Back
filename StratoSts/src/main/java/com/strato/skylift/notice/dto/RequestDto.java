@@ -1,13 +1,12 @@
 package com.strato.skylift.notice.dto;
 
-import com.strato.skylift.approval.dto.ApprovalDto;
-import com.strato.skylift.entity.Member;
-import com.strato.skylift.member.dto.MbMemberDto;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.strato.skylift.approval.dto.ApprovalDto;
+
+import lombok.Data;
 
 @Data
 public class RequestDto {
@@ -16,6 +15,7 @@ public class RequestDto {
     private String requsetType;
     private Date requestStart;
     private Date requestEnd;
+    @JsonIgnore
     private List<ApprovalDto> approvals;
 	@Override
 	public String toString() {

@@ -36,4 +36,6 @@ public class Request
 
     @OneToMany(mappedBy = "request", cascade = CascadeType.MERGE)
     private List<Approval> approvals = new ArrayList<>();
+    
+    
 }

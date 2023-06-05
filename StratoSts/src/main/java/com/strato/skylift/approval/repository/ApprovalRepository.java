@@ -28,6 +28,7 @@ public interface ApprovalRepository extends JpaRepository<Approval, Long> {
 //	Page<Approval> findByMemberAndAppStatus(Pageable pageable, String appStatus, Member findMember);
 	//
 	
+//	@EntityGraph(attributePaths= {"member","request"})
 	@Query("SELECT a FROM Approval a WHERE a.member.memberCode = :memberCode AND a.appStatus = :appStatus")
 	Page<Approval> findByMemberCodeAndAppStatus(Pageable pageable, Long memberCode, String appStatus);
 
