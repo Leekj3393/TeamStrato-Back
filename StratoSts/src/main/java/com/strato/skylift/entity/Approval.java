@@ -61,4 +61,13 @@ public class Approval
 		this.approvedDate = approvedDate;
 	}
 
+	public void setRequestAndPersist(Request request, EntityManager entityManager) {
+		Request persistedRequest;
+		if (entityManager.contains(request)) {
+		    persistedRequest = request;
+		} else {
+		    persistedRequest = entityManager.merge(request);
+		}
+		this.request = persistedRequest;
+	}
 }

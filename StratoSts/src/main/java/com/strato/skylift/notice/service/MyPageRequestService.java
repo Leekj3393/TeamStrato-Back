@@ -43,12 +43,9 @@ public class MyPageRequestService {
     //리 퀘스트 등록하기
     @Transactional
     public void insertRequest(Long memberCode, RequestDto requestDto) {
-
-        // Find Member by memberCode
         Member member = myPageRepository.findById(memberCode)
-                .orElseThrow(() -> new IllegalArgumentException("아이디를 다시 확인해주세요 :  " + memberCode));
+                .orElseThrow(() -> new IllegalArgumentException("아이디를 다시 확인해주세요: " + memberCode));
 
-        // Check if there is a '퇴직' request for the specific member only if the current request is '퇴직 신청'
         if ("퇴직 신청".equals(requestDto.getRequsetType())) {
             List<Request> requests = requestRepository.findAllByApprovals_Member(member);
             boolean hasResignationRequest = requests.stream()
@@ -58,7 +55,6 @@ public class MyPageRequestService {
             }
         }
 
-        // Create new Request
         Request newRequest = new Request();
         newRequest.setRequestReason(requestDto.getRequestReason());
         newRequest.setRequsetType(requestDto.getRequsetType());
@@ -66,7 +62,6 @@ public class MyPageRequestService {
         newRequest.setRequestEnd(requestDto.getRequestEnd());
         Request savedRequest = requestRepository.save(newRequest);
 
-        // Create new Approval
         Approval newApproval = new Approval();
         newApproval.setMember(member);
         newApproval.setRequest(savedRequest);
@@ -75,23 +70,17 @@ public class MyPageRequestService {
         newApproval.setAppType(requestDto.getRequsetType());
         newApproval.setAppStatus("wait");
         newApproval.setAppRegistDate(new Date());
-        newApproval.setApprovedDate(new Date());
-        newApproval.setAppWdlDate(new Date());
 
-        // Save new Approval
         approvalRepository.save(newApproval);
     }
 
-
-    //리퀘스트 삭제하기
     public void deleteRequest(Long requestCode) {
         Request request = requestRepository.findById(requestCode).orElseThrow(() ->
-                new IllegalArgumentException("아이디를 다시 확인해주세요 :  " + requestCode));
-        // Find related approval
-        Approval approval = (Approval) approvalRepository.findByRequest(request)
-                .orElseThrow(() -> new IllegalArgumentException("승인 요청을 찾을 수 없습니다 : " + requestCode));
+                new IllegalArgumentException("아이디를 다시 확인해주세요: " + requestCode));
 
-        // Check if the request's status is 'wait'
+        Approval approval = (Approval) approvalRepository.findByRequest(request)
+                .orElseThrow(() -> new IllegalArgumentException("승인 요청을 찾을 수 없습니다: " + requestCode));
+
         if (!"wait".equals(approval.getAppStatus())) {
             throw new IllegalStateException("이 요청은 'wait' 상태가 아니므로 삭제할 수 없습니다.");
         }

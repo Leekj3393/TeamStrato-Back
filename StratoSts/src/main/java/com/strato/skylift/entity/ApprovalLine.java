@@ -31,7 +31,7 @@ public class ApprovalLine {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "APPLINE_SEQ_GENERATOR")
 	private Long appLineCode;
     
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne /* (cascade = CascadeType.ALL) */
 	@JoinColumn(name = "APP_CODE")
 	private Approval approval;
 	
@@ -51,11 +51,6 @@ public class ApprovalLine {
 	@JoinColumn(name = "MEMBER_CODE")
 	private Member accessor;
 
-	
-//	public void update(String appLineStatus, Date appTime) {
-//		this.appLineStatus = appLineStatus;
-//		this.appTime = appTime;
-//	}
 
 //	/*결재선 승인/반려 용도의 메소드를 별도로 정의함*/
 	public void update(String appPriorYn, String appLineStatus, Date appTime) {

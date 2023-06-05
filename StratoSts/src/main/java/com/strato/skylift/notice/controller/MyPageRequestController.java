@@ -49,25 +49,15 @@ public class MyPageRequestController {
     }
 
     //리퀘스트요청 인서트
-@PostMapping("/request/insert")
-public ResponseEntity<ResponseDto> insertRequestGo(@AuthenticationPrincipal MbMemberDto memberDto, @RequestBody RequestDto requestDto) {
-    myPageRequestService.insertRequest(memberDto.getMemberCode(), requestDto);
-    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "리퀘스트 등록 완료"));
-}
-
+    @PostMapping("/request/insert")
+    public ResponseEntity<ResponseDto> insertRequestGo(@AuthenticationPrincipal MbMemberDto memberDto, @RequestBody RequestDto requestDto) {
+        myPageRequestService.insertRequest(memberDto.getMemberCode(), requestDto);
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "리퀘스트 등록 완료"));
+    }
 
     @DeleteMapping("/request/delete/{requestCode}")
     public ResponseEntity<ResponseDto> deleteRequest(@PathVariable Long requestCode) {
         myPageRequestService.deleteRequest(requestCode);
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "리퀘스트 삭제 완료"));
     }
-
-
-
-
-
-
 }
-
-
-

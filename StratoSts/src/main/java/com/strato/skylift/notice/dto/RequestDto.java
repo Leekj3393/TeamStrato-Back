@@ -17,5 +17,12 @@ public class RequestDto {
     private Date requestStart;
     private Date requestEnd;
     private List<ApprovalDto> approvals;
+	@Override
+	public String toString() {
+		return "RequestDto [requestCode=" + requestCode + ", requestReason=" + requestReason + ", requsetType="
+				+ requsetType + ", requestStart=" + requestStart + ", requestEnd=" + requestEnd + "]";
+	}
+    
+   
 }
 

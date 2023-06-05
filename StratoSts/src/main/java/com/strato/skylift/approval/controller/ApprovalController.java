@@ -88,6 +88,23 @@ public class ApprovalController {
 	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 목록 조회 성공", responseDtoWithPaging));
 	}
 	
+	
+	@GetMapping("/count/{memberCode}/{appStatus}/")
+	public ResponseEntity<ResponseDto> countApprovalList(ApprovalDto approval, 
+			@PathVariable(name="memberCode") Long memberCode,
+			@PathVariable(name="appStatus") String appStatus,
+			@AuthenticationPrincipal MbMemberDto member) {
+		
+		List<ApprovalDto> approvalDtoList = appServ.countApprovalList(memberCode, appStatus);
+		log.info("[ApprovalController] countApprovalList Start --------------------------------------------------------------------");
+		log.info("[ApprovalController] approvalDtoList : {}" + approvalDtoList);
+		
+		
+		
+		log.info("[ApprovalController] countApprovalList End. --------------------------------------------------------------------");
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재상태별 데이터 개수 조회 성공", approvalDtoList));
+	}
+	
 /* 5. 메인화면 결재 요청문서 조회 */
 	@GetMapping("/demandList/{memberCode}")
 	public ResponseEntity<ResponseDto> getdemandList(/* ApprovalDto approval, ApprovalLineDto appLine, */ 
@@ -222,22 +239,20 @@ public class ApprovalController {
 	        										  @RequestParam(name="appCode") Long appCode,
 	        										  @RequestParam(name="memberCode") Long memberCode) {
 	    log.info("[ApprovalController] updateApproval Start --------------------------------------------------------------------");
-	    
 	    appServ.updateApproval(memberDto, memberCode, appCode);
 	    log.info("[ApprovalController] updateApproval End --------------------------------------------------------------------");
 	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"결재 승인 완료"));
 	}
 	
 /* 9. 결재 반려  */
-	@PutMapping("/accessor/returned")
+	@PutMapping("/access/approvalReturned")
 	public ResponseEntity<ResponseDto>updateAppLineReturn(@AuthenticationPrincipal MbMemberDto memberDto,
 														  @RequestParam(name="appCode") Long appCode,
 														  @RequestParam(name="memberCode") Long memberCode) {
 		log.info("[ApprovalController] updateAppLineReturn Start --------------------------------------------------------------------");
-
 		appServ.updateApprovalReturn(memberDto, memberCode, appCode);
 		log.info("[ApprovalController] updateAppLineReturn End --------------------------------------------------------------------");
-return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"결재 반려 완료"));
-}
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"결재 반려 완료"));
+	}
 	
 }

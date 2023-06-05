@@ -389,4 +389,22 @@ public class ApprovalService {
 		return appLineDto;
 	}
 
+
+
+	public List<ApprovalDto> countApprovalList(Long memberCode, String appStatus) {
+		log.info("[ApprovalService] selectApprovalList start ============================== ");
+		log.info("[ApprovalService] appStatus : {}", appStatus);
+		
+		Member member = appMbRepo.findById(memberCode)
+				.orElseThrow(() -> new IllegalArgumentException("직원코드를 다시 확인해주세요 :  " + memberCode));
+		
+		
+		List<ApprovalDto> approvalDtoList = appRepo.findAllByMemberAndAppStatus(member, appStatus,  Sort.by("appCode").descending())
+				.stream().map(approval -> mm.map(approval, ApprovalDto.class)).collect(Collectors.toList());
+		log.info("[ApprovalService] approvalDtoList : {}", approvalDtoList);
+		
+		log.info("[ApprovalService] selectApprovalList end ============================== ");
+		return approvalDtoList;	
+	}
+
 }

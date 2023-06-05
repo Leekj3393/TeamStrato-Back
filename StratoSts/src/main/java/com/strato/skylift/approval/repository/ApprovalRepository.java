@@ -1,13 +1,17 @@
 package com.strato.skylift.approval.repository;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.util.Streamable;
 
 import com.strato.skylift.entity.Approval;
 import com.strato.skylift.entity.Member;
@@ -62,4 +66,11 @@ public interface ApprovalRepository extends JpaRepository<Approval, Long> {
         flush();
         return savedApproval;
     }
+
+
+    @Query("SELECT a FROM Approval a WHERE a.member.memberCode = :memberCode AND a.appStatus = :appStatus")
+	List<Approval> findByMemberCodeAndAppStatus(Long memberCode, String appStatus);
+
+    @EntityGraph(attributePaths = {"approval", "approval.member"})
+	List<Approval> findAllByMemberAndAppStatus(Member member, String appStatus, Sort descending);
 }
