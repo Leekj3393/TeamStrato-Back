@@ -294,7 +294,7 @@ public class EducationService {
 		
 		EdClass classView = classRepository.findByMemberCode(memberDto.getMemberCode(), edCode);
 		
-		return modelMapper.map(classView, ClassDto.class);
+		return modelMapper.map(classView, ClassDto.class);  
 	}
 	
 	/* 수강한 수강교육목록 조회 */
