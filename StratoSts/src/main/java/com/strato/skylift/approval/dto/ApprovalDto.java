@@ -30,4 +30,13 @@ public class ApprovalDto {
 	
 	private Date appWdlDate;
 
+	@Override
+	public String toString() {
+		return "ApprovalDto [appCode=" + appCode + ", appTitle=" + appTitle + ", appContent=" + appContent
+				+ ", appType=" + appType + ", appStatus=" + appStatus + ", appRegistDate=" + appRegistDate
+				+ ", approvedDate=" + approvedDate + ", appWdlDate=" + appWdlDate + "]";
+	}
+
+
+	
 }

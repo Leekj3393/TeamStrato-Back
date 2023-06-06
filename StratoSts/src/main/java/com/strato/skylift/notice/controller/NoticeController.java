@@ -142,7 +142,7 @@ public class NoticeController {
 	public ResponseEntity<ResponseDto> modifyNotice(@ModelAttribute NoticeDto noticeDto,
 													@AuthenticationPrincipal MbMemberDto memberDto)
 	{
-		log.info("NoticeDto : {}",noticeDto);
+		log.info("modifyNotice : NoticeDto : {}",noticeDto);
 		noticeService.modifyNotice(noticeDto);
 
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"넹"));

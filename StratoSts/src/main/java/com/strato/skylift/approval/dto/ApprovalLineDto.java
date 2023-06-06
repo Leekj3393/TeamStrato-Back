@@ -17,9 +17,10 @@ public class ApprovalLineDto {
 	
 	private String appPriorYn;
 
-	private String appTime;
+	private Date appTime;
 	
 	private MbMemberDto accessor;
 	
 	private Long appOrder;
+
 }

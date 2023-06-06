@@ -1,15 +1,12 @@
 package com.strato.skylift.equipment.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter @Setter
+@Getter @Setter @ToString
 public class EQFileDTO
 {
     private Long fileCode;
@@ -20,6 +17,10 @@ public class EQFileDTO
     @JsonIgnore
     private MultipartFile EquipmentImage;
 
-    public EQFileDTO(String imageName, String reFileName, String 장비) {
+    public EQFileDTO(String imageName, String reFileName, String fileType)
+    {
+        this.fileName = imageName;
+        this.filePath = reFileName;
+        this.fileType = fileType;
     }
 }

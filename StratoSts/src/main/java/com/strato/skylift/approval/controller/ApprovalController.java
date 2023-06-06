@@ -1,9 +1,11 @@
 package com.strato.skylift.approval.controller;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -11,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,11 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.strato.skylift.approval.dto.ApprovalDto;
 import com.strato.skylift.approval.dto.ApprovalLineDto;
 import com.strato.skylift.approval.repository.AppMemberRepository;
+import com.strato.skylift.approval.repository.ApprovalLineRepository;
+import com.strato.skylift.approval.repository.ApprovalRepository;
 import com.strato.skylift.approval.service.ApprovalService;
 import com.strato.skylift.common.ResponseDto;
 import com.strato.skylift.common.paging.Pagenation;
 import com.strato.skylift.common.paging.PagingButtonInfo;
 import com.strato.skylift.common.paging.ResponseDtoWithPaging;
+import com.strato.skylift.entity.Approval;
+import com.strato.skylift.entity.ApprovalLine;
 import com.strato.skylift.entity.Member;
 import com.strato.skylift.member.dto.MbDepartmentDto;
 import com.strato.skylift.member.dto.MbJobDto;
@@ -42,13 +47,17 @@ public class ApprovalController {
 	
 	private final ApprovalService appServ;
 	private final AppMemberRepository appMbRepo;
+	private final ApprovalLineRepository appLineRepo;
+	private final ApprovalRepository appRepo;
 	private final ModelMapper mm;
 	
-	public ApprovalController (ApprovalService appServ, AppMemberRepository appMbRepo, ModelMapper mm) {
+	public ApprovalController (ApprovalService appServ, ApprovalRepository appRepo, AppMemberRepository appMbRepo, ModelMapper mm, ApprovalLineRepository appLineRepo) {
 		
 		this.appServ = appServ;
 		this.appMbRepo = appMbRepo;
+		this.appRepo = appRepo;
 		this.mm = mm;
+		this.appLineRepo = appLineRepo;
 		
 	}
 	
@@ -77,6 +86,23 @@ public class ApprovalController {
 	    
 	    log.info("[ApprovalController] selectApprovalList End. --------------------------------------------------------------------");
 	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 목록 조회 성공", responseDtoWithPaging));
+	}
+	
+	
+	@GetMapping("/count/{memberCode}/{appStatus}/")
+	public ResponseEntity<ResponseDto> countApprovalList(ApprovalDto approval, 
+			@PathVariable("memberCode") Long memberCode,
+			@PathVariable("appStatus") String appStatus,
+			@AuthenticationPrincipal MbMemberDto member) {
+		
+		List<ApprovalDto> approvalDtoList = appServ.countApprovalList(memberCode, appStatus);
+		log.info("[ApprovalController] countApprovalList Start --------------------------------------------------------------------");
+		log.info("[ApprovalController] approvalDtoList : {}" + approvalDtoList);
+		
+		
+		
+		log.info("[ApprovalController] countApprovalList End. --------------------------------------------------------------------");
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재상태별 데이터 개수 조회 성공", approvalDtoList));
 	}
 	
 /* 5. 메인화면 결재 요청문서 조회 */
@@ -175,27 +201,6 @@ public class ApprovalController {
 	
 	
 	
-/* 8. 결재 승인
- * 9. 결재 반려  */
-	//1. 본인인증 - ?????
-	@PostMapping("/accessor-identify")
-	public ResponseEntity<ResponseDto> identifyAccessor(@AuthenticationPrincipal MbMemberDto memberDto) {
-		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "본인인증 완료", appServ.identifyAccessor(memberDto)));
-	}	
-	
-	
-	//2
-	@PutMapping("/access")
-	public ResponseEntity<ResponseDto> putApprovalAccess(@RequestBody ApprovalDto appDto,
-			  @AuthenticationPrincipal MbMemberDto memberDto) {
-		log.info("[ApprovalController] putApprovalAccess start -----------------------------------------");
-		appServ.putApprovalAccess(appDto, memberDto);
-		log.info("[ApprovalController] putApprovalAccess end -----------------------------------------");
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 요청 승인/반려 처리 성공"));
-	}
-	
-	// 다음 결재선 변경
 	
 	
 /* 10. 결재 문서 상세페이지 - 포스트맨 테스트 완료!! */
@@ -208,7 +213,46 @@ public class ApprovalController {
 	public ResponseEntity<ResponseDto> selectAppLineDetail(@PathVariable Long appCode, @AuthenticationPrincipal MbMemberDto memberDto) {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재선 정보 조회 성공", appServ.selectAppLineDetail(appCode)));
 	}
-/*  */
+	
+	
+/* 결재라인코드 찾기 */
+	@GetMapping("/access/appLineInfo")
+	public ResponseEntity<ResponseDto> getAppLineCode(@AuthenticationPrincipal MbMemberDto memberDto,
+			  @RequestParam(name="appCode") Long appCode,
+			  @RequestParam(name="memberCode") Long memberCode
+			  ) {
+		log.info("[ApprovalController] getAppLineCode Start --------------------------------------------------------------------");
+
+		appServ.getAppLineCode(memberDto, memberCode, appCode);
+		log.info("[ApprovalController] getAppLineCode End --------------------------------------------------------------------");
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"결재라인정보 조회 완료"));
+	}
+	
 /*  */
 
+
+	
+	
+/* 8. 결재 승인*/
+	@PutMapping("/access/approvalUpdate")
+	public ResponseEntity<ResponseDto> updateApproval(@AuthenticationPrincipal MbMemberDto memberDto,
+	        										  @RequestParam(name="appCode") Long appCode,
+	        										  @RequestParam(name="memberCode") Long memberCode) {
+	    log.info("[ApprovalController] updateApproval Start --------------------------------------------------------------------");
+	    appServ.updateApproval(memberDto, memberCode, appCode);
+	    log.info("[ApprovalController] updateApproval End --------------------------------------------------------------------");
+	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"결재 승인 완료"));
+	}
+	
+/* 9. 결재 반려  */
+	@PutMapping("/access/approvalReturned")
+	public ResponseEntity<ResponseDto>updateAppLineReturn(@AuthenticationPrincipal MbMemberDto memberDto,
+														  @RequestParam(name="appCode") Long appCode,
+														  @RequestParam(name="memberCode") Long memberCode) {
+		log.info("[ApprovalController] updateAppLineReturn Start --------------------------------------------------------------------");
+		appServ.updateApprovalReturn(memberDto, memberCode, appCode);
+		log.info("[ApprovalController] updateAppLineReturn End --------------------------------------------------------------------");
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"결재 반려 완료"));
+	}
+	
 }

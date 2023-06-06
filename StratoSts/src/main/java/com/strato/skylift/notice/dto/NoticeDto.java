@@ -3,6 +3,7 @@ package com.strato.skylift.notice.dto;
 import java.util.Date;
 import java.util.List;
 
+import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,7 +12,7 @@ import com.strato.skylift.member.dto.MbMemberDto;
 
 import lombok.Data;
 
-@Data
+@Data @ToString
 public class NoticeDto {
 	
 	private Long noticeCode;
@@ -19,7 +20,7 @@ public class NoticeDto {
 	private String noticeContent; // 추가된 필드
 	private String noticeType;
 	private String noticeDelYn;
-	private String noticeRegistDate;
+	private Date noticeRegistDate;
 	private MbMemberDto member;
 	private MbDepartmentDto department;
 	private List<NoticeFileDto> noticefiles;
