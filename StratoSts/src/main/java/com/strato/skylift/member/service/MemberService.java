@@ -101,9 +101,7 @@ public class MemberService {
 	/* 직원 등록 */
 	@Transactional
 	public void insertMember(MbMemberDto memberDto) {
-		
-		log.info("memberDto : {}", memberDto);
-		
+	
 		String imageName = UUID.randomUUID().toString().replace("-", "");
 		
 		MbFileDto fileDto = new MbFileDto();
@@ -122,9 +120,7 @@ public class MemberService {
 			
 			memberDto.setMemberPwd(passwordEncoder.encode(memberDto.getMemberPwd()));
 			memberDto.setMemberStatus("재직");
-			
-			System.out.println("memberDto의 memberRole 값 : " + memberDto.getMemberRole());
-			
+	
 			Member newMember = memberRepository.save(modelMapper.map(memberDto, Member.class));
 			
 			fileDto.setMemberCode(newMember.getMemberCode());
@@ -251,8 +247,7 @@ public class MemberService {
 		
 		Page<Member> memberList = memberRepository.findByMemberName(pageable, memberName);
 		Page<MbMemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MbMemberDto.class));
-		
-		log.info("memberList : {}", memberList);
+
 		return memberDtoList;
 	}
 	
@@ -299,10 +294,8 @@ public class MemberService {
 			return modelMapper.map(memberImages.get(0), MbFileDto.class);
 		}
 
-		return null; // or throw an exception
+		return null; 
 	}
-
-
 	
 	/* 직원 정보 삭제 */
 	@Transactional
@@ -310,12 +303,9 @@ public class MemberService {
 		
 		MbFileDto originFile = modelMapper.map(fileRepository.findByMemberCode(memberCode), MbFileDto.class);
 		
-		log.info("originFile : {}", originFile);
-		
 		Long fileCode = originFile.getFileCode();
 		
 		memberRepository.deleteById(memberCode);
-//		fileRepository.deleteById(fileCode);
 		
 		try {
 			

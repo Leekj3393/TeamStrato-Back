@@ -44,10 +44,7 @@ public class EducationController {
 	/* 교육 목록 전체 조회 */    
 	@GetMapping("/educations")   
 	public ResponseEntity<ResponseDto> selectProductList(@RequestParam(name="page", defaultValue="1") int page) {
-		
-		log.info("[ProductController] : selectProductList start =================================");
-		log.info("[ProductController] : page : {}", page);
-		
+			
 		Page<EducationDto> educationDtoList = edService.selectEducationList(page);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(educationDtoList);
@@ -108,8 +105,6 @@ public class EducationController {
 	@PostMapping("/add")
 	public ResponseEntity<ResponseDto> insertMember(@ModelAttribute EducationDto educationDto) {
 		
-		log.info("educationDto : {}", educationDto); 
-		
 		edService.insertMember(educationDto);
 			
 		return ResponseEntity
@@ -134,8 +129,6 @@ public class EducationController {
 	/* 수강 등록 */
 	@PostMapping("/classRegist")
 	public ResponseEntity<ResponseDto> insertClass(@AuthenticationPrincipal MbMemberDto memberDto, @RequestParam(name="edCode") Long edCode) {
-		
-		System.out.println("동작");
 		
 		edService.insertClass(memberDto, edCode);
 		
@@ -162,7 +155,7 @@ public class EducationController {
 	public ResponseEntity<ResponseDto> selectClassViewList(@AuthenticationPrincipal MbMemberDto memberDto) {
 		
 		List<ClassDto> classDto = edService.selectClassViewList(memberDto);
-				
+			 
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회성공", classDto));
 	}
 	
