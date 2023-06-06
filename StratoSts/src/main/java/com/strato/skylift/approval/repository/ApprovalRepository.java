@@ -72,6 +72,6 @@ public interface ApprovalRepository extends JpaRepository<Approval, Long> {
     @Query("SELECT a FROM Approval a WHERE a.member.memberCode = :memberCode AND a.appStatus = :appStatus")
 	List<Approval> findByMemberCodeAndAppStatus(Long memberCode, String appStatus);
 
-    @EntityGraph(attributePaths = {"approval", "approval.member"})
+    @EntityGraph(attributePaths = {"member"})
 	List<Approval> findAllByMemberAndAppStatus(Member member, String appStatus, Sort descending);
 }

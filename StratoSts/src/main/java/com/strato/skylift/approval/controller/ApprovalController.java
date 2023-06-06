@@ -89,7 +89,7 @@ public class ApprovalController {
 	}
 	
 	
-	@GetMapping("/count/{memberCode}/{appStatus}/")
+	@GetMapping("/count/{memberCode}/{appStatus}")
 	public ResponseEntity<ResponseDto> countApprovalList(ApprovalDto approval, 
 			@PathVariable("memberCode") Long memberCode,
 			@PathVariable("appStatus") String appStatus,

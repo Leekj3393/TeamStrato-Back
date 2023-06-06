@@ -399,8 +399,8 @@ public class ApprovalService {
 				.orElseThrow(() -> new IllegalArgumentException("직원코드를 다시 확인해주세요 :  " + memberCode));
 		
 		
-		List<ApprovalDto> approvalDtoList = appRepo.findAllByMemberAndAppStatus(member, appStatus,  Sort.by("appCode").descending())
-				.stream().map(approval -> mm.map(approval, ApprovalDto.class)).collect(Collectors.toList());
+		List<ApprovalDto> approvalDtoList = appRepo.findAllByMemberAndAppStatus(member, appStatus, Sort.by(Sort.Direction.DESC, "appCode"))
+	            .stream().map(approval -> mm.map(approval, ApprovalDto.class)).collect(Collectors.toList());
 		log.info("[ApprovalService] approvalDtoList : {}", approvalDtoList);
 		
 		log.info("[ApprovalService] selectApprovalList end ============================== ");
