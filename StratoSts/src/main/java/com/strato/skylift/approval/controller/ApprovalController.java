@@ -91,8 +91,8 @@ public class ApprovalController {
 	
 	@GetMapping("/count/{memberCode}/{appStatus}/")
 	public ResponseEntity<ResponseDto> countApprovalList(ApprovalDto approval, 
-			@PathVariable(name="memberCode") Long memberCode,
-			@PathVariable(name="appStatus") String appStatus,
+			@PathVariable("memberCode") Long memberCode,
+			@PathVariable("appStatus") String appStatus,
 			@AuthenticationPrincipal MbMemberDto member) {
 		
 		List<ApprovalDto> approvalDtoList = appServ.countApprovalList(memberCode, appStatus);
