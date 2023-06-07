@@ -128,7 +128,6 @@ public class EducationService {
 	
 	/* 원본 영상 시간 추출 메소드 */
 	   	private Long getVideoDuration(MultipartFile videoFile) throws IOException {
-	       // Save the video file to a temporary location
 	       Path tempFilePath = Files.createTempFile("temp", videoFile.getOriginalFilename());
 	       try {
 	           try (InputStream inputStream = videoFile.getInputStream();
@@ -140,15 +139,10 @@ public class EducationService {
 	           FFmpegFormat format = ffprobe.probe(tempFilePath.toString()).format;
 	           double durationSeconds = format.duration;
 
-	           // Convert duration to milliseconds
-//	           long durationInSeconds = Math.round(durationSeconds);
-
-//	           return durationInSeconds;
 	           long durationMillis = (long) (durationSeconds * 1000);
 
 	           return durationMillis;
 	       } finally {
-	           // Delete the temporary file
 	           deleteFile(tempFilePath);
 	       }
 	   }
