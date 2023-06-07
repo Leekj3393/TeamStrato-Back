@@ -85,8 +85,10 @@ public class MyPageRequestService {
             throw new IllegalStateException("이 요청은 'wait' 상태가 아니므로 삭제할 수 없습니다.");
         }
 
+        approvalRepository.delete(approval); // 먼저 Approval 레코드를 삭제
         requestRepository.delete(request);
     }
+
 
 
 

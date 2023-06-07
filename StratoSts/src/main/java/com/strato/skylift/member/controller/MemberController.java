@@ -141,9 +141,6 @@ public class MemberController {
 	    List<MbJobDto> jobListDto = memberService.selectJobList();
 	    List<MbDepartmentDto> deptListDto = memberService.selectDeptList();
 	    
-	    log.info("jobListDto : {}", jobListDto);
-	    log.info("deptListDto : {}", deptListDto);
-	    
 	    Map<String, Object> data = new HashMap<>();
 	    data.put("job", jobListDto);
 	    data.put("dept", deptListDto);
@@ -155,11 +152,7 @@ public class MemberController {
 	@PostMapping("/regist")
 	public ResponseEntity<ResponseDto> insertMember(@ModelAttribute MbMemberDto memberDto) {
 		
-		System.out.println(memberDto);  
-		
 		memberService.insertMember(memberDto);
-		
-		log.info("memberDto : {}", memberDto);
 		
 		return ResponseEntity
 				.ok()
@@ -169,8 +162,6 @@ public class MemberController {
 	/* 직원 수정 */
 	@PutMapping("/update")
 	public ResponseEntity<ResponseDto> updateMember(@ModelAttribute MbMemberDto memberDto) {
-		
-		log.info("memberDto : {}", memberDto);
 		
 		memberService.updateMember(memberDto);
 		
@@ -182,9 +173,7 @@ public class MemberController {
 	/* 직원 권한 수정 */
 	@PutMapping("/updaterole")
 	public ResponseEntity<ResponseDto> updateRoleMember(@ModelAttribute MbMemberDto memberDto) {
-		
-		log.info("memberDto : {}", memberDto);
-		
+
 		memberService.updateRoleMember(memberDto);
 		
 		return ResponseEntity 
@@ -195,9 +184,7 @@ public class MemberController {
 	/* 직원 삭제 */
 	@DeleteMapping("/delete/{memberCode}")
 	public ResponseEntity<ResponseDto> deleteMember(@PathVariable Long memberCode) {
-		
-		log.info("memberCode : {}", memberCode);
-		
+	
 		memberService.deleteMember(memberCode);
 		
 		return ResponseEntity
@@ -217,9 +204,7 @@ public class MemberController {
 	/* 직원 인사이동 */
 	@PutMapping("/updateRequest")
 	public ResponseEntity<ResponseDto> updateJobDeptMember(@ModelAttribute MbMemberDto memberDto) {
-		
-		log.info("memberDto : {}", memberDto);
-		
+
 		memberService.updateJobDeptMember(memberDto);
 		
 		return ResponseEntity   
