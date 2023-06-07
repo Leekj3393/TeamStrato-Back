@@ -116,8 +116,6 @@ public class EducationService {
 
          fileDto.setEdCode(newEdu.getEdCode());
 
-         System.out.println("fileDto :" + fileDto);
-
          edFileRepository.save(modelMapper.map(fileDto, EdFile.class));
 
       } catch (IOException e) {
@@ -140,15 +138,11 @@ public class EducationService {
 	           FFmpegFormat format = ffprobe.probe(tempFilePath.toString()).format;
 	           double durationSeconds = format.duration;
 
-	           // Convert duration to milliseconds
-//	           long durationInSeconds = Math.round(durationSeconds);
-
-//	           return durationInSeconds;
 	           long durationMillis = (long) (durationSeconds * 1000);
 
 	           return durationMillis;
 	       } finally {
-	           // Delete the temporary file
+	          
 	           deleteFile(tempFilePath);
 	       }
 	   }
@@ -158,7 +152,7 @@ public class EducationService {
 	       try {
 	           Files.deleteIfExists(filePath);
 	      } catch (IOException e) {
-	          // Handle exception or log error message
+	         
 	           e.printStackTrace();
 	       }
 	   }
@@ -211,9 +205,7 @@ public class EducationService {
 	public EdFileDto selectEducationVideo(Long edCode) {
 		
 		EdFile file = edFileRepository.findByEdCode(edCode);
-		
-		System.out.println("edCode : " + edCode);
-		
+			
 		EdFileDto fileDto = modelMapper.map(file, EdFileDto.class);
 		
 		return fileDto;
@@ -226,8 +218,7 @@ public class EducationService {
 		Long memberCode = memberDto.getMemberCode();
 		
 		EdClass classEntity = classRepository.findByMemberAndEducation(memberCode, edCode);
-		System.out.println("classEntity : " + classEntity);
-				
+						
 		if(classEntity == null) {
 		
 		ClassDto classDto = new ClassDto();
@@ -236,8 +227,6 @@ public class EducationService {
 		classDto.setMember(memberDto);
 		classDto.setEducation(eduDto);
 		classDto.setClassStatus("N");
-		
-		log.info("classDto : {}", classDto);
 		
 		classRepository.save(modelMapper.map(classDto, EdClass.class));
 		}
@@ -250,9 +239,7 @@ public class EducationService {
 		Long memberCode = memberDto.getMemberCode();
 		
 		EducationDto originEducation = modelMapper.map(edRepository.findByEdCode(edCode),EducationDto.class);
-		
-		System.out.println("originEducation : " + originEducation);
-		
+	
 		EdClass classInfo = classRepository.findByMemberAndEducation(memberCode, edCode);	
 		ClassDto classDto = modelMapper.map(classInfo, ClassDto.class);
 		classDto.setClassTime(classTime);
@@ -262,11 +249,7 @@ public class EducationService {
 		Long percent = (long) Math.floor(((double) classTime / originEducation.getEdTime()) * 100);
 		
 		classDto.setClassPercent(percent);
-		
-		System.out.println("classTime : " + classTime);
-		System.out.println("originTime : " + originEducation.getEdTime());
-		System.out.println("percent : " + percent);
-		
+				
 		if(percent > 90) {
 			classDto.setClassStatus("Y");
 		} 
@@ -294,7 +277,9 @@ public class EducationService {
 		
 		EdClass classView = classRepository.findByMemberCode(memberDto.getMemberCode(), edCode);
 		
-		return modelMapper.map(classView, ClassDto.class);
+
+		return modelMapper.map(classView, ClassDto.class);  
+	
 	}
 	
 	/* 수강한 수강교육목록 조회 */
@@ -313,14 +298,9 @@ public class EducationService {
 	
 	/* 교육 사진 등록 */
 	public void insertEudcationPhoto(MbMemberDto memberDto, MbFileDto fileDto) {
-		
-		System.out.println("fileDto : " + fileDto.getEducationImage());
-		System.out.println("fileDto : " + fileDto.getFileTitle());
-		
+			
 		String imageName = fileDto.getFileTitle() + "^" + UUID.randomUUID().toString().replace("-", "");
-		
-//		MbFileDto fileDto = new MbFileDto();
-		
+			
 		try {
 			
 			String replaceFilename = MbFileUploadUtils.saveFile(IMAGE_DIR + "/education", imageName, fileDto.getEducationImage());
